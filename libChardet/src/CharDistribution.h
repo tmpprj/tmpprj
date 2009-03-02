@@ -46,12 +46,7 @@
 class CharDistributionAnalysis
 {
 public:
-
-  CharDistributionAnalysis() 
-    {
-      std::cout << "CharDistributionAnalysis::CharDistributionAnalysis" << std::endl;
-      Reset();
-    }
+  CharDistributionAnalysis() {Reset();}
 
   //feed a block of data and do distribution analysis
   void HandleData(const char* aBuf, PRUint32 aLen) {}
@@ -63,13 +58,10 @@ public:
 
     //we only care about 2-bytes character in our distribution analysis
     order = (aCharLen == 2) ? GetOrder(aStr) : -1;
-   
-    ++mTemp;
+
     if (order >= 0)
     {
       mTotalChars++;
-      std::cout << "Total chars = " << mTotalChars << " All = " << mTemp << std::endl;
-
       //order is valid
       if ((PRUint32)order < mTableSize)
       {
@@ -85,11 +77,9 @@ public:
   //Reset analyser, clear any state 
   void      Reset(void) 
   {
-    std::cout << "Reset " << std::endl;
     mDone = PR_FALSE;
     mTotalChars = 0;
     mFreqChars = 0;
-    mTemp = 0;
   }
 
   //This function is for future extension. Caller can use this function to control
@@ -98,10 +88,7 @@ public:
 
   //It is not necessary to receive all data to draw conclusion. For charset detection,
   // certain amount of data is enough
-  PRBool GotEnoughData() 
-    {
-      return mTotalChars > ENOUGH_DATA_THRESHOLD;
-    }
+  PRBool GotEnoughData() {return mTotalChars > ENOUGH_DATA_THRESHOLD;}
 
 protected:
   //we do not handle character base on its original encoding string, but 
@@ -117,7 +104,6 @@ protected:
 
   //Total character encounted.
   PRUint32 mTotalChars;
-  size_t mTemp;
 
   //Mapping table to get frequency order from char order (get from GetOrder())
   const PRInt16  *mCharToFreqOrder;

@@ -104,19 +104,6 @@ void nsUniversalDetector::HandleData(const char* aBuf, PRUint32 aLen)
   if(mDone) 
     return;
 
-//---------------------------------------------------
-
-      for (PRInt32 i = 0; i < NUM_OF_CHARSET_PROBERS; i++)
-      {
-        if (mCharSetProbers[i])
-        {
-          float proberConfidence = mCharSetProbers[i]->GetConfidence();
-//          std::cout << "Confidence = " << proberConfidence << std::endl;
-          //mCharSetProbers[i]->DumpStatus();
-        }
-      }
-//---------------------------------------------------
-
   if (aLen > 0)
     mGotData = PR_TRUE;
 
