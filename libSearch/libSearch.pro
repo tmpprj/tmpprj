@@ -3,7 +3,7 @@
 # -------------------------------------------------
 TARGET = Search
 TEMPLATE = lib
-CONFIG += staticlib
-SOURCES += filesearcher.cc
-HEADERS += filesearcher.h
-INCLUDEPATH += /home/bolotin/projects/antispam/external/boost
+CONFIG += staticlib debug
+SOURCES += src/filesearcher.cc src/searchfacade.cc
+HEADERS += ./include/searchfacade.h ./include/searchdefines.h ./include/filesearcher.h
+INCLUDEPATH += /home/bolotin/projects/antispam/external/boost ./include ../libCommon/include
