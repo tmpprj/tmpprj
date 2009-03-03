@@ -1,6 +1,8 @@
 #ifndef CPLAINTEXTEXTRACTOR_H
 #define CPLAINTEXTEXTRACTOR_H
 
+#include <string>
+
 class CPlainTextExtractor
 {
 public:
@@ -9,17 +11,11 @@ public:
 
     boost::signal1< void, const std::string& >& SigDataObtained();
 
+    void OnNewFile( const std::string& strFileName );
+
+    void OnStop();
+
 private:
-
-    enum enumEvents
-    {
-        EV_FILEAVAIL,
-        EV_STOP
-    };
-
-    void ReleaseWait( int iAction
-
-    void OnSignal( const std::string& strFileName );
 
     boost::signal1< void, const std::string& > m_sigDataObtained;
 };
