@@ -6,7 +6,7 @@ QT -= core \
 TARGET = libChardet
 TEMPLATE = lib
 CONFIG += staticlib
-SOURCES += ccharsetdetector.cpp \
+SOURCES += src/ccharsetdetector.cc \
     src/nsUTF8Prober.cpp \
     src/nsUniversalDetector.cpp \
     src/nsSJISProber.cpp \
@@ -32,7 +32,7 @@ SOURCES += ccharsetdetector.cpp \
     src/LangBulgarianModel.cpp \
     src/JpCntx.cpp \
     src/CharDistribution.cpp
-HEADERS += ccharsetdetector.h \
+HEADERS += src/ccharsetdetector.h \
     src/prtypes.h \
     src/nsUTF8Prober.h \
     src/nsUniversalDetector.h \

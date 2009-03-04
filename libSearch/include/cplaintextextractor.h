@@ -6,6 +6,7 @@
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <boost/signal.hpp>
+#include <QString>
 
 class CPlainTextExtractor: private boost::noncopyable
 {
@@ -63,13 +64,21 @@ private:
         boost::this_thread::interruption_point();
 
         //Process file
+
     }
 
-    boost::signal1< void, const std::string& > m_sigDataObtained;
-
-
+    boost::signal1< void, const QString& > m_sigDataObtained;
 
     mt_queue<std::string> m_Queue;
+};
+
+class ITextExtractor
+{
+public:
+
+    virtual ~ITextExtractor(){}
+
+    void Extract( const std::string strFileName, QString& strText ) = 0;
 };
 
 #endif // CPLAINTEXTEXTRACTOR_H
