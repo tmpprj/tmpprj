@@ -1,7 +1,7 @@
 #ifndef CCHARSETDETECTOR_H
 #define CCHARSETDETECTOR_H
 
-#include "src/nsUniversalDetector.h"
+#include "nsUniversalDetector.h"
 #include <string>
 
 

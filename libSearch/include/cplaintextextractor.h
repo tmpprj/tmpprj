@@ -2,11 +2,13 @@
 #define CPLAINTEXTEXTRACTOR_H
 
 #include <string>
-#include <mt_queue.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <boost/signal.hpp>
+#include <boost/filesystem.hpp>
 #include <QString>
+#include <singleton.hpp>
+#include <mt_queue.hpp>
 
 class CPlainTextExtractor: private boost::noncopyable
 {
@@ -19,7 +21,7 @@ public:
         OnStop();
     }
 
-    boost::signal1< void, const std::string& >& SigDataObtained();
+    boost::signal1< void, const QString& >& SigDataObtained();
 
     void OnNewFile( const std::string& strFileName )
     {
@@ -78,7 +80,34 @@ public:
 
     virtual ~ITextExtractor(){}
 
-    void Extract( const std::string strFileName, QString& strText ) = 0;
+    virtual void Extract( const std::string strFileName, QString& strText ) = 0;
 };
+
+class CTextExtractorFactory
+{
+public:
+
+    ITextExtractor* GetExtractor( const std::string& strFileName )
+    {
+        boost::filesystem::path file( strFileName );
+        if( mapExtractors.end() == mapExtractors.find( file.extension() ) )
+            return mapExtractors[ ".txt" ];
+        else
+            return mapExtractors[ file.extension() ];
+    }
+
+    bool RegisterExtractor( const std::string& strFormat, ITextExtractor* pTextExtractor )
+    {
+        mapExtractors[ strFormat ] = pTextExtractor;
+        return true;
+    }
+
+private:
+
+    std::map< std::string, ITextExtractor* > mapExtractors;
+
+};
+
+typedef Singleton<CTextExtractorFactory> TextExtractorFactory;
 
 #endif // CPLAINTEXTEXTRACTOR_H

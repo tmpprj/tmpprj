@@ -4,7 +4,7 @@ CPlainTextExtractor::CPlainTextExtractor()
 {
 }
 
- boost::signal1< void, const std::string& >& CPlainTextExtractor::SigDataObtained()
+ boost::signal1< void, const QString& >& CPlainTextExtractor::SigDataObtained()
  {
      return m_sigDataObtained;
  }
