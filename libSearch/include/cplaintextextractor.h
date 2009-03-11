@@ -49,6 +49,7 @@ public:
             m_Queue.push( "" );
             m_pThread->join();
             m_pThread.reset();
+            //TODO: clear queue
         }
     }
 
