@@ -59,16 +59,7 @@ private:
 
     boost::shared_ptr< boost::thread > m_pThread;
 
-    void ThreadFunc( boost::mutex* pmtxThreadStarted )
-    {
-        pmtxThreadStarted->unlock();
-        std::string strFileName = m_Queue.pop();
-
-        boost::this_thread::interruption_point();
-
-        //Process file
-
-    }
+    void ThreadFunc( boost::mutex* pmtxThreadStarted );
 
     boost::signal1< void, const QString& > m_sigDataObtained;
 
