@@ -12,12 +12,16 @@ boost::signal1< void, const QString& >& CPlainTextExtractor::SigDataObtained()
 void CPlainTextExtractor::ThreadFunc( boost::mutex* pmtxThreadStarted )
 {
     pmtxThreadStarted->unlock();
-    std::string strFileName = m_Queue.pop();
 
-    boost::this_thread::interruption_point();
+    for(;;)
+    {
+        std::string strFileName = m_Queue.pop();
 
-    //Process file
-    QString strContent;
-    TextExtractorFactory::Instance().GetExtractor( strFileName )->Extract( strFileName, strContent );
-    m_sigDataObtained( strContent );
+        boost::this_thread::interruption_point();
+
+        //Process file
+        QString strContent;
+        TextExtractorFactory::Instance().GetExtractor( strFileName )->Extract( strFileName, strContent );
+        m_sigDataObtained( strContent );
+    }
 }
