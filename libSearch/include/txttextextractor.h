@@ -24,6 +24,9 @@ public:
         {
             getline( file, strLine );
 
+            if( strLine.empty() )
+                break;
+
             if( !CharDet.Done() )
                 CharDet.HandleData( strLine.data(), strLine.size() );
 
