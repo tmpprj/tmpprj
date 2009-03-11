@@ -22,7 +22,7 @@ public:
     void Stop();
 
     boost::signal1< void, const std::string& >& SigFileFound();
-    boost::signal1< void, const QString& >& SigFileProcessed();
+    boost::signal2< void, const std::string&, const QString& >& SigFileProcessed();
 
 /* TODO: Future work
     boost::singal0< void >& SigDone();

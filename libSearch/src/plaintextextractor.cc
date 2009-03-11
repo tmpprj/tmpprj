@@ -1,10 +1,11 @@
+#include "txttextextractor.h"
 #include "plaintextextractor.h"
 
 CPlainTextExtractor::CPlainTextExtractor()
 {
 }
 
-boost::signal1< void, const QString& >& CPlainTextExtractor::SigDataObtained()
+boost::signal2< void, const std::string&, const QString& >& CPlainTextExtractor::SigDataObtained()
 {
     return m_sigDataObtained;
 }
@@ -22,6 +23,11 @@ void CPlainTextExtractor::ThreadFunc( boost::mutex* pmtxThreadStarted )
         //Process file
         QString strContent;
         TextExtractorFactory::Instance().GetExtractor( strFileName )->Extract( strFileName, strContent );
-        m_sigDataObtained( strContent );
+        m_sigDataObtained( strFileName, strContent );
     }
+}
+
+CTextExtractorFactory::CTextExtractorFactory()
+{
+    RegisterExtractor( ".txt", new CTxtTextExtractor );
 }

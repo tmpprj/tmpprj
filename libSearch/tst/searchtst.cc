@@ -6,9 +6,9 @@
 
 using namespace std;
 
-void FileProcessed( const QString& strFileData )
+void FileProcessed( const std::string& strFileName, const QString& strFileData )
 {
-    qDebug() << "DATA: " << strFileData << endl;
+    std::cout << "FILE: " << strFileName << " DATA: " << strFileData.toStdString() << endl;
 }
 
 void FileFound( const std::string& strFilename )

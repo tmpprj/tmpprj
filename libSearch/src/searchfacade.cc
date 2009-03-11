@@ -24,7 +24,7 @@ boost::signal1< void, const std::string& >& CSearchFacade::SigFileFound()
     return m_searcher.SigFileProcessed();
 }
 
-boost::signal1< void, const QString& >& CSearchFacade::SigFileProcessed()
+boost::signal2< void, const std::string&, const QString& >& CSearchFacade::SigFileProcessed()
 {
     return m_extractor.SigDataObtained();
 }

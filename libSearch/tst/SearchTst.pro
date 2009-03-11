@@ -5,7 +5,5 @@ TARGET = SearchTest
 TEMPLATE = app
 CONFIG += console debug
 SOURCES += searchtst.cc
-INCLUDEPATH += /home/bolotin/projects/antispam/external/boost ../include ../../libCommon/include
-LIBS += -L../ -lSearch -L/home/bolotin/projects/antispam/external/boost/stage/lib /home/bolotin/projects/antispam/external/boost/stage/lib/libboost_thread-mt.a /home/bolotin/projects/antispam/external/boost/stage/lib/libboost_signals-mt.a /home/bolotin/projects/antispam/external/boost/stage/lib/libboost_system-mt.a
-
-DEPENDPATH += ../
+INCLUDEPATH += ../../external/boost ../include ../../libCommon/include
+LIBS += -L../ -lSearch -L../../external/boost/stage/lib ../../external/boost/stage/lib/libboost_thread-mt.a ../../external/boost/stage/lib/libboost_signals-mt.a ../../external/boost/stage/lib/libboost_system-mt.a

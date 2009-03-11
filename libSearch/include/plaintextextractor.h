@@ -21,7 +21,7 @@ public:
         OnStop();
     }
 
-    boost::signal1< void, const QString& >& SigDataObtained();
+    boost::signal2< void, const std::string&, const QString& >& SigDataObtained();
 
     void OnNewFile( const std::string& strFileName )
     {
@@ -62,7 +62,7 @@ private:
 
     void ThreadFunc( boost::mutex* pmtxThreadStarted );
 
-    boost::signal1< void, const QString& > m_sigDataObtained;
+    boost::signal2< void, const std::string&, const QString& > m_sigDataObtained;
 
     mt_queue<std::string> m_Queue;
 };
@@ -79,6 +79,8 @@ public:
 class CTextExtractorFactory
 {
 public:
+
+    CTextExtractorFactory();
 
     ITextExtractor* GetExtractor( const std::string& strFileName )
     {
