@@ -1,14 +1,19 @@
 #include <boost/signal.hpp>
-#include <glob.h>
+#include <QtCore>
 #include <string>
 #include <iostream>
 #include "searchfacade.h"
 
 using namespace std;
 
-void FileProcessed( std::string strFilename )
+void FileProcessed( const QString& strFileData )
 {
-    cout << strFilename << endl;
+    qDebug() << "DATA: " << strFileData << endl;
+}
+
+void FileFound( const std::string& strFilename )
+{
+    qDebug() << "FOUND: " << strFilename.c_str() << endl;
 }
 
 int main( int argc, char* argv[] )
@@ -19,17 +24,16 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
-    SearchFacade search;
+    CSearchFacade search;
     Masks_t masks;
     masks.push_back( argv[ 2 ] );
     search.SigFileProcessed().connect( FileProcessed );
-    
-    search.StartSearch( argv[ 1 ], masks );
+    search.SigFileFound().connect( FileFound );
 
-    cout << "Stopped" << endl;
+    search.Start( argv[ 1 ], masks );
+
     string str;
     getline( cin, str );
-    search.Stop();
     
     return 0;
 }
