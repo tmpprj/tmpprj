@@ -1,4 +1,4 @@
-#include "ctxttextextractor.h"
+#include "txttextextractor.h"
 
 CTxtTextExtractor::CTxtTextExtractor()
 {

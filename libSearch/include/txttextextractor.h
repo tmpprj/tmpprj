@@ -1,10 +1,10 @@
 #ifndef CTXTTEXTEXTRACTOR_H
 #define CTXTTEXTEXTRACTOR_H
 
-#include <cplaintextextractor.h>
+#include <plaintextextractor.h>
 #include <string>
 #include <fstream>
-#include <ccharsetdetector.h>
+#include <charsetdetector.h>
 #include <QTextCodec>
 
 class CTxtTextExtractor: public ITextExtractor

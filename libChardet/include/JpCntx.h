@@ -52,6 +52,7 @@ class JapaneseContextAnalysis
 {
 public:
   JapaneseContextAnalysis() {Reset();}
+  virtual ~JapaneseContextAnalysis(){}
 
   void HandleData(const char* aBuf, PRUint32 aLen);
 
@@ -104,6 +105,8 @@ protected:
 class SJISContextAnalysis : public JapaneseContextAnalysis
 {
   //SJISContextAnalysis(){};
+public:
+    virtual ~SJISContextAnalysis(){}
 protected:
   PRInt32 GetOrder(const char* str, PRUint32 *charLen);
 
@@ -120,6 +123,8 @@ protected:
 
 class EUCJPContextAnalysis : public JapaneseContextAnalysis
 {
+public:
+    virtual ~EUCJPContextAnalysis(){}
 protected:
   PRInt32 GetOrder(const char* str, PRUint32 *charLen);
   PRInt32 GetOrder(const char* str)

@@ -1,4 +1,4 @@
-#include "cplaintextextractor.h"
+#include "plaintextextractor.h"
 
 CPlainTextExtractor::CPlainTextExtractor()
 {

@@ -4,7 +4,6 @@
 #include "nsUniversalDetector.h"
 #include <string>
 
-
 class CCharsetDetector: public nsUniversalDetector
 {
 public:

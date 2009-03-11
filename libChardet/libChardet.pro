@@ -6,7 +6,8 @@ QT -= core \
 TARGET = libChardet
 TEMPLATE = lib
 CONFIG += staticlib
-SOURCES += src/ccharsetdetector.cc \
+INCLUDEPATH += ./include
+SOURCES += src/charsetdetector.cc \
     src/nsUTF8Prober.cpp \
     src/nsUniversalDetector.cpp \
     src/nsSJISProber.cpp \
@@ -32,27 +33,27 @@ SOURCES += src/ccharsetdetector.cc \
     src/LangBulgarianModel.cpp \
     src/JpCntx.cpp \
     src/CharDistribution.cpp
-HEADERS += src/ccharsetdetector.h \
-    src/prtypes.h \
-    src/nsUTF8Prober.h \
-    src/nsUniversalDetector.h \
-    src/nsSJISProber.h \
-    src/nsSBCSGroupProber.h \
-    src/nsSBCharSetProber.h \
-    src/nsPkgInt.h \
-    src/nsMBCSGroupProber.h \
-    src/nsLatin1Prober.h \
-    src/nsHebrewProber.h \
-    src/nsGB2312Prober.h \
-    src/nsEUCTWProber.h \
-    src/nsEUCKRProber.h \
-    src/nsEUCJPProber.h \
-    src/nsEscCharsetProber.h \
-    src/nsCodingStateMachine.h \
-    src/nsCharSetProber.h \
-    src/nsBig5Prober.h \
-    src/JpCntx.h \
-    src/CharDistribution.h
+HEADERS += include/charsetdetector.h \
+    include/prtypes.h \
+    include/nsUTF8Prober.h \
+    include/nsUniversalDetector.h \
+    include/nsSJISProber.h \
+    include/nsSBCSGroupProber.h \
+    include/nsSBCharSetProber.h \
+    include/nsPkgInt.h \
+    include/nsMBCSGroupProber.h \
+    include/nsLatin1Prober.h \
+    include/nsHebrewProber.h \
+    include/nsGB2312Prober.h \
+    include/nsEUCTWProber.h \
+    include/nsEUCKRProber.h \
+    include/nsEUCJPProber.h \
+    include/nsEscCharsetProber.h \
+    include/nsCodingStateMachine.h \
+    include/nsCharSetProber.h \
+    include/nsBig5Prober.h \
+    include/JpCntx.h \
+    include/CharDistribution.h
 OTHER_FILES += src/Makefile.in \
     src/JISFreq.tab \
     src/GB2312Freq.tab \

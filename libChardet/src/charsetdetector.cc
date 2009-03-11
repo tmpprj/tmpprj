@@ -1,4 +1,4 @@
-#include "ccharsetdetector.h"
+#include "charsetdetector.h"
 
 CCharsetDetector::CCharsetDetector():nsUniversalDetector(NS_FILTER_ALL)
 {};
