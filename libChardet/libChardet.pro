@@ -6,7 +6,8 @@ QT -= core \
 TARGET = libChardet
 TEMPLATE = lib
 CONFIG += staticlib
-INCLUDEPATH += ./include
+INCLUDEPATH += ../external/boost \
+                ./include
 SOURCES += src/charsetdetector.cc \
     src/nsUTF8Prober.cpp \
     src/nsUniversalDetector.cpp \
