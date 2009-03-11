@@ -34,7 +34,7 @@ public:
             strContent += strLine + '\n';
         }
 
-        CLog() << strContent << strContent;
+        CLog() << strContent << std::endl;
 
         CharDet.DataEnd();
 
