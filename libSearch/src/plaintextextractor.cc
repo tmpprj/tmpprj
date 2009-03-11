@@ -1,5 +1,6 @@
 #include "txttextextractor.h"
 #include "plaintextextractor.h"
+#include "log.hpp"
 
 CPlainTextExtractor::CPlainTextExtractor()
 {

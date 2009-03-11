@@ -1,11 +1,12 @@
 #ifndef CTXTTEXTEXTRACTOR_H
 #define CTXTTEXTEXTRACTOR_H
 
-#include <plaintextextractor.h>
+#include "plaintextextractor.h"
 #include <string>
 #include <fstream>
-#include <charsetdetector.h>
+#include "charsetdetector.h"
 #include <QTextCodec>
+#include "log.hpp"
 
 class CTxtTextExtractor: public ITextExtractor
 {
@@ -32,6 +33,9 @@ public:
 
             strContent += strLine + '\n';
         }
+
+        CLog log;
+        log << strContent << std::endl;
 
         CharDet.DataEnd();
 
