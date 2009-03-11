@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void FileSearcher::Search( const std::string& strPath, const Masks_t& vMasks )
+void CFileSearcher::Search( const std::string& strPath, const Masks_t& vMasks )
 {
     for( size_t i = 0; i < vMasks.size(); i++ )
     {
@@ -28,27 +28,26 @@ void FileSearcher::Search( const std::string& strPath, const Masks_t& vMasks )
     globfree( &gtDir );
 }
 
-void FileSearcher::SearchFunc( const std::string& strPath, const Masks_t& vMasks, boost::condition_variable* pvarStarted )
+void CFileSearcher::SearchFunc( const std::string& strPath, const Masks_t& vMasks, boost::condition_variable* pvarStarted )
 {
     pvarStarted->notify_all();
     Search( strPath, vMasks );
 }
 
-void FileSearcher::StartSearch( const std::string& strPath, const Masks_t& vMasks )
+void CFileSearcher::StartSearch( const std::string& strPath, const Masks_t& vMasks )
 {
-    StopSearch();
+    OnStop();
     
     boost::mutex mutStart;
     boost::unique_lock<boost::mutex> lock( mutStart );
     boost::condition_variable varStart;
     
-    boost::function0< void > threadFunc = boost::bind( &FileSearcher::SearchFunc, this, strPath, vMasks, &varStart );
+    boost::function0< void > threadFunc = boost::bind( &CFileSearcher::SearchFunc, this, strPath, vMasks, &varStart );
     m_ptrSearchThread = ThreadPtr_t( new boost::thread( threadFunc ) );
     varStart.wait( lock );
-    m_ptrSearchThread->join();
 }
 
-void FileSearcher::StopSearch()
+void CFileSearcher::OnStop()
 {
     if( m_ptrSearchThread.get() )
     {
@@ -57,13 +56,13 @@ void FileSearcher::StopSearch()
     }
 }
 
-boost::signal1< void, const std::string& >& FileSearcher::SigFileProcessed()
+boost::signal1< void, const std::string& >& CFileSearcher::SigFileProcessed()
 {
     return m_sigFileProcessed;
 }
 
-FileSearcher::~FileSearcher()
+CFileSearcher::~CFileSearcher()
 {
-    StopSearch();
+    OnStop();
 }
 

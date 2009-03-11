@@ -10,7 +10,7 @@
 #include "searchdefines.h"
 #include "mt_queue.hpp"
 
-class FileSearcher
+class CFileSearcher
 {
     typedef std::auto_ptr< boost::thread > ThreadPtr_t;
     ThreadPtr_t m_ptrSearchThread;
@@ -21,9 +21,9 @@ class FileSearcher
 
 public:
     void StartSearch( const std::string& strPath, const Masks_t& vMasks );
-    void StopSearch();
+    void OnStop();
     boost::signal1< void, const std::string& >& SigFileProcessed();
-    ~FileSearcher();
+    ~CFileSearcher();
 };
 
 #endif

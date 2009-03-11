@@ -1,23 +1,30 @@
 #include "searchfacade.h"
 #include "filesearcher.h"
 
-void SearchFacade::StartSearch( const std::string& strPath, const Masks_t& vMasks )
+CSearchFacade::CSearchFacade()
+{
+    m_sigStop.connect( boost::bind( &CFileSearcher::OnStop, &m_searcher ) );
+    m_sigStop.connect( boost::bind( &CPlainTextExtractor::OnStop, &m_extractor ) );
+
+    m_searcher.SigFileProcessed().connect( boost::bind( &CPlainTextExtractor::OnNewFile, &m_extractor, _1 ) );
+}
+
+void CSearchFacade::Start( const std::string& strPath, const Masks_t& vMasks )
 {
     m_searcher.StartSearch( strPath, vMasks );
 }
 
-void SearchFacade::Stop()
+void CSearchFacade::Stop()
 {
     m_sigStop();
 }
 
-boost::signal0< void >& SearchFacade::SigStop()
-{
-    return m_sigStop;
-}
-
-boost::signal1< void, const std::string& >& SearchFacade::SigFileProcessed()
+boost::signal1< void, const std::string& >& CSearchFacade::SigFileFound()
 {
     return m_searcher.SigFileProcessed();
 }
 
+boost::signal1< void, const QString& >& CSearchFacade::SigFileProcessed()
+{
+    return m_extractor.SigDataObtained();
+}

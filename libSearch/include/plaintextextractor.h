@@ -37,6 +37,7 @@ public:
             m_pThread = boost::shared_ptr<boost::thread>( new boost::thread( boost::bind( &CPlainTextExtractor::ThreadFunc, this, &mtxThreadStarted ) ) );
 
             mtxThreadStarted.lock();
+            mtxThreadStarted.unlock();
         }
     }
 
