@@ -3,7 +3,7 @@
 # -------------------------------------------------
 TARGET = Search
 TEMPLATE = lib
-CONFIG += staticlib \
+CONFIG += sharedlib \
     debug
 SOURCES += src/filesearcher.cc \
     src/searchfacade.cc \
@@ -18,3 +18,5 @@ INCLUDEPATH += ../external/boost \
     ./include \
     ../libCommon/include \
     ../libChardet/include
+
+LIBS += ../libChardet/libChardet.a

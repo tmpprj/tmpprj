@@ -3,7 +3,7 @@
 # -------------------------------------------------
 QT -= core \
     gui
-TARGET = libChardet
+TARGET = Chardet
 TEMPLATE = lib
 CONFIG += staticlib
 INCLUDEPATH += ../external/boost \
