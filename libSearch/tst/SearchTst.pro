@@ -6,4 +6,10 @@ TEMPLATE = app
 CONFIG += console debug
 SOURCES += searchtst.cc
 INCLUDEPATH += ../../external/boost ../include ../../libCommon/include
-LIBS += -L../ -lSearch -L../../external/boost/stage/lib ../../external/boost/stage/lib/libboost_thread-mt.a ../../external/boost/stage/lib/libboost_signals-mt.a ../../external/boost/stage/lib/libboost_system-mt.a
+LIBS += -static -L../ \
+                -L../../external/boost/stage/lib \
+                 ../debug/libSearch.a \
+                 -llibboost_thread-mt \
+                 -llibboost_signals-mt \
+                 -llibboost_system-mt \
+                 ../../libChardet/debug/libChardet.a

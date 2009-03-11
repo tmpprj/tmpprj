@@ -19,6 +19,22 @@ public:
         GetLock().unlock();
     }
 
+    template< class T >
+            CLog& operator<<( const T& t )
+    {
+        std::cout << t;
+        return *this;
+    }
+
+    typedef std::ostream&(*Manip_t)( std::ostream& );
+
+    CLog& operator<<( Manip_t m )
+    {
+        m( std::cout );
+        return *this;
+    }
+
+
 private:
 
     CLog( const CLog& );
@@ -31,11 +47,5 @@ private:
     }
 };
 
-template< class T >
-        CLog& operator<<( CLog& log, const T& t )
-{
-    std::cout << t;
-    return log;
-}
 
 #endif // LOG_H
