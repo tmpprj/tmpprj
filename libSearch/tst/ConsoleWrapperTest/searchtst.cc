@@ -8,7 +8,7 @@ using namespace std;
 
 void FileProcessed( const std::string& strFileName, const QString& strFileData )
 {
-    std::cout << "FILE: " << strFileName << " DATA: " << strFileData.toStdString() << endl;
+    qDebug() << "FILE: " << strFileName.c_str() << " DATA: " << strFileData << endl;
 }
 
 void FileFound( const std::string& strFilename )

@@ -4,6 +4,7 @@
 QT -= core \
     gui
 TARGET = Chardet
+DESTDIR = ../lib
 TEMPLATE = lib
 CONFIG += staticlib
 INCLUDEPATH += ../external/boost \

@@ -2,6 +2,7 @@
 # Project created by QtCreator 2009-03-01T22:56:42
 # -------------------------------------------------
 TARGET = Search
+DESTDIR = ../lib
 TEMPLATE = lib
 CONFIG += staticlib \
     debug
@@ -19,4 +20,7 @@ INCLUDEPATH += ../external/boost \
     ../libCommon/include \
     ../libChardet/include
 
-LIBS += ../libChardet/debug/libChardet.a
+LIBS += -L../lib \
+        -Wl,-Bstatic \
+        -lChardet \
+        -Wl,-Bdynamic

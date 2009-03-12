@@ -5,11 +5,16 @@ TARGET = SearchTest
 TEMPLATE = app
 CONFIG += console debug
 SOURCES += searchtst.cc
-INCLUDEPATH += ../../external/boost ../include ../../libCommon/include
-LIBS += -static -L../ \
-                -L../../external/boost/stage/lib \
-                 ../debug/libSearch.a \
-                 -llibboost_thread-mt \
-                 -llibboost_signals-mt \
-                 -llibboost_system-mt \
-                 ../../libChardet/debug/libChardet.a
+INCLUDEPATH += ../../../external/boost ../../include ../../../libCommon/include
+LIBS +=     -L../ \
+            -L../../../lib \
+            -L../../../external/boost/stage/lib \
+            -Wl,-Bstatic \
+            -lSearch \
+            -lChardet \
+            -lCommon \
+            -lboost_thread-mt \
+            -lboost_signals-mt \
+            -lboost_system-mt \
+            -Wl,-Bdynamic 
+            
