@@ -11,12 +11,16 @@ CONFIG   += console debug
 CONFIG   -= app_bundle
 INCLUDEPATH += ../../../external/boost ../../include ../../../libCommon/include
 TEMPLATE = app
-LIBS += -static -L../../../external/boost/stage/lib \
-                 ../../debug/libSearch.a \
-                 -llibboost_thread-mt \
-                 -llibboost_signals-mt \
-                 -llibboost_system-mt \
-                 ../../../libChardet/debug/libChardet.a
+LIBS += -static \
+            -L../ \
+            -L../../../lib \
+            -L../../../external/boost/stage/lib \
+            -lSearch \
+            -lChardet \
+            -lCommon \
+            -llibboost_thread-mt \
+            -llibboost_signals-mt \
+            -llibboost_system-mt
 
 
 SOURCES += main.cc

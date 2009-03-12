@@ -24,8 +24,6 @@ void CTxtTextExtractor::Extract( const std::string strFileName, QString& strText
         strContent += strLine + '\n';
     }
 
-    CLog() << "Content: " << strContent << std::endl;
-
     CharDet.DataEnd();
 
     std::string strCharset = CharDet.GetCharset();

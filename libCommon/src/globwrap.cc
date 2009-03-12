@@ -7,10 +7,19 @@
     
     }
 
+    GlobWrap::GlobWrap( const std::string& strPath )
+    {
+    }
+
     const char* GlobWrap::NextFilename()
     {
 
     }
+
+    GlobWrap::~GlobWrap()
+    {
+    }
+
 
 #else
 
