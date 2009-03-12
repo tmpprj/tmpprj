@@ -1,9 +1,10 @@
 #include <iostream>
 #include "plaintextextractor.h"
+#include <qdebug>
 
 void OnData( const std::string& strFileName, const QString& strData )
 {
-    std::cout << "file: " << strFileName << " data: " << strData.toStdString() << std::endl;
+    qDebug() << "file: " << QString::fromStdString(strFileName) << " data: " << strData;
 }
 
 int main(int argc, char *argv[])
