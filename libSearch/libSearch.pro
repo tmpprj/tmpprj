@@ -10,12 +10,16 @@ CONFIG += staticlib \
 SOURCES += src/filesearcher.cc \
     src/searchfacade.cc \
     src/plaintextextractor.cc \
-    src/txttextextractor.cc
+    src/txttextextractor.cc \
+    src/multipatternsearcher.cc \
+    src/patternmatcher.cc
 HEADERS += ./include/searchfacade.h \
     ./include/searchdefines.h \
     ./include/filesearcher.h \
     include/plaintextextractor.h \
-    include/txttextextractor.h
+    include/txttextextractor.h \
+    include/multipatternsearcher.h \
+    include/patternmatcher.h
 DEPENDPATH += ./include \
     ../libCommon/include \
     ../libChardet/include

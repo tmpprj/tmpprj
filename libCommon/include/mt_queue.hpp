@@ -30,6 +30,17 @@ public:
         return m_queue.size();
     }
 
+    void clear()
+    {
+        boost::unique_lock< boost::shared_mutex > lock( m_mtxAccess );
+
+        while( !m_queue.empty() )
+        {
+            m_smpQueue.try_wait();
+            m_queue.pop();
+        }
+    }
+
     void push( const T& elem )
     {
         boost::unique_lock< boost::shared_mutex > lock( m_mtxAccess );

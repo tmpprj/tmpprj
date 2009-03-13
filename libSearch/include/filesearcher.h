@@ -8,7 +8,6 @@
 #include <memory>
 
 #include "searchdefines.h"
-#include "mt_queue.hpp"
 
 class CFileSearcher
 {
@@ -17,7 +16,7 @@ class CFileSearcher
     boost::signal1< void , const std::string& > m_sigFileProcessed;
 
     void Search( const std::string& strPath, const Masks_t& vMasks );
-    void SearchFunc( const std::string& strPath, const Masks_t& vMasks, boost::condition_variable* pvarStarted );
+    void ThreadFunc( const std::string& strPath, const Masks_t& vMasks, boost::condition_variable* pvarStarted );
 
 public:
     void StartSearch( const std::string& strPath, const Masks_t& vMasks );

@@ -26,7 +26,7 @@ void CFileSearcher::Search( const std::string& strPath, const Masks_t& vMasks )
     }
 }
 
-void CFileSearcher::SearchFunc( const std::string& strPath, const Masks_t& vMasks, boost::condition_variable* pvarStarted )
+void CFileSearcher::ThreadFunc( const std::string& strPath, const Masks_t& vMasks, boost::condition_variable* pvarStarted )
 {
     pvarStarted->notify_all();
     Search( strPath, vMasks );
@@ -40,7 +40,7 @@ void CFileSearcher::StartSearch( const std::string& strPath, const Masks_t& vMas
     boost::unique_lock<boost::mutex> lock( mutStart );
     boost::condition_variable varStart;
     
-    boost::function0< void > threadFunc = boost::bind( &CFileSearcher::SearchFunc, this, strPath, vMasks, &varStart );
+    boost::function0< void > threadFunc = boost::bind( &CFileSearcher::ThreadFunc, this, strPath, vMasks, &varStart );
     m_ptrSearchThread = ThreadPtr_t( new boost::thread( threadFunc ) );
     varStart.wait( lock );
 }
