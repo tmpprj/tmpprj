@@ -7,23 +7,22 @@ CTxtTextExtractor::CTxtTextExtractor()
 void CTxtTextExtractor::Extract( const std::string strFileName, QString& strText )
 {
     std::string strLine;
-    std::ifstream file( strFileName.c_str(), std::ifstream::in );
+    std::ifstream file( strFileName.c_str(), std::ios::in|std::ios::binary|std::ios::ate );
 
     CCharsetDetector CharDet;
-    std::string strContent;
-    while( file.good() )
+    std::vector<unsigned char> vecBuf;
+
+    if (file.is_open())
     {
-        getline( file, strLine );
-
-        if( strLine.empty() )
-            break;
-
-        if( !CharDet.Done() )
-            CharDet.HandleData( strLine.data(), strLine.size() );
-
-        strContent += strLine + '\n';
+        size_t stFileSize = file.tellg();
+        vecBuf.resize( stFileSize );
+        file.seekg( 0, std::ios::beg );
+        file.read( (char*)&vecBuf[0], stFileSize );
+        file.close();
     }
 
+    //TODO:maybe it`s faster to handle data blocks of some size, 1024 bytes for example
+    CharDet.HandleData( (char*)&vecBuf[0], vecBuf.size() );
     CharDet.DataEnd();
 
     std::string strCharset = CharDet.GetCharset();
@@ -34,10 +33,12 @@ void CTxtTextExtractor::Extract( const std::string strFileName, QString& strText
     if( NULL == pTextCodec )
     {
         CLog() << "Cant get codec" << std::endl;
-        strText.fromStdString( strContent );
+        strText.fromAscii( (const char*)&vecBuf[0], vecBuf.size() );
     }
     else
-        strText = pTextCodec->toUnicode( strContent.data() );
+    {
+        strText = pTextCodec->toUnicode( QByteArray( (const char*)&vecBuf[0], vecBuf.size() ) );
+    }
 }
 
 //namespace
