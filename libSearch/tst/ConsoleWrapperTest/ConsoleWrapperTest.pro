@@ -3,8 +3,10 @@
 # -------------------------------------------------
 TARGET = SearchTest
 TEMPLATE = app
+POST_TARGETDEPS += ../../../lib/libSearch.a ../../../lib/libChardet.a ../../../lib/libCommon.a
 CONFIG += console debug
 SOURCES += searchtst.cc
+DEPENDPATH +=  ../../include ../../../libCommon/include
 INCLUDEPATH += ../../../external/boost ../../include ../../../libCommon/include
 LIBS +=     -L../ \
             -L../../../lib \

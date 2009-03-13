@@ -4,6 +4,7 @@
 TARGET = Search
 DESTDIR = ../lib
 TEMPLATE = lib
+POST_TARGETDEPS += ../lib/libChardet.a ../lib/libCommon.a
 CONFIG += staticlib \
     debug
 SOURCES += src/filesearcher.cc \
@@ -15,6 +16,9 @@ HEADERS += ./include/searchfacade.h \
     ./include/filesearcher.h \
     include/plaintextextractor.h \
     include/txttextextractor.h
+DEPENDPATH += ./include \
+    ../libCommon/include \
+    ../libChardet/include
 INCLUDEPATH += ../external/boost \
     ./include \
     ../libCommon/include \
