@@ -23,7 +23,7 @@ int verbose=0;
  * it is word processor file or copy_out if it is plain text file
  * return not 0 when error
  ********************************************************************/ 
-int analyze_format(FILE *f) {
+int __cdecl analyze_format(FILE *f) {
 	unsigned char buffer[129];
 	long offset=0;
 	FILE *new_file, *ole_file;

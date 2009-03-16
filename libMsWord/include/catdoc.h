@@ -215,13 +215,13 @@ void copy_out(FILE *f, char *header);
 void output_paragraph(unsigned short int *buffer) ;
 int parse_rtf(FILE *f);
 /* format recognition*/
-int analyze_format(FILE *f);
+int __cdecl analyze_format(FILE *f);
 void list_charsets(void);
 int parse_word_header(unsigned char *buffer,FILE *f,int offset,long curpos);
 /* large buffers for file IO*/
 extern char *input_buffer,*output_buffer;
 #ifndef HAVE_STRDUP
-	char *strdup(const char *s);
+//	char *strdup(const char *s);
 #endif
 /* numeric conversions */	
 long int getlong(unsigned char *buffer,int offset);

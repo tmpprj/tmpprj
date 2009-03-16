@@ -3,7 +3,7 @@
 # -------------------------------------------------
 QT -= core \
     gui
-TARGET = libMsWord
+TARGET = MsWord
 DESTDIR = ../lib
 TEMPLATE = lib
 CONFIG += staticlib
