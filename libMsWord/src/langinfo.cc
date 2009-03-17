@@ -13,7 +13,7 @@ char* __get_dos_codepage(void) {
 	//if (regs.x.cflag) {
 	//	return badParam;
 	//}
-	return strCp;
+        return (char*)strCp;
 }	
 char *nl_langinfo(nl_item item) {
    if (item == CODESET) {

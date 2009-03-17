@@ -296,7 +296,7 @@ const char *charset_from_codepage(unsigned int codepage) {
 		sprintf(buffer,"cp%d",codepage);
 		return buffer;
 	} else {
-		for (cp = cp_to_charset;cp->codepage!=0&& cp->codepage!=codepage;cp++);
+                for (cp = cp_to_charset;cp->codepage!=0&& cp->codepage!=(int)codepage;cp++);
 		return cp->charset_name;
 	}
 }	

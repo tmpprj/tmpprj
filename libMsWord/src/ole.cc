@@ -71,7 +71,7 @@ FILE* ole_init(FILE *f, void *buffer, size_t bufSize)  {
 			}
 			if (bufSize > 0) {
 				ret=fwrite(buffer, 1, bufSize, newfile);
-				if(ret != bufSize) {
+                                if(ret != (int)bufSize) {
 					perror("Can't write to tmp file");
 					return NULL;
 				}
@@ -97,7 +97,7 @@ FILE* ole_init(FILE *f, void *buffer, size_t bufSize)  {
 	if ( ret != BBD_BLOCK_SIZE ) {
 		return NULL;
 	}
-	if (strncmp(oleBuf,ole_sign,8) != 0) {
+        if (strncmp((const char*)oleBuf,(const char*)ole_sign,8) != 0) {
 		return NULL;
 	}
  	sectorSize = 1<<getshort(oleBuf,0x1e);
@@ -105,11 +105,11 @@ FILE* ole_init(FILE *f, void *buffer, size_t bufSize)  {
 	
 /* Read BBD into memory */
 	bbdNumBlocks = getulong(oleBuf,0x2c);
-	if((BBD=malloc(bbdNumBlocks*sectorSize)) == NULL ) {
+        if((BBD=(unsigned char*)malloc(bbdNumBlocks*sectorSize)) == NULL ) {
 		return NULL;
 	}
 	
-	if((tmpBuf=malloc(MSAT_ORIG_SIZE)) == NULL ) {
+        if((tmpBuf=(unsigned char*)malloc(MSAT_ORIG_SIZE)) == NULL ) {
 		return NULL;
 	}
 	memcpy(tmpBuf,oleBuf+0x4c,MSAT_ORIG_SIZE);
@@ -122,7 +122,7 @@ FILE* ole_init(FILE *f, void *buffer, size_t bufSize)  {
 	while((mblock >= 0) && (i < msat_size)) {
 		unsigned char *newbuf;
 /* 		fprintf(stderr, "i=%d mblock=%ld\n", i, mblock); */
-		if ((newbuf=realloc(tmpBuf, sectorSize*(i+1)+MSAT_ORIG_SIZE)) != NULL) {
+                if ((newbuf=(unsigned char*)realloc(tmpBuf, sectorSize*(i+1)+MSAT_ORIG_SIZE)) != NULL) {
 			tmpBuf=newbuf;
 		} else {
 			perror("MSAT realloc error");
@@ -133,7 +133,7 @@ FILE* ole_init(FILE *f, void *buffer, size_t bufSize)  {
 		
 		fseek(newfile, 512+mblock*sectorSize, SEEK_SET);
 		if(fread(tmpBuf+MSAT_ORIG_SIZE+(sectorSize-4)*i,
-						 1, sectorSize, newfile) != sectorSize) {
+                                                 1, sectorSize, newfile) != (size_t)sectorSize) {
 			fprintf(stderr, "Error read MSAT!\n");
 			ole_finish();
 			return NULL;
@@ -153,7 +153,7 @@ FILE* ole_init(FILE *f, void *buffer, size_t bufSize)  {
 			return NULL;
 		}
 		fseek(newfile, 512+bbdSector*sectorSize, SEEK_SET);
-		if ( fread(BBD+i*sectorSize, 1, sectorSize, newfile) != sectorSize ) {
+                if ( fread(BBD+i*sectorSize, 1, sectorSize, newfile) != (size_t)sectorSize ) {
 			fprintf(stderr, "Can't read BBD!\n");
 			free(tmpBuf);
 			ole_finish();
@@ -167,7 +167,7 @@ FILE* ole_init(FILE *f, void *buffer, size_t bufSize)  {
 	sbdMaxLen=10;
 	sbdCurrent = sbdStart = getlong(oleBuf,0x3c);
 	if (sbdStart > 0) {
-		if((SBD=malloc(sectorSize*sbdMaxLen)) == NULL ) {
+                if((SBD=(unsigned char*)malloc(sectorSize*sbdMaxLen)) == NULL ) {
 			ole_finish();
 			return NULL;
 		}
@@ -179,7 +179,7 @@ FILE* ole_init(FILE *f, void *buffer, size_t bufSize)  {
 				unsigned char *newSBD;
 				
 				sbdMaxLen+=5;
-				if ((newSBD=realloc(SBD, sectorSize*sbdMaxLen)) != NULL) {
+                                if ((newSBD=(unsigned char*)realloc(SBD, sectorSize*sbdMaxLen)) != NULL) {
 					SBD=newSBD;
 				} else {
 					perror("SBD realloc error");
@@ -202,7 +202,7 @@ FILE* ole_init(FILE *f, void *buffer, size_t bufSize)  {
 	propMaxLen = 5;
 	propCurrent = propStart = getlong(oleBuf,0x30);
 	if (propStart >= 0) {
-		if((properties=malloc(propMaxLen*sectorSize)) == NULL ) {
+                if((properties=(unsigned char*)malloc(propMaxLen*sectorSize)) == NULL ) {
 			ole_finish();
 			return NULL;
 		}
@@ -216,7 +216,7 @@ FILE* ole_init(FILE *f, void *buffer, size_t bufSize)  {
 				unsigned char *newProp;
 				
 				propMaxLen+=5;
-				if ((newProp=realloc(properties, propMaxLen*sectorSize)) != NULL)
+                                if ((newProp=(unsigned char*)realloc(properties, propMaxLen*sectorSize)) != NULL)
 					properties=newProp;
 				else {
 					perror("Properties realloc error");
@@ -327,7 +327,7 @@ FILE *ole_readdir(FILE *f) {
 		e->length >= 0 &&
 		(e->startBlock <=
 		 fileLength/(e->isBigBlock ? sectorSize : shortSectorSize))) {
-		if((e->blocks=malloc(chainMaxLen*sizeof(long int))) == NULL ) {
+                if((e->blocks=(long int*)malloc(chainMaxLen*sizeof(long int))) == NULL ) {
 			return NULL;
 		}
 		while(1) {
@@ -336,7 +336,7 @@ FILE *ole_readdir(FILE *f) {
 			if (e->numOfBlocks >= chainMaxLen) {
 				long int *newChain;
 				chainMaxLen+=25;
-				if ((newChain=realloc(e->blocks,
+                                if ((newChain=(long int*)realloc(e->blocks,
 									  chainMaxLen*sizeof(long int))) != NULL)
 					e->blocks=newChain;
 				else {
@@ -358,14 +358,14 @@ FILE *ole_readdir(FILE *f) {
 								 ((bbdNumBlocks*sectorSize)/4)
 								 : ((sbdNumber*shortSectorSize)/4) ) ||
 			   (e->numOfBlocks >
-				e->length/(e->isBigBlock ? sectorSize : shortSectorSize))) {
+                                (long)e->length/(e->isBigBlock ? sectorSize : shortSectorSize))) {
 /*   				fprintf(stderr, "chain End=%ld\n", chainCurrent);   */
 				break;
 			}
 		}
 	}
 	
-	if(e->length > (e->isBigBlock ? sectorSize : shortSectorSize)*e->numOfBlocks)
+        if((long)e->length > (e->isBigBlock ? sectorSize : shortSectorSize)*e->numOfBlocks)
 		e->length = (e->isBigBlock ? sectorSize : shortSectorSize)*e->numOfBlocks;
 /* 	fprintf(stderr, "READDIR: e->name=%s e->numOfBlocks=%ld length=%ld\n", */
 /* 					e->name, e->numOfBlocks, e->length); */
@@ -430,8 +430,8 @@ size_t ole_read(void *ptr, size_t size, size_t nmemb, FILE *stream) {
 	long int blockNumber, modBlock, toReadBlocks, toReadBytes, bytesInBlock;
 	long int ssize;				/**< Size of block */
 	long int newoffset;
-	unsigned char *cptr = ptr;	
-	if( e->ole_offset+llen > e->length )
+        unsigned char *cptr = (unsigned char*)ptr;
+        if( e->ole_offset+llen > (long)e->length )
 		llen= e->length - e->ole_offset;
 	
 	ssize = (e->isBigBlock ? sectorSize : shortSectorSize);
@@ -493,7 +493,7 @@ int ole_eof(FILE *stream) {
 	oleEntry *e=(oleEntry*)stream;
 /*	fprintf(stderr, "EOF: e->ole_offset=%ld  e->length=%ld\n",
 	e->ole_offset,  e->length);*/
-	return (e->ole_offset >=  e->length);
+        return (e->ole_offset >=  (long)e->length);
 }
 
 /** 
@@ -559,7 +559,7 @@ int ole_seek(FILE *stream, long offset, int whence) {
 	}
 	if(new_ole_offset<0)
 		new_ole_offset=0;
-	if(new_ole_offset >= e->length)
+        if(new_ole_offset >= (long)e->length)
 		new_ole_offset=e->length;
 
 	ssize = (e->isBigBlock ? sectorSize : shortSectorSize);

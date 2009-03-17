@@ -41,16 +41,16 @@ void do_table(FILE *input,char *filename) {
 	CleanUpFormatIdxUsed();
 	while (itemsread) {
 		catdoc_read(rec,2,1,input);
-		biff_version=getshort(rec,0);
+                biff_version=getshort((unsigned char*)rec,0);
 		catdoc_read(rec,2,1,input);
-		reclen=getshort(rec,0);
+                reclen=getshort((unsigned char*)rec,0);
 		if ( biff_version == 0x0809 || biff_version == 0x0409 ||
 				 biff_version == 0x0209 || biff_version == 0x0009 ) {
 			if (reclen==8 || reclen==16) {
 				if (biff_version == 0x0809 ) {
 					itemsread=catdoc_read(rec,4,1,input);
-					build_year=getshort(rec+2,0);
-					build_rel=getshort(rec,0);
+                                        build_year=getshort((unsigned char*)rec+2,0);
+                                        build_rel=getshort((unsigned char*)rec,0);
 					if(build_year > 5 ) {
 						itemsread=catdoc_read(rec,8,1,input);
 						biff_version=8;
@@ -84,7 +84,7 @@ void do_table(FILE *input,char *filename) {
 		exit(1);
 	}    
 	while(itemsread){
-		char buffer[2];
+		unsigned char buffer[2];
 		rectype = 0;
 		itemsread = catdoc_read(buffer, 2, 1, input);
 		if (catdoc_eof(input)) {
@@ -92,7 +92,7 @@ void do_table(FILE *input,char *filename) {
 			return;
 		}
 		
-		rectype=getshort(buffer,0);
+                rectype=getshort((unsigned char*)buffer,0);
 		if(itemsread == 0)
 			break;
 		reclen=0;
@@ -109,7 +109,7 @@ void do_table(FILE *input,char *filename) {
 			}    
 		}
 /* 		fprintf(stderr,"Rectype 0x%04X reclen=%d\n",rectype, reclen); */
-		process_item(rectype,reclen,rec);
+                process_item(rectype,reclen,(char*)rec);
 		if (rectype == MSEOF) {
 			eof_flag=1;
 		} else {
@@ -135,7 +135,7 @@ void process_item (int rectype, int reclen, char *rec) {
 		/* we have accumulated  unparsed SST, and now encountered
 		 * another record, which indicates that SST is ended */
 		/* fprintf(stderr,"parse sst!\n");*/
-		parse_sst(sstBuffer,sstBytes);
+                parse_sst((char*)sstBuffer,sstBytes);
 	}	
 	switch (rectype) {
 	case FILEPASS: {
@@ -150,7 +150,7 @@ void process_item (int rectype, int reclen, char *rec) {
 		
 	case 0x42: {
 		if (source_charset) break;
-		codepage=getshort(rec,0);
+                codepage=getshort((unsigned char*)rec,0);
 		/*fprintf(stderr,"CODEPAGE %d\n",codepage); */
 		if (codepage!=1200) {
 			const char *cp = charset_from_codepage(codepage); 
@@ -160,7 +160,7 @@ void process_item (int rectype, int reclen, char *rec) {
 	}  
 	case FORMAT: {
 		int format_code;
-		format_code=getshort(rec,0);
+                format_code=getshort((unsigned char*)rec,0);
 		SetFormatIdxUsed(format_code);
 		/* this debug code prints format string */
 		/*							  
@@ -191,7 +191,7 @@ void process_item (int rectype, int reclen, char *rec) {
 		if (sst != NULL)
 			free(sst);
 		
-		sstBuffer=(char*)malloc(reclen);
+                sstBuffer=(unsigned char*)malloc(reclen);
 		sstBytes = reclen;
 		if (sstBuffer == NULL ) {
 			perror("SSTptr alloc error! ");
@@ -204,7 +204,7 @@ void process_item (int rectype, int reclen, char *rec) {
 		if (prev_rectype != SST) {
 			return; /* to avoid changing of prev_rectype;*/
 		}    
-		sstBuffer=realloc(sstBuffer,sstBytes+reclen);
+                sstBuffer=(unsigned char*)realloc(sstBuffer,sstBytes+reclen);
 		if (sstBuffer == NULL ) {
 			perror("SSTptr realloc error! ");
 			exit(1);
@@ -219,16 +219,16 @@ void process_item (int rectype, int reclen, char *rec) {
 		unsigned char *src=(unsigned char *)rec+6;
 
 		saved_reference=NULL;
-		row = getshort(rec,0); 
-		col = getshort(rec,2);
+                row = getshort((unsigned char*)rec,0);
+                col = getshort((unsigned char*)rec,2);
 		/* 		fprintf(stderr,"LABEL!\n"); */
 		pcell=allocate(row,col);
-		*pcell=copy_unicode_string(&src);
+                *pcell=(unsigned char*)copy_unicode_string(&src);
 		break;
 	}     
 	case BLANK: { int row,col;unsigned char **pcell;
-			row = getshort(rec,0);
-			col = getshort(rec,2);
+                        row = getshort((unsigned char*)rec,0);
+                        col = getshort((unsigned char*)rec,2);
 			pcell=allocate(row,col);
 			*pcell=NULL;
 			break;
@@ -236,18 +236,18 @@ void process_item (int rectype, int reclen, char *rec) {
 	case MULBLANK: {
 		int row, startcol,endcol;
 		unsigned char **pcell;
-		row = getshort(rec,0);
-		startcol = getshort(rec,2);
-		endcol=getshort(rec,reclen-2);
+                row = getshort((unsigned char*)rec,0);
+                startcol = getshort((unsigned char*)rec,2);
+                endcol=getshort((unsigned char*)rec,reclen-2);
 		pcell=allocate(row,endcol);
 		*pcell=NULL;
 		break;
 	}	   
 	case CONSTANT_STRING: {
-		int row = getshort(rec,0); 
-		int col = getshort(rec,2);
+                int row = getshort((unsigned char*)rec,0);
+                int col = getshort((unsigned char*)rec,2);
 		unsigned char **pcell;
-		int string_no=getshort(rec,6);
+                int string_no=getshort((unsigned char*)rec,6);
 		if (!sst) {
 			fprintf(stderr,"CONSTANT_STRING before SST parsed\n");
 			exit(1);
@@ -262,12 +262,13 @@ void process_item (int rectype, int reclen, char *rec) {
 		} else if (sst[string_no] !=NULL) {	
 			int len;
 			char *outptr;
-			len=strlen(sst[string_no]);
-			outptr=*pcell=malloc(len+1);
-			strcpy(outptr,sst[string_no]);
+                        len=strlen((const char*)sst[string_no]);
+                        *pcell=(unsigned char*)malloc(len+1);
+                        outptr=(char*)(*pcell);
+                        strcpy(outptr,(const char*)sst[string_no]);
 		} else {
-			*pcell=malloc(1);
-			strcpy(*pcell,"");
+			*pcell=(unsigned char*)malloc(1);
+                        strcpy((char*)*pcell,"");
 		}	
 		break;
 	}
@@ -279,20 +280,20 @@ void process_item (int rectype, int reclen, char *rec) {
 		unsigned char **pcell;
 
 		saved_reference=NULL;
-		row = getshort(rec,0)-startrow; 
-		col = getshort(rec,2);
+                row = getshort((unsigned char*)rec,0)-startrow;
+                col = getshort((unsigned char*)rec,2);
 		pcell=allocate(row,col);
-		*pcell=strdup(format_double(rec,6,getshort(rec,4)));
+                *pcell=(unsigned char*)strdup(format_double(rec,6,getshort((unsigned char*)rec,4)));
 		break;
 	}
 	case INTEGER_CELL: {
 		int row,col;
 		unsigned char **pcell;
 
-		row = getshort(rec,0)-startrow;
-		col = getshort(rec,2);
+                row = getshort((unsigned char*)rec,0)-startrow;
+                col = getshort((unsigned char*)rec,2);
 		pcell=allocate(row,col);
-		*pcell=strdup(format_int(getshort(rec,7),getshort(rec,4)));		  
+                *pcell=(unsigned char*)strdup(format_int(getshort((unsigned char*)rec,7),getshort((unsigned char*)rec,4)));
 		break;
 
 	}				  
@@ -301,25 +302,25 @@ void process_item (int rectype, int reclen, char *rec) {
 		unsigned char **pcell;
 
 		saved_reference=NULL;
-		row = getshort(rec,0)-startrow; 
-		col = getshort(rec,2);
+                row = getshort((unsigned char*)rec,0)-startrow;
+                col = getshort((unsigned char*)rec,2);
 		pcell=allocate(row,col);
-		format_code = getshort(rec,4);
-		*pcell=strdup(format_rk(rec+6,format_code));
+                format_code = getshort((unsigned char*)rec,4);
+                *pcell=(unsigned char*)strdup(format_rk(rec+6,format_code));
 		break;
 	}
 	case MULRK: {
 		int row,col,startcol,endcol,offset,format_code;
 		unsigned char **pcell;
-		row = getshort(rec,0)-startrow; 
-		startcol = getshort(rec,2);
-		endcol = getshort(rec,reclen-2);
+                row = getshort((unsigned char*)rec,0)-startrow;
+                startcol = getshort((unsigned char*)rec,2);
+                endcol = getshort((unsigned char*)rec,reclen-2);
 		saved_reference=NULL;
 
 		for (offset=4,col=startcol;col<=endcol;offset+=6,col++) { 
 			pcell=allocate(row,col);
-			format_code=getshort(rec,offset);
-			*pcell=strdup(format_rk(rec+offset+2,format_code));
+                        format_code=getshort((unsigned char*)rec,offset);
+                        *pcell=(unsigned char*)strdup(format_rk(rec+offset+2,format_code));
 
 		}		 
 		break;
@@ -328,8 +329,8 @@ void process_item (int rectype, int reclen, char *rec) {
 		int row,col;
 		unsigned char **pcell;
 		saved_reference=NULL;
-		row = getshort(rec,0)-startrow; 
-		col = getshort(rec,2);
+                row = getshort((unsigned char*)rec,0)-startrow;
+                col = getshort((unsigned char*)rec,2);
 		pcell=allocate(row,col);
 		if (((unsigned char)rec[12]==0xFF)&&(unsigned char)rec[13]==0xFF) {
 			/* not a floating point value */
@@ -337,17 +338,17 @@ void process_item (int rectype, int reclen, char *rec) {
 				/*boolean*/
 				char buf[2]="0";
 				buf[0]+=rec[9];
-				*pcell=strdup(buf);
+                                *pcell=(unsigned char*)strdup(buf);
 			} else if (rec[6]==2) {
 				/*error*/
 				char buf[6]="ERROR";
-				*pcell=strdup(buf);
+                                *pcell=(unsigned char*)strdup(buf);
 			} else if (rec[6]==0) {
 				saved_reference=pcell;
 			}   
 		} else {
-			int format_code=getshort(rec,4);
-			*pcell=strdup(format_double(rec,6,format_code));
+                        int format_code=getshort((unsigned char*)rec,4);
+                        *pcell=(unsigned char*)strdup(format_double(rec,6,format_code));
 		}		 
 		break;
 	}
@@ -357,7 +358,7 @@ void process_item (int rectype, int reclen, char *rec) {
 			fprintf(stderr,"String record without preceeding string formula\n");
 			break;
 		}
-		*saved_reference=copy_unicode_string(&src);
+                *saved_reference=(unsigned char*)copy_unicode_string(&src);
 		break;
 	}	    
 	case BOF: {
@@ -370,10 +371,10 @@ void process_item (int rectype, int reclen, char *rec) {
 	case XF:
 	case 0x43: /*from perl module Spreadsheet::ParseExecel */		  
 		{
-			short int formatIndex = getshort(rec,2);
+                        short int formatIndex = getshort((unsigned char*)rec,2);
 			/* we are interested only in format index here */ 
 			if (formatTableIndex >= formatTableSize) {
-				formatTable=realloc(formatTable,
+                                formatTable=(short int*)realloc(formatTable,
 														(formatTableSize+=16)*sizeof(short int));
 					  	  
 				if (!formatTable) {
@@ -396,7 +397,7 @@ void process_item (int rectype, int reclen, char *rec) {
 		break;
 	}
 	case ROW: { 
-		/*  		fprintf(stderr,"Row! %d %d %d\n",getshort(rec,0), getshort(rec+2,0),getshort(rec+4,0));  */
+                /*  		fprintf(stderr,"Row! %d %d %d\n",getshort((unsigned char*)rec,0), getshort((unsigned char*)rec+2,0),getshort((unsigned char*)rec+4,0));  */
 		break; 
 	} 
 	case INDEX: {
@@ -479,7 +480,7 @@ char *copy_unicode_string (unsigned char **src) {
 	/* 	fprintf(stderr,"count=%d skip=%d start_offset=%d\n", */
 	/* 					count, to_skip, start_offset); */
 	/* а здесь мы копируем строку	*/
-	if ( (dest=malloc(count+1)) == NULL ) {
+        if ( (dest=(char*)malloc(count+1)) == NULL ) {
 		perror("Dest string alloc error");
 		*src+=(to_skip+start_offset+(count*charsize));
 		exit(0);
@@ -487,7 +488,7 @@ char *copy_unicode_string (unsigned char **src) {
 	*src+=start_offset;
 	len = count;
 	*dest=0;l=0;
-	for (s=*src,d=dest,i=0;i<count;i++,s+=charsize) {
+        for (s=(char*)*src,d=dest,i=0;i<count;i++,s+=charsize) {
 		/* 		fprintf(stderr,"l=%d len=%d count=%d charsize=%d\n",l,len,count,charsize); */
 		if ( (charsize == 1 && (*s == 1 || *s == 0)) ||
 				 (charsize == 2 && (*s == 1 || *s == 0) && *(s+1) != 4)) {
@@ -499,7 +500,7 @@ char *copy_unicode_string (unsigned char **src) {
 			continue;
 		}
 		if ( charsize == 2 ){
-			u=(unsigned short)getshort(s,0);
+                        u=(unsigned short)getshort((unsigned char*)s,0);
 			c=convert_char(u);
 			/* 			fprintf(stderr,"char=%02x %02x\n", *s, *(s+1)); */
 		} else {
@@ -515,7 +516,7 @@ char *copy_unicode_string (unsigned char **src) {
 			int dl = strlen(c);
 			while (l+dl>=len) {
 				len+=16;
-				dest=realloc(dest,len+1);
+                                dest=(char*)realloc(dest,len+1);
 			}
 			d=dest+l;
 			strcpy(d,c);
@@ -523,7 +524,7 @@ char *copy_unicode_string (unsigned char **src) {
 			l+=dl;
 		}      
 	}
-	*src=s+to_skip;
+        *src=(unsigned char*)s+to_skip;
 	return dest;
 }
 
@@ -643,7 +644,7 @@ char IsFormatIdxUsed(int format_code) {
 char *isDateFormat(int format_code) {
 	int index;
 	int dateindex;
-	if (format_code>=formatTableIndex) {
+        if (format_code>=(int)formatTableIndex) {
 		fprintf(stderr,"Format code %d is used before definition\n",format_code);
 		return NULL;
 	}
@@ -713,7 +714,7 @@ char* format_rk(char *rec,short int format_code) {
 
 	if ( *(rec) & 0x02 )
 	{
-		value=(double)(getlong(rec,0)>>2);
+                value=(double)(getlong((unsigned char*)rec,0)>>2);
 	}
 	else { 
 		union { char cc[8];
@@ -747,7 +748,7 @@ time_t float2date(double f) {
 	 * We are substracting value of 1.1.1970 and multiplying
 	 * by 86400 thus getting seconds from the epoch
 	 */
-	return round2((f-date_shift)*86400); 
+	return (time_t)round2((f-date_shift)*86400); 
 }
 
 /*
@@ -759,18 +760,18 @@ void parse_sst(char *sstbuf,int bufsize) {
 	unsigned char *barrier=(unsigned char *)sstbuf+bufsize; /*pointer to end of buffer*/
 	unsigned char **parsedString;/*pointer into parsed array*/ 
 			
-	sstsize = getlong(sstbuf+4,0);
-	sst=malloc(sstsize*sizeof(char *));
+        sstsize = getlong((unsigned char*)sstbuf+4,0);
+        sst=(unsigned char**)malloc(sstsize*sizeof(char *));
 	
 	if (sst == NULL) {
 		perror("SST allocation error");
 		exit(1);
 	}
 	memset(sst,0,sstsize*sizeof(char *));
-	for (i=0,parsedString=sst,curString=sstbuf+8;
+        for (i=0,parsedString=sst,curString=(unsigned char*)sstbuf+8;
 			 i<sstsize && curString<barrier; i++,parsedString++) {
 		/* 		fprintf(stderr,"copying %d string\n",i); */
-		*parsedString = copy_unicode_string(&curString);
+                *parsedString = (unsigned char*)copy_unicode_string(&curString);
 	}       
 	/* 	fprintf(stderr,"end sst i=%d sstsize=%d\n",i,sstsize); */
 

@@ -164,7 +164,7 @@ void set_time_locale() {
 char *strdup(const char *s) {
 	int size=strlen(s);
 	char *newstr;
-	newstr=malloc(size+1);
+        newstr=(char*)malloc(size+1);
 	return strcpy(newstr,s);
 }	
 #endif

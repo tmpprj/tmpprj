@@ -152,7 +152,7 @@ static void process_item (int rectype, long reclen, FILE* input) {
 			text_len=reclen/2;
 			for(i=0; i < text_len; i++) {
 				catdoc_read(buf,2,1,input);
-				u=(unsigned short)getshort(buf,0);
+                                u=(unsigned short)getshort((unsigned char*)buf,0);
 				if(u!=0x0d)
 					fputs(convert_char(u),stdout);
 				else
