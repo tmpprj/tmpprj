@@ -1,10 +1,13 @@
 //#include <QtCore/QCoreApplication>
+extern "C" {
 #include <catdoc.h>
+}
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <iostream>
 
 void help(void);
 
@@ -15,6 +18,16 @@ int wrap_margin = WRAP_MARGIN;
 int (*get_unicode_char)(FILE *f,long *offset,long fileend) =NULL;
 
 char *input_buffer, *output_buffer;
+
+void WriterF( unsigned short int* pBuf )
+{
+    std::cout << "WriterFunc:" << std::endl;
+    while( *pBuf++ )
+    {
+        std::cout << (int)*pBuf << " ";
+    }
+}
+
 /**************************************************************/
 /*       Main program                                         */
 /*  Processes options, reads charsets  files and substitution */
@@ -55,6 +68,7 @@ int main(int argc, char **argv) {
                         perror(argv[1]);
                 }
         }
+        set_writer( WriterF );
         c=analyze_format(f);
         fclose(f);
         return c;

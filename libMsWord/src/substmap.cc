@@ -162,7 +162,7 @@ void map_insert(SUBSTMAP map, int uc, const char *s) {
 	SUBSTMAP p=map+((unsigned)uc>>8);
 
 	if (!*p) {
-		*p= calloc(sizeof(char*),256);
+                *p= (char**)calloc(sizeof(char*),256);
 		if (!*p) { 
 			fprintf(stderr,"Insufficient memory\n");
 			exit(1);

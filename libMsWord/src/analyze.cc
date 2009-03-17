@@ -23,7 +23,7 @@ int verbose=0;
  * it is word processor file or copy_out if it is plain text file
  * return not 0 when error
  ********************************************************************/ 
-int __cdecl analyze_format(FILE *f) {
+int analyze_format(FILE *f) {
 	unsigned char buffer[129];
 	long offset=0;
 	FILE *new_file, *ole_file;
@@ -39,18 +39,18 @@ int __cdecl analyze_format(FILE *f) {
 	}
 	catdoc_read(buffer,4,1,f);
 	buffer[4]=0;
-	if (strncmp(buffer,write_sign,2)==0) {
+        if (strncmp((const char*)buffer,write_sign,2)==0) {
 		printf("[Windows Write file. Some garbage expected]\n");
 		get_unicode_char=get_8bit_char;
 		return process_file(f,LONG_MAX);
-	} else if (strncmp(buffer,rtf_sign,4)==0) {
+        } else if (strncmp((const char*)buffer,rtf_sign,4)==0) {
 		return parse_rtf(f);
-	} else if (strncmp(buffer,old_word_sign,2)==0) {
+        } else if (strncmp((const char*)buffer,old_word_sign,2)==0) {
 	   fread(buffer+4,1,124,f);	
 	   return parse_word_header(buffer,f,128,0);
 	}	
 	fread(buffer+4,1,4,f);
-	if (strncmp(buffer,ole_sign,8)==0) {
+        if (strncmp((const char*)buffer,ole_sign,8)==0) {
 		if ((new_file=ole_init(f, buffer, 8)) != NULL) {
 			set_ole_func();
 			while((ole_file=ole_readdir(new_file)) != NULL) {
@@ -67,11 +67,11 @@ int __cdecl analyze_format(FILE *f) {
 			ole_finish();
 		} else {
 			fprintf(stderr,"Broken OLE file. Try using -b switch");
-			exit(1);
+                        return 1;
 		}	
 	} else {
 		set_std_func();
-		copy_out(f,buffer);
+                copy_out(f,(char*)buffer);
 		return 0;
 	}
 	
@@ -167,7 +167,7 @@ int parse_word_header(unsigned char * buffer,FILE *f,int offset,long curpos) {
 		catdoc_read(buf, 1, 1, f);
 		if (catdoc_eof(f)) {
 			fprintf(stderr,"File ended before textstart. Probably it is broken. Try -b switch\n");
-			exit(1);
+                        return 1;
 		}
 	}    
 	return process_file(f,textlen) || ret_code;

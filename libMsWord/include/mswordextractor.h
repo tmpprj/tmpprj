@@ -1,10 +1,10 @@
 #ifndef MSWORDEXTRACTOR_H
 #define MSWORDEXTRACTOR_H
 
+#include <string>
 
-class CMswordExtractor {
-public:
-    CMswordExtractor();
-};
+typedef void (*WriterFunc)(unsigned short int* );
+
+void Extract( WriterFunc Writer, const std::string& strFileName );
 
 #endif // MSWORDEXTRACTOR_H

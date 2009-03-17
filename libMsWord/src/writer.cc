@@ -71,17 +71,22 @@ void out_char(const char *chunk) {
 	}
 }
 
+WriterFunc WriterImpl = NULL;
+
+void set_writer( WriterFunc Func )
+{
+    WriterImpl = Func;
+}
+
 /************************************************************************/
 /* Main output function.
  * Programs which read word-processor files should accumulate paragraphs
  * in the buffer as array of unicode 16-bit codes and pass to this
  * function
  ************************************************************************/ 
-void output_paragraph(unsigned short int *buffer) {
-	unsigned short int *p;
-	int countout=0;
-	for (p=buffer;*p;p++) {
-		out_char(convert_char(*p));
-		countout++;
-	}
+void output_paragraph(unsigned short int *buffer)
+{
+    if( NULL != WriterImpl )
+        WriterImpl( buffer );
 }
+

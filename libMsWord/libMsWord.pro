@@ -7,26 +7,30 @@ TARGET = MsWord
 DESTDIR = ../lib
 TEMPLATE = lib
 CONFIG += staticlib
-INCLUDEPATH += ./include
-SOURCES += src/mswordextractor.cpp \
-    src/xlsparse.c \
-    src/xls2csv.c \
-    src/writer.c \
-    src/substmap.c \
-    src/strftime.c \
-    src/sheet.c \
-    src/rtfread.c \
-    src/reader.c \
-    src/pptparse.c \
-    src/ole.c \
-    src/numutils.c \
-    src/langinfo.c \
-    src/fileutil.c \
-    src/confutil.c \
-    src/charsets.c \
-    src/catppt.c \
-    src/catdoc.c \
-    src/analyze.c
+POST_TARGETDEPS += ../lib/libCommon.a
+DEPENDPATH += ./include \
+    ../libCommon/include
+INCLUDEPATH += ./include\
+    ../libCommon/include
+SOURCES += src/mswordextractor.cc \
+    src/xlsparse.cc \
+    src/xls2csv.cc \
+    src/writer.cc \
+    src/substmap.cc \
+    src/strftime.cc \
+    src/sheet.cc \
+    src/rtfread.cc \
+    src/reader.cc \
+    src/pptparse.cc \
+    src/ole.cc \
+    src/numutils.cc \
+    src/langinfo.cc \
+    src/fileutil.cc \
+    src/confutil.cc \
+    src/charsets.cc \
+    src/catppt.cc \
+    src/catdoc.cc \
+    src/analyze.cc
 HEADERS += include/mswordextractor.h \
     include/xltypes.h \
     include/xls.h \

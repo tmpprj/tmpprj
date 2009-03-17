@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 #include "catdoc.h"
+#include <unistd.h>
 #if defined(MSDOS) && !defined(__MSDOS__)
 #define __MSDOS__
 #endif
@@ -119,7 +120,7 @@ int check_charset(char **filename,const char *charset) {
 /**********************************************************************/
 char *stradd(const char *s1,const char *s2) 
 { char *res;
-	res=malloc(strlen(s1)+strlen(s2)+1);
+        res=(char*)malloc(strlen(s1)+strlen(s2)+1);
 	if (!res) {
 		fprintf (stderr,"Out of memory!");
 		exit(1);

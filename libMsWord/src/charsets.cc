@@ -42,7 +42,7 @@ int from_unicode (CHARSET charset, int u) {
 /*  Converts direct (charset -> unicode) to reverse map                 */
 /************************************************************************/
 CHARSET make_reverse_map(short int *charset) {
-	CHARSET newmap=calloc(sizeof(short int *), 256);
+        CHARSET newmap=(short int**)calloc(sizeof(short int *), 256);
 	int i,j,k,l;
 	short int *p;   
 	if (! charset) {
@@ -52,10 +52,10 @@ CHARSET make_reverse_map(short int *charset) {
 		k= charset[i];
 		j=  (unsigned)k>>8;
 		if (!newmap[j]) {
-			newmap[j] = malloc(sizeof(short int *)*256);
+                        newmap[j] = (short int*)malloc(sizeof(short int *)*256);
 			if (!newmap[j]) {
 				fprintf(stderr,"Insufficient memory for  charset\n");
-				exit(1);
+                                return NULL;
 			}
 			for (l=0,p=newmap[j];l<256;l++,p++) *p=-1;
 		}
@@ -72,12 +72,12 @@ CHARSET make_reverse_map(short int *charset) {
 short int * read_charset(const char *filename) {
 	char *path;
 	FILE *f;
-	short int *new=calloc(sizeof(short int),256);
+        short int *pnew=(short int*)calloc(sizeof(short int),256);
 	int c;
 	long int uc;
 	path= find_file(stradd(filename,CHARSET_EXT),charset_path);
 	if (!path) {
-		fprintf(stderr,"Cannot load charset %s - file not found\n",filename);
+//		fprintf(stderr,"Cannot load charset %s - file not found\n",filename);
 		return NULL;
 	}
 	f=fopen(path,"rb");
@@ -90,7 +90,7 @@ short int * read_charset(const char *filename) {
 		setvbuf(f,input_buffer,_IOFBF,FILE_BUFFER);
 	/* defaults */
 	for (c=0;c<32;c++) {
-		new[c]=c;
+                pnew[c]=c;
 	}
 	while (!feof(f)) {
 		if (fscanf(f,"%i %li",&c,&uc)==2) {
@@ -99,13 +99,13 @@ short int * read_charset(const char *filename) {
 				fclose(f);
 				return NULL;
 			}
-			new[c]=uc;
+                        pnew[c]=uc;
 		}
 		while((fgetc(f)!='\n')&&!feof(f)) ;
 	}
 	fclose (f);
 	free(path);
-	return new;
+        return pnew;
 }
 
 
@@ -133,7 +133,7 @@ int get_utf16lsb (FILE *f,long *offset,long fileend) {
 	result=catdoc_read(buf, 1, 2, f);
 	if (result<0) {
 		perror("read:");
-		exit(1);
+                return EOF;
 	}
 	if (result !=2) {
 		return EOF;
@@ -152,7 +152,7 @@ int get_utf16msb (FILE *f,long *offset,long fileend) {
 	result=catdoc_read(buf, 1, 2, f);
 	if (result<0) {
 		perror("read:");
-		exit(1);
+                return EOF;
 	}
 	if (result !=2) {
 		return EOF;
@@ -168,7 +168,7 @@ int get_utf8 (FILE *f,long *offset,long fileend) {
 	result=catdoc_read(buf, 1, 1, f);
 	if (result<0) {
 		perror("read");
-		exit(1);
+                return EOF;
 	}	
 	if (result==0) return EOF;
 	c=buf[0];

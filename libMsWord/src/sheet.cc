@@ -24,7 +24,7 @@ unsigned char **allocate (int row,int col) {
 	unsigned int newrow,newcol;
 	if (row>=lastrow) {
 		newrow=(row/16+1)*16;
-		rowptr=realloc(rowptr,newrow*sizeof(struct rowdescr));
+                rowptr=(rowdescr*)realloc(rowptr,newrow*sizeof(struct rowdescr));
 		if (rowptr == NULL) {
 			perror("allocating sheet ");
 			exit(1);
@@ -34,7 +34,7 @@ unsigned char **allocate (int row,int col) {
 	}
 	if (col>=rowptr[row].end) {
 		newcol=(col/16+1)*16;
-		rowptr[row].cells=realloc(rowptr[row].cells,newcol*sizeof(char *));
+                rowptr[row].cells=(unsigned char**)realloc(rowptr[row].cells,newcol*sizeof(char *));
 		if (rowptr[row].cells == NULL) {
 			perror("allocating row");
 			exit(1);
@@ -94,7 +94,7 @@ void print_value(unsigned char *value)
 			break;
 		case QUOTE_ALL_STRINGS:
 			{ char *endptr;
-			  strtod(value,&endptr);
+                          strtod((const char*)value,&endptr);
 			  quotes=(*endptr != '0');
 			break;
 			}  

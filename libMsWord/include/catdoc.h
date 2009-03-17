@@ -190,6 +190,10 @@ extern int from_unicode (CHARSET charset, int u) ;
 
 extern char* convert_char(int unicode_char);
 
+typedef void (*WriterFunc)(unsigned short int* );
+
+void set_writer( WriterFunc Func );
+
 extern char* to_utf8(unsigned int uc);
 
 extern char* map_path, *charset_path;
@@ -215,7 +219,7 @@ void copy_out(FILE *f, char *header);
 void output_paragraph(unsigned short int *buffer) ;
 int parse_rtf(FILE *f);
 /* format recognition*/
-int __cdecl analyze_format(FILE *f);
+int analyze_format(FILE *f);
 void list_charsets(void);
 int parse_word_header(unsigned char *buffer,FILE *f,int offset,long curpos);
 /* large buffers for file IO*/
