@@ -10,7 +10,7 @@ CONFIG += staticlib
 POST_TARGETDEPS += ../lib/libCommon.a
 DEPENDPATH += ./include \
     ../libCommon/include
-INCLUDEPATH += ./include\
+INCLUDEPATH += ./include \
     ../libCommon/include
 SOURCES += src/mswordextractor.cc \
     src/xlsparse.cc \
@@ -34,7 +34,6 @@ SOURCES += src/mswordextractor.cc \
 HEADERS += include/mswordextractor.h \
     include/xltypes.h \
     include/xls.h \
-    include/unistd.h \
     include/strftime.h \
     include/ppttypes.h \
     include/ppt.h \

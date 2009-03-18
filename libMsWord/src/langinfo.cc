@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <dos.h>
 #include <langinfo.h>
 
 static char *badParam="";
