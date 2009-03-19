@@ -3,10 +3,6 @@
 
 #include "plaintextextractor.h"
 #include <string>
-#include <fstream>
-#include "charsetdetector.h"
-#include <QTextCodec>
-#include "log.hpp"
 
 class CTxtTextExtractor: public ITextExtractor
 {

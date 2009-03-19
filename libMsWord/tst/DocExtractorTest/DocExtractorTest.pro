@@ -6,7 +6,7 @@
 
 QT       -= gui
 
-TARGET = DocExtractor
+TARGET = DocExtractorTest
 CONFIG   += console
 CONFIG   -= app_bundle
 

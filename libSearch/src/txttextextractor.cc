@@ -1,4 +1,9 @@
 #include "txttextextractor.h"
+#include "charsetdetector.h"
+#include <fstream>
+#include <QTextCodec>
+#include "log.hpp"
+
 
 CTxtTextExtractor::CTxtTextExtractor()
 {
