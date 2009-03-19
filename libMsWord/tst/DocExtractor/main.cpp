@@ -5,9 +5,10 @@
 void WriterF( unsigned short int* pBuf )
 {
     std::cout << "WriterFunc:" << std::endl;
-    while( *pBuf++ )
+    while( *pBuf )
     {
-        std::cout << (int)*pBuf << " ";
+        std::cout << std::hex << *pBuf << " ";
+        pBuf++;
     }
 }
 
