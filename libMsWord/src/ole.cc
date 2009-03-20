@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <QtDebug>
 
 #include "catdoc.h"
 
@@ -134,7 +135,7 @@ FILE* ole_init(FILE *f, void *buffer, size_t bufSize)  {
 		fseek(newfile, 512+mblock*sectorSize, SEEK_SET);
 		if(fread(tmpBuf+MSAT_ORIG_SIZE+(sectorSize-4)*i,
                                                  1, sectorSize, newfile) != (size_t)sectorSize) {
-			fprintf(stderr, "Error read MSAT!\n");
+            qDebug() << "Error read MSAT!";
 			ole_finish();
 			return NULL;
 		}
@@ -148,13 +149,13 @@ FILE* ole_init(FILE *f, void *buffer, size_t bufSize)  {
 		long int bbdSector=getlong(tmpBuf,4*i);
 		
 		if (bbdSector >= fileLength/sectorSize || bbdSector < 0) {
-			fprintf(stderr, "Bad BBD entry!\n");
+            qDebug() << "Bad BBD entry!";
 			ole_finish();
 			return NULL;
 		}
 		fseek(newfile, 512+bbdSector*sectorSize, SEEK_SET);
                 if ( fread(BBD+i*sectorSize, 1, sectorSize, newfile) != (size_t)sectorSize ) {
-			fprintf(stderr, "Can't read BBD!\n");
+            qDebug() << "Can't read BBD!";
 			free(tmpBuf);
 			ole_finish();
 			return NULL;
@@ -252,7 +253,8 @@ FILE* ole_init(FILE *f, void *buffer, size_t bufSize)  {
 	propCurNumber = 0;
 	fseek(newfile, 0, SEEK_SET);
 	if (!rootEntry) {
-		fprintf(stderr,"Broken OLE structure. Cannot find root entry in this file!\n");		ole_finish();
+        qDebug() << "Broken OLE structure. Cannot find root entry in this file!";
+        ole_finish();
 		return NULL;
 	}	
 	return newfile;
@@ -324,7 +326,7 @@ FILE *ole_readdir(FILE *f) {
 /* 	fprintf(stderr, "e->name=%s e->length=%ld\n", e->name, e->length); */
 /* 	fprintf(stderr, "e->startBlock=%ld BBD=%p\n", e->startBlock, BBD); */
 	if (e->startBlock >= 0 &&
-		e->length >= 0 &&
+        /*e->length----FIX-----*/ getlong(oleBuf,0x78) >= 0 &&
 		(e->startBlock <=
 		 fileLength/(e->isBigBlock ? sectorSize : shortSectorSize))) {
                 if((e->blocks=(long int*)malloc(chainMaxLen*sizeof(long int))) == NULL ) {

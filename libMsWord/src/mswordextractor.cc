@@ -13,7 +13,7 @@ int forced_charset = 0; /* Flag which disallow rtf parser override charset*/
 int wrap_margin = WRAP_MARGIN;
 int (*get_unicode_char)(FILE *f,long *offset,long fileend) =NULL;
 
-char *input_buffer, *output_buffer;
+char *input_buffer;
 
 namespace MsWord
 {
@@ -29,15 +29,6 @@ namespace MsWord
         source_charset = read_charset(source_csname);
         if (!source_charset)
             throw std::runtime_error( "MsWord::Extract: src charset not found" );
-        if (strncmp(dest_csname,"utf-8",6)) {
-            tmp_charset = read_charset(dest_csname);
-            if (!tmp_charset)
-                exit(1);
-            target_charset= make_reverse_map(tmp_charset);
-            free(tmp_charset);
-        } else {
-            target_charset = NULL;
-        }
 
         set_std_func();
         c=0;

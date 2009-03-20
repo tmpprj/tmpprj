@@ -30,14 +30,11 @@ extern char *sheet_separator;
 /************************************************************************/
 /* Displays  help message                                               */
 /************************************************************************/
-void help (void) {
-	printf("Usage:\n xls2csv [-xlV] [-g number] [-f date-format] [-b string] [-s charset] [-d charset] [-c char] [ -q number] files\n");
-}
 /* Defines unicode chars which should be
    replaced by strings before UNICODE->target chatset
    mappigs are applied i.e. TeX special chars like %
    */
-//char *input_buffer, *output_buffer;
+//char *input_buffer;
 //int main(int argc, char *argv[])
 //{
 //	FILE *input;
@@ -118,17 +115,6 @@ void help (void) {
 //#endif
 //	/* charset conversion init*/
 //	input_buffer=malloc(FILE_BUFFER);
-//	if (strcmp(dest_csname,"utf-8")) {
-//		tmp_charset=read_charset(dest_csname);
-//		if (!tmp_charset) {
-//			fprintf(stderr,"Cannot load target charset %s\n",dest_csname);
-//			exit(1);
-//		}
-//		target_charset=make_reverse_map(tmp_charset);
-//		free(tmp_charset);
-//	} else {
-//		target_charset=NULL;
-//	}
 //	spec_chars=read_substmap(stradd("ascii",SPEC_EXT));
 //	if (!spec_chars) {
 //		fprintf(stderr,"Cannod read substitution map ascii%s\n",

@@ -38,7 +38,7 @@ void help (void) {
 }
 
 
-char *input_buffer, *output_buffer;
+char *input_buffer;
 
 /** 
  * 
@@ -96,17 +96,6 @@ char *input_buffer, *output_buffer;
 //#endif
 //	/* charset conversion init*/
 //	input_buffer=malloc(FILE_BUFFER);
-//	if (strcmp(dest_csname,"utf-8")) {
-//		tmp_charset=read_charset(dest_csname);
-//		if (!tmp_charset) {
-//			fprintf(stderr,"Cannot load target charset %s\n",dest_csname);
-//			exit(1);
-//		}
-//		target_charset=make_reverse_map(tmp_charset);
-//		free(tmp_charset);
-//	} else {
-//		target_charset=NULL;
-//	}
 //	//spec_chars=read_substmap(stradd("ascii",SPEC_EXT));
 //	//if (!spec_chars) {
 //	//	fprintf(stderr,"Cannod read substitution map ascii%s\n",
