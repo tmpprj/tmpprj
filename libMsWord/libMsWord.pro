@@ -1,8 +1,7 @@
 # -------------------------------------------------
 # Project created by QtCreator 2009-03-16T22:23:45
 # -------------------------------------------------
-QT -= core \
-    gui
+QT -= gui
 TARGET = MsWord
 DESTDIR = ../lib
 TEMPLATE = lib
@@ -11,7 +10,8 @@ POST_TARGETDEPS += ../lib/libCommon.a
 DEPENDPATH += ./include \
     ../libCommon/include
 INCLUDEPATH += ./include \
-    ../libCommon/include
+    ../libCommon/include \
+    ../external/boost
 SOURCES += src/mswordextractor.cc \
     src/xlsparse.cc \
     src/xls2csv.cc \
@@ -40,3 +40,4 @@ HEADERS += include/mswordextractor.h \
     include/ole.h \
     include/langinfo.h \
     include/catdoc.h
+RESOURCES += charsets.qrc

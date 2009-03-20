@@ -3,11 +3,12 @@
 # -------------------------------------------------
 TARGET = SearchTest
 TEMPLATE = app
-POST_TARGETDEPS += ../../../lib/libSearch.a ../../../lib/libChardet.a ../../../lib/libCommon.a
+POST_TARGETDEPS += ../../../lib/libMsWord.a ../../../lib/libSearch.a ../../../lib/libChardet.a ../../../lib/libCommon.a
 CONFIG += console debug
 SOURCES += searchtst.cc
 DEPENDPATH +=  ../../include ../../../libCommon/include
 INCLUDEPATH += ../../../external/boost ../../include ../../../libCommon/include
+RESOURCES += ../../../libMsWord/charsets.qrc
 LIBS +=     -L../ \
             -L../../../lib \
             -L../../../external/boost/stage/lib \
@@ -15,6 +16,7 @@ LIBS +=     -L../ \
             -lSearch \
             -lChardet \
             -lCommon \
+            -lMsWord \
             -lboost_thread-mt \
             -lboost_signals-mt \
             -lboost_system-mt \

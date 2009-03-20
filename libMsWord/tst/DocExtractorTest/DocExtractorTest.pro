@@ -12,7 +12,8 @@ CONFIG   -= app_bundle
 
 POST_TARGETDEPS += ../../../lib/libMsWord.a
 DEPENDPATH += ../../include
-INCLUDEPATH += ../../include
+INCLUDEPATH += ../../include ../../../external/boost
+RESOURCES += ../../../libMsWord/charsets.qrc
 TEMPLATE = app
 LIBS +=     -L../ \
             -L../../../lib \

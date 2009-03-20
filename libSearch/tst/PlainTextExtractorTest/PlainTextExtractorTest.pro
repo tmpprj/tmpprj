@@ -12,6 +12,7 @@ CONFIG   += console debug
 CONFIG   -= app_bundle
 DEPENDPATH += ../../include ../../../libCommon/include
 INCLUDEPATH += ../../../external/boost ../../include ../../../libCommon/include
+RESOURCES += ../../../libMsWord/charsets.qrc
 TEMPLATE = app
 LIBS +=     -L../ \
             -L../../../lib \

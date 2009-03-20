@@ -2,9 +2,11 @@
 #define MSWORDEXTRACTOR_H
 
 #include <string>
+#include <boost/function.hpp>
 
-typedef void (*WriterFunc)(unsigned short int* );
-
-void Extract( WriterFunc Writer, const std::string& strFileName );
+namespace MsWord
+{
+    void Extract( boost::function<void (unsigned short*)> Writer, const std::string& strFileName );
+}
 
 #endif // MSWORDEXTRACTOR_H

@@ -15,13 +15,13 @@ int (*get_unicode_char)(FILE *f,long *offset,long fileend) =NULL;
 
 char *input_buffer, *output_buffer;
 
-void Extract( WriterFunc Writer, const std::string& strFileName )
+namespace MsWord
 {
+    void Extract( boost::function<void (unsigned short*)> Writer, const std::string& strFileName )
+    {
         FILE *f;
-        int c,i;
-        char *tempname;
+        int c;
         short int *tmp_charset;
-        int stdin_processed=0;
         input_buffer=(char*)malloc(FILE_BUFFER);
         if (!input_buffer)
             throw std::runtime_error( "MsWord::Extract: memory allocating error" );
@@ -30,13 +30,13 @@ void Extract( WriterFunc Writer, const std::string& strFileName )
         if (!source_charset)
             throw std::runtime_error( "MsWord::Extract: src charset not found" );
         if (strncmp(dest_csname,"utf-8",6)) {
-                tmp_charset = read_charset(dest_csname);
-                if (!tmp_charset)
-                    exit(1);
-                target_charset= make_reverse_map(tmp_charset);
-                free(tmp_charset);
+            tmp_charset = read_charset(dest_csname);
+            if (!tmp_charset)
+                exit(1);
+            target_charset= make_reverse_map(tmp_charset);
+            free(tmp_charset);
         } else {
-                target_charset = NULL;
+            target_charset = NULL;
         }
 
         set_std_func();
@@ -44,16 +44,18 @@ void Extract( WriterFunc Writer, const std::string& strFileName )
         f=fopen(strFileName.c_str(),"rb");
         if (!f)
         {
-                c=1;
-                perror("catdoc");
-                exit(0);
+            c=1;
+            perror("catdoc");
+            exit(0);
         }
         if (input_buffer) {
-                if (setvbuf(f,input_buffer,_IOFBF,FILE_BUFFER)) {
-                        //perror();
-                }
+            if (setvbuf(f,input_buffer,_IOFBF,FILE_BUFFER)) {
+                //perror();
+            }
         }
         set_writer( Writer );
         c=analyze_format(f);
         fclose(f);
+    }
+
 }

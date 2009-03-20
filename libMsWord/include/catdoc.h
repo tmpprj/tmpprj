@@ -14,6 +14,7 @@
 /* These include files are always available */
 #include <stdio.h>
 #include <ctype.h>
+#include <boost/function.hpp>
 
 /* This is our own file */
 #include "ole.h"
@@ -190,9 +191,7 @@ extern int from_unicode (CHARSET charset, int u) ;
 
 extern char* convert_char(int unicode_char);
 
-typedef void (*WriterFunc)(unsigned short int* );
-
-void set_writer( WriterFunc Func );
+void set_writer( boost::function< void ( unsigned short* ) > Func );
 
 extern char* to_utf8(unsigned int uc);
 

@@ -22,6 +22,8 @@
 #else
 #include <glob.h>
 #endif
+#include <QString>
+#include <QFile>
 
 
 /************************************************************************/
@@ -66,49 +68,51 @@ int prepare_path_buf(char *path_buf, const char *start, const char *end) {
 /* Returns dynamically allocated full path or NULL. if nothing          */
 /* appropriate   Expects name to be dynamically allocated and frees it  */
 /************************************************************************/
-char *find_file(char *name, const char *path)
-{ const char *p;
-	char *q;
-	char path_buf[PATH_BUF_SIZE];
-	char dir_sep[2]={DIR_SEP,0};
-	for (p=path;p;p=q+1) {
-		q=strchr(p,LIST_SEP);
-
-		if (q) {
-			if (!prepare_path_buf(path_buf,p,q)) continue;
-		} else {
-			q--;
-			if (!prepare_path_buf(path_buf,p,p+strlen(p))) continue;
-		}
-		strcat(path_buf,dir_sep); /* always one char */
-		if (strlen(path_buf)+strlen(name)>=PATH_BUF_SIZE) 
-			continue; /* Ignore too deeply nested directories */
-		strcat(path_buf,name);
-		if (access(path_buf,0)==0) {
-			free(name); 
-			return strdup(path_buf);
-		}
-	}
-	/* if we are here, nothing found */
-	free(name); 
-	return NULL;
-}
+//char *find_file(char *name, const char *path)
+//{ const char *p;
+//	char *q;
+//	char path_buf[PATH_BUF_SIZE];
+//	char dir_sep[2]={DIR_SEP,0};
+//	for (p=path;p;p=q+1) {
+//		q=strchr(p,LIST_SEP);
+//
+//		if (q) {
+//			if (!prepare_path_buf(path_buf,p,q)) continue;
+//		} else {
+//			q--;
+//			if (!prepare_path_buf(path_buf,p,p+strlen(p))) continue;
+//		}
+//		strcat(path_buf,dir_sep); /* always one char */
+//		if (strlen(path_buf)+strlen(name)>=PATH_BUF_SIZE)
+//			continue; /* Ignore too deeply nested directories */
+//		strcat(path_buf,name);
+//		if (access(path_buf,0)==0) {
+//			free(name);
+//			return strdup(path_buf);
+//		}
+//	}
+//	/* if we are here, nothing found */
+//	free(name);
+//	return NULL;
+//}
 
 /************************************************************************/
 /* Searches for charset with given name and put pointer to malloced copy*/
 /* of its name into first arg if found. Otherwise leaves first arg      */
 /*  unchanged. Returns non-zero on success                              */ 
 /************************************************************************/
-int check_charset(char **filename,const char *charset) {
-	char *tmppath;
-	if (!strncmp(charset,"utf-8",6)) {
+int check_charset(char **filename,const char *charset)
+{
+    if( !strncmp(charset,"utf-8",6) )
+    {
 		*filename=strdup("utf-8");
 		return 1;
 	}   
-	tmppath=find_file(stradd(charset,CHARSET_EXT),charset_path);
-	if (tmppath&& *tmppath) {
-		*filename=strdup(charset);
-		free(tmppath);
+
+    QFile file( ":/libmsword/charsets/" + QString(charset) + CHARSET_EXT );
+    if( file.exists() )
+    {
+        *filename=strdup(charset);
 		return 1;
 	}
 	return 0;
@@ -129,98 +133,3 @@ char *stradd(const char *s1,const char *s2)
 	strcat(res,s2);
 	return res;
 }  
-
-
-/*
- * In DOS, argv[0] contain full path to the program, and it is a custom
- * to keep configuration files in same directory as program itself
- */
-//char *exe_dir(void) {
-//	static char pathbuf[PATH_BUF_SIZE];
-//	char *q;
-//	strcpy(pathbuf,_argv[0]); /* DOS ensures, that our exe path is no
-//								 longer than PATH_BUF_SIZE*/
-//	q=strrchr(pathbuf,DIR_SEP);
-//	if (q) {
-//		*q=0;
-//	} else {
-//		pathbuf[0]=0;
-//	}
-//	return pathbuf;
-//}
-//char *add_exe_path(const char *name) {
-//	static char path[PATH_BUF_SIZE];
-//	char *mypath=exe_dir();
-//	/* No snprintf in Turbo C 2.0 library, so just check by hand
-//	   and exit if something goes wrong */
-//	if (strchr(name,'%')) {
-//		/* there is substitution */
-//		if (strlen(name)-1+strlen(mypath)>=PATH_BUF_SIZE) {
-//			fprintf(stderr,"Invalid config file. file name \"%s\" too long "
-//					"after substitution\n",name);
-//			exit(1);
-//		}   
-//		sprintf(path,name,exe_dir());
-//		return path;
-//	} else {
-//		return name;
-//	}  
-//}
-/*********************************************************************/
-/* Prints out list of available charsets, i.e. names without extension *
- * of all .txt files in the charset path + internally-supported utf-8  *
- ************************************************************************/ 
-
-//void list_charsets(void) {
-//	const char *p;
-//	char *q;
-//	char path_buf[PATH_BUF_SIZE];
-//	char dir_sep[2]={DIR_SEP,0};
-//	struct ffblk ffblock;
-//	int res,col;
-//	char **ptr;
-//	for (p=charset_path;p;p=q+1) {
-//		q=strchr(p,LIST_SEP);
-//
-//		if (q) {
-//			if (q-p>=PATH_BUF_SIZE) {
-//				/* Oops, dir name too long, perhabs broken config file */
-//				continue;
-//			}
-//			strncpy(path_buf,p,q-p);
-//			path_buf[q-p]=0;
-//		} else {
-//			q--;
-//			if (strlen(p)>=PATH_BUF_SIZE) continue;
-//			strcpy(path_buf,p);
-//		}
-//		/* Empty list element means current directory */
-//		if (!*path_buf) {
-//			path_buf[0]='.';
-//			path_buf[1]=0;
-//		} else {
-//			strcpy(path_buf,add_exe_path(path_buf)); /* safe, becouse
-//														add_exe_path knows about PATH_BUF_SIZE */
-//		}
-//		strcat(path_buf,dir_sep); /* always one char */
-//		if (strlen(path_buf)+6>=PATH_BUF_SIZE)
-//			continue; /* Ignore too deeply nested directories */
-//		strcat(path_buf,"*.txt");
-//		res=findfirst(path_buf,&ffblock,FA_RDONLY | FA_HIDDEN | FA_ARCH);
-//		col=1;
-//		printf("Available charsets:\n"); 
-//		while (!res) {
-//			char name[12],*src,*dest;
-//			dest=name;
-//			src=ffblock.ff_name;
-//			for (dest=name,src=ffblock.ff_name;*src && *src !='.';dest++,src++)
-//				*dest=tolower(*src);
-//			*dest++=(col<5)?'\t':'\n';
-//			if (++col>5) col=1;
-//			*dest=0;
-//			printf("%10s",name);
-//			res=findnext(&ffblock);
-//		}
-//	}
-//	fputs("utf-8\n",stdout);
-//}    

@@ -13,6 +13,7 @@ public:
 
 private:
 
+    void WriterFunc( QString& strBuf, unsigned short* data );
 
 };
 

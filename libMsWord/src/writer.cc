@@ -71,9 +71,10 @@ void out_char(const char *chunk) {
 	}
 }
 
-WriterFunc WriterImpl = NULL;
+boost::function< void ( unsigned short* ) > WriterImpl;
+//WriterFunc WriterImpl = NULL;
 
-void set_writer( WriterFunc Func )
+void set_writer( boost::function< void ( unsigned short* ) > Func )
 {
     WriterImpl = Func;
 }
@@ -86,7 +87,7 @@ void set_writer( WriterFunc Func )
  ************************************************************************/ 
 void output_paragraph(unsigned short int *buffer)
 {
-    if( NULL != WriterImpl )
+    if( !WriterImpl.empty() )
         WriterImpl( buffer );
 }
 

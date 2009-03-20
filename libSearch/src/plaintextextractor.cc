@@ -1,5 +1,6 @@
 #include "txttextextractor.h"
 #include "plaintextextractor.h"
+#include "mswordtextextractor.h"
 #include "log.hpp"
 
 CPlainTextExtractor::CPlainTextExtractor()
@@ -31,4 +32,6 @@ void CPlainTextExtractor::ThreadFunc( boost::mutex* pmtxThreadStarted )
 CTextExtractorFactory::CTextExtractorFactory()
 {
     RegisterExtractor( ".txt", new CTxtTextExtractor );
+    RegisterExtractor( ".doc", new CMsWordTextExtractor );
+    RegisterExtractor( ".rtf", new CMsWordTextExtractor );
 }

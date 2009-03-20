@@ -216,7 +216,7 @@ int parse_rtf(FILE *f) {
 				break;
 			switch (com.type) {
 			case RTF_SPEC_CHAR:
-                fprintf(stderr, "Spec Char found=%s and arg=%c\n", com.name, com.numarg);
+                //fprintf(stderr, "Spec Char found=%s and arg=%c\n", com.name, com.numarg);
 				if (com.numarg == '*' && data_skip_mode == 0) {
 					data_skip_mode=group_count;
 				} else if (com.numarg == '\r') {
@@ -244,7 +244,7 @@ int parse_rtf(FILE *f) {
 			case RTF_ENSPACE:
 					add_to_buffer(&bufptr,' ');break;
 			case RTF_CHAR:
-                fprintf(stderr, "RTF char %d\n", com.numarg);
+                //fprintf(stderr, "RTF char %d\n", com.numarg);
 				if (data_skip_mode == 0) {
 				 	add_to_buffer(&bufptr,rtf_to_unicode(com.numarg));
 				}	
@@ -258,17 +258,17 @@ int parse_rtf(FILE *f) {
 			case RTF_UNICODE_CHAR:
 				if (com.numarg < 0)
 					break;
-                fprintf(stderr, "Unicode char %04X\n", com.numarg);
+                //fprintf(stderr, "Unicode char %04X\n", com.numarg);
 				if (data_skip_mode == 0)
 					add_to_buffer(&bufptr,com.numarg);
 				i=groups[group_count].uc;
-                fprintf(stderr, "i=%d", i );
+                //fprintf(stderr, "i=%d", i );
 				while((--i)>0)
 					fgetc(f);
                 //PATCH
                 {
                     char c1 = fgetc(f), c2 = fgetc(f);
-                    fprintf(stderr, "c1=%c,c2=%c", c1, c2 );
+                    //fprintf(stderr, "c1=%c,c2=%c", c1, c2 );
                     if( '\\' == c1 && '\'' == c2 )
                         fgetc(f),fgetc(f);
                     else
@@ -297,12 +297,12 @@ int parse_rtf(FILE *f) {
 				}
 				break;
 			case RTF_LANG:
-                fprintf(stderr, "Selected lang = %d\n",com.numarg);
+                //fprintf(stderr, "Selected lang = %d\n",com.numarg);
 				break;
 			case RTF_CODEPAGE:
 				rtfSetCharset(&current_charset,com.numarg);
 			default:
-                fprintf(stderr, "Unknown command with name %s and arg=%d\n",  com.name, com.numarg);
+                //fprintf(stderr, "Unknown command with name %s and arg=%d\n",  com.name, com.numarg);
 			;
 			}
 			break;
@@ -475,12 +475,11 @@ signed int getCharCode(FILE *f) {
 
 void rtfSetCharset(short int **charset_ptr,unsigned int codepage)
 {
-    std::cout << "Codepage control = " << codepage << std::endl;
 	/* Do not override charset if it is specified in the command line */
 	const char *charset_name;
 	char *save_buf = input_buffer;
 	if (forced_charset) return;
-	charset_name = charset_from_codepage(codepage);
+    charset_name = charset_from_codepage(codepage);
 	check_charset(&source_csname,charset_name);
 	input_buffer=NULL;
 	*charset_ptr = read_charset(source_csname);	
