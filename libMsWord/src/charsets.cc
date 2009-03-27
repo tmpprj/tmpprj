@@ -24,7 +24,8 @@ char bad_char[]=UNKNOWN_CHAR;
 /* Converts char in input charset into unicode representation           */
 /* Should be converted to macro                                         */
 /************************************************************************/
-int to_unicode (short int *charset, int c) {
+int to_unicode( short int *charset, int c )
+{
     return charset[c];
 }
 
@@ -32,35 +33,36 @@ int to_unicode (short int *charset, int c) {
 /* Reads charset file (as got from ftp.unicode.org) and returns array of*/
 /* 256 short ints (malloced) mapping from charset t unicode             */
 /************************************************************************/
-short int * read_charset(const char *filename)
+short int * read_charset( const char *filename )
 {
     FILE *f;
-    short int *pnew=(short int*)calloc(sizeof(short int),256);
+    short int *pnew=( short int* )calloc( sizeof( short int ),256 );
     int c;
     long int uc;
 
     QFile file( ":/libmsword/charsets/" + QString( filename ) + ".txt" );
-    if (!file.exists()) {
+    if ( !file.exists() )
+    {
         qDebug() << "Cannot load charset " << filename << " - file not found";
         return NULL;
     }
 
-    if( !file.open( QIODevice::ReadOnly ) )
+    if ( !file.open( QIODevice::ReadOnly ) )
     {
         qDebug() << "Cannot open file " << filename;
         return NULL;
     }
 
-    for (c=0;c<32;c++)
+    for ( c=0;c<32;c++ )
         pnew[c]=c;
 
-    while( !file.atEnd() )
+    while ( !file.atEnd() )
     {
         QTextStream stream( &file );
         stream >> c >> uc;
-        if( QTextStream::Ok == stream.status() )
+        if ( QTextStream::Ok == stream.status() )
         {
-            if( c<0 || c>255 || uc<0 || (uc>0xFEFE && uc!=0xFFFE) )
+            if ( c<0 || c>255 || uc<0 || ( uc>0xFEFE && uc!=0xFFFE ) )
             {
                 qDebug() << "Invalid charset file " << filename;
                 return NULL;
@@ -68,8 +70,8 @@ short int * read_charset(const char *filename)
             pnew[c]=uc;
         }
         char c = ' ';
-        while( ( c != '\n' ) && !file.atEnd() )
-            file.getChar(&c);
+        while (( c != '\n' ) && !file.atEnd() )
+            file.getChar( &c );
     }
     return pnew;
 }
@@ -79,23 +81,27 @@ short int * read_charset(const char *filename)
 /* Reads 8-bit char and convers it from source charset                  */
 /************************************************************************/
 
-int get_8bit_char (FILE *f,long *offset,long fileend)
+int get_8bit_char( FILE *f,long *offset,long fileend )
 {
     unsigned char buf;
-    if (catdoc_read(&buf, 1, 1, f)==0) return EOF;
-    (*offset)++;
-    return to_unicode(source_charset,buf);
+    if ( catdoc_read( &buf, 1, 1, f )==0 ) return EOF;
+    ( *offset )++;
+    return to_unicode( source_charset,buf );
 }
 
 
-struct cp_map {
+struct cp_map
+{
     int codepage;
     char *charset_name;
 };
 
 
-struct cp_map cp_to_charset [] = {
-    {10000,"mac-roman"},
+struct cp_map cp_to_charset [] =
+{
+    {
+        10000,"mac-roman"
+    },
     {10001,"mac-japanese"},
     {10002,"mac-tchinese"},
     {10003,"mac-korean"},
@@ -123,21 +129,28 @@ struct cp_map cp_to_charset [] = {
     {28599,"8859-9"},
     {28605,"8859-15"},
     {65001,"utf-8"},
-    {0,NULL}};
+    {0,NULL}
+};
 
-const char *charset_from_codepage(unsigned int codepage) {
+const char *charset_from_codepage( unsigned int codepage )
+{
 
     static char buffer[7];
     struct cp_map *cp;
-    if (codepage==1200||codepage==1201) {
+    if ( codepage==1200||codepage==1201 )
+    {
         /* For UCS2 */
         return "";
-    } else
-        if (codepage<10000) {
-        sprintf(buffer,"cp%d",codepage);
-        return buffer;
-    } else {
-        for (cp = cp_to_charset;cp->codepage!=0&& cp->codepage!=(int)codepage;cp++);
-        return cp->charset_name;
     }
-}	
+    else
+        if ( codepage<10000 )
+        {
+            sprintf( buffer,"cp%d",codepage );
+            return buffer;
+        }
+        else
+        {
+            for ( cp = cp_to_charset;cp->codepage!=0&& cp->codepage!=( int )codepage;cp++ );
+            return cp->charset_name;
+        }
+}

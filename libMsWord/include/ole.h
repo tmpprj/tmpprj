@@ -3,15 +3,15 @@
  * @author Alex Ott <ott@jet.msk.su>
  * @date   03 È¿Œ 2003
  * Version: $Id: ole.h,v 1.1.1.1 2006/02/24 17:44:06 vitus Exp $
- * Copyright: Alex Ott, 2003, 
- * 
- * @brief  
- * 
- * 
+ * Copyright: Alex Ott, 2003,
+ *
+ * @brief
+ *
+ *
  */
 
-#ifndef _OLE_H
-#define _OLE_H 1
+#ifndef _OLE_CATDOC_H
+#define _OLE_CATDOC_H 1
 
 #define BBD_BLOCK_SIZE     512
 #define SBD_BLOCK_SIZE      64
@@ -19,31 +19,33 @@
 #define OLENAMELENGHT       32
 #define MSAT_ORIG_SIZE     436
 
-typedef enum {
-	oleDir=1,
-	oleStream=2,
-	oleRootDir=5,
-	oleUnknown=3
+typedef enum
+{
+    oleDir=1,
+    oleStream=2,
+    oleRootDir=5,
+    oleUnknown=3
 } oleType;
 
-typedef struct {
-	FILE *file;
-	char name[OLENAMELENGHT+1];
-	long int startBlock;
-	long int curBlock;
-	unsigned long int length;
-	long int ole_offset;
-	long int file_offset;
-	unsigned char *dirPos;
-	oleType type;
-	long int numOfBlocks;
-	long int *blocks;			/**< array of blocks numbers */
-	int isBigBlock;
+typedef struct
+{
+    FILE *file;
+    char name[OLENAMELENGHT+1];
+    long int startBlock;
+    long int curBlock;
+    unsigned long int length;
+    long int ole_offset;
+    long int file_offset;
+    unsigned char *dirPos;
+    oleType type;
+    long int numOfBlocks;
+    long int *blocks;			/**< array of blocks numbers */
+    int isBigBlock;
 } oleEntry;
 
 /**
  * Functions
- * 
+ *
  */
 FILE* ole_init(FILE *f, void *buffer, size_t bufSize);
 FILE *ole_readdir(FILE *f);

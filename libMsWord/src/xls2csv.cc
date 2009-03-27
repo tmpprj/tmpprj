@@ -24,7 +24,7 @@
 #ifdef __TURBOC__
 #define strcasecmp(a,b) strcmpi(a,b)
 #endif
-extern char *forced_date_format; 
+extern char *forced_date_format;
 extern char number_format[];
 extern char *sheet_separator;
 /************************************************************************/

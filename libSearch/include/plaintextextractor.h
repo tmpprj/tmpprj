@@ -67,7 +67,7 @@ private:
     mt_queue<std::string> m_Queue;
 };
 
-class ITextExtractor
+class ITextExtractor: public boost::noncopyable
 {
 public:
 
@@ -82,20 +82,11 @@ public:
 
     CTextExtractorFactory();
 
-    ITextExtractor* GetExtractor( const std::string& strFileName )
-    {
-        boost::filesystem::path file( strFileName );
-        if( mapExtractors.end() == mapExtractors.find( file.extension() ) )
-            return mapExtractors[ ".txt" ];
-        else
-            return mapExtractors[ file.extension() ];
-    }
+    ~CTextExtractorFactory();
 
-    bool RegisterExtractor( const std::string& strFormat, ITextExtractor* pTextExtractor )
-    {
-        mapExtractors[ strFormat ] = pTextExtractor;
-        return true;
-    }
+    ITextExtractor* GetExtractor( const std::string& strFileName );
+
+    bool RegisterExtractor( const std::string& strFormat, ITextExtractor* pTextExtractor );
 
 private:
 

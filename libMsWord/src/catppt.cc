@@ -3,11 +3,11 @@
  * @author Alex Ott <alexott@gmail.com>
  * @date   23 ‰≈À 2004
  * Version: $Id: catppt.c,v 1.1.1.1 2006/02/24 17:44:06 vitus Exp $
- * Copyright: Alex Ott 
- * 
+ * Copyright: Alex Ott
+ *
  * @brief  main module for text extracting from .ppt
- * 
- * 
+ *
+ *
  */
 
 #ifdef HAVE_CONFIG_H
@@ -29,24 +29,25 @@
 #define strcasecmp(a,b) strcmpi(a,b)
 #endif
 
-/** 
+/**
  * Displays  help message
- * 
+ *
  */
-void help (void) {
-	printf("Usage:\n ppt2text [-lV] [-b string] [-s charset] [-d charset] files\n");
+void help( void )
+{
+    printf( "Usage:\n ppt2text [-lV] [-b string] [-s charset] [-d charset] files\n" );
 }
 
 
 char *input_buffer;
 
-/** 
- * 
- * 
- * @param argc 
- * @param argv 
- * 
- * @return 
+/**
+ *
+ *
+ * @param argc
+ * @param argv
+ *
+ * @return
  */
 //int main(int argc, char *argv[]) {
 //	FILE *input;

@@ -4,10 +4,10 @@
  * @date   26 ‰≈À 2004
  * Version: $Id: ppttypes.h,v 1.1.1.1 2006/02/24 17:44:06 vitus Exp $
  * Copyright: Alex Ott
- * 
+ *
  * @brief  Enumerations for .ppt records
- * 
- * 
+ *
+ *
  */
 
 #ifndef _PPTTYPES_H
@@ -22,7 +22,7 @@
 #define SLIDE_BASE_ATOM 1005
 #define SLIDE           1006
 #define SLIDE_ATOM      1007
-#define NOTES           1008 
+#define NOTES           1008
 #define NOTES_ATOM      1009
 #define ENVIRONMENT     1010
 #define SLIDE_PERSIST_ATOM 1011

@@ -65,7 +65,7 @@ extern char bad_char[]; /* defines one-symbol string to replace unknown unicode 
 extern char *source_csname;
 extern int verbose; /* if true, some additional information would be
 		       printed. defined in analyze.c */
-extern int (*get_unicode_char)(FILE *f,long *offset,long fileend); 
+extern int (*get_unicode_char)(FILE *f,long *offset,long fileend);
 /* pointer to function which gets
                                      a char from stream */
 extern int get_8bit_char (FILE *f,long *offset,long fileend);
@@ -86,7 +86,7 @@ extern int unknown_as_hex;
 void get_locale_charset(void);
 #if  defined(HAVE_STRFTIME)
 void	set_time_locale();
-#endif	
+#endif
 #endif
 int check_charset(char **filename,const char *charset);
 int process_file(FILE *f,long stop);
@@ -97,7 +97,7 @@ int analyze_format(FILE *f);
 int parse_word_header(unsigned char *buffer,FILE *f,int offset,long curpos);
 /* large buffers for file IO*/
 extern char *input_buffer;
-/* numeric conversions */	
+/* numeric conversions */
 long int getlong(unsigned char *buffer,int offset);
 unsigned long int getulong(unsigned char *buffer,int offset);
 unsigned int getshort(unsigned char *buffer,int offset);

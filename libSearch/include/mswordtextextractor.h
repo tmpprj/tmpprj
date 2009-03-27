@@ -11,9 +11,19 @@ public:
 
     virtual void Extract( const std::string strFileName, QString& strText );
 
-private:
+protected:
 
     void WriterFunc( QString& strBuf, unsigned short* data );
+
+};
+
+class CXlsTextExtractor: public CMsWordTextExtractor
+{
+public:
+
+    CXlsTextExtractor();
+
+    virtual void Extract( const std::string strFileName, QString& strText );
 
 };
 

@@ -23,3 +23,11 @@ void CMsWordTextExtractor::Extract( const std::string strFileName, QString& strT
     MsWord::Extract( boost::bind( &CMsWordTextExtractor::WriterFunc, this, boost::ref(strText), _1 ), strFileName );
 }
 
+CXlsTextExtractor::CXlsTextExtractor()
+{
+}
+
+void CXlsTextExtractor::Extract( const std::string strFileName, QString& strText )
+{
+    MsWord::ExtractXls( boost::bind( &CXlsTextExtractor::WriterFunc, this, boost::ref(strText), _1 ), strFileName );
+}

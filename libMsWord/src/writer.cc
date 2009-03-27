@@ -25,10 +25,10 @@ void set_writer( boost::function< void ( unsigned short* ) > Func )
  * Programs which read word-processor files should accumulate paragraphs
  * in the buffer as array of unicode 16-bit codes and pass to this
  * function
- ************************************************************************/ 
-void output_paragraph(unsigned short int *buffer)
+ ************************************************************************/
+void output_paragraph( unsigned short int *buffer )
 {
-    if( !WriterImpl.empty() )
+    if ( !WriterImpl.empty() )
         WriterImpl( buffer );
 }
 
