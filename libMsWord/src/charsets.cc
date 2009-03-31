@@ -14,6 +14,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QtDebug>
+#include <QStringList>
 
 char *charset_path=CHARSETPATH;
 char *source_csname=SOURCE_CHARSET;
@@ -56,11 +57,20 @@ short int * read_charset( const char *filename )
     for ( c=0;c<32;c++ )
         pnew[c]=c;
 
-    while ( !file.atEnd() )
+    QStringList strList;
+    bool bConv1Ok, bConv2Ok;
+    QTextStream stream( &file );
+    while( !stream.atEnd() )
     {
-        QTextStream stream( &file );
-        stream >> c >> uc;
-        if ( QTextStream::Ok == stream.status() )
+        strList = stream.readLine().split( "\t", QString::SkipEmptyParts );
+
+        if( strList.size() < 2 )
+            continue;
+
+        c = strList[0].toInt( &bConv1Ok, 16 );
+        uc = strList[1].toLong( &bConv2Ok, 16 );
+
+        if( QTextStream::Ok == stream.status() && bConv1Ok && bConv2Ok )
         {
             if ( c<0 || c>255 || uc<0 || ( uc>0xFEFE && uc!=0xFFFE ) )
             {
@@ -69,9 +79,6 @@ short int * read_charset( const char *filename )
             }
             pnew[c]=uc;
         }
-        char c = ' ';
-        while (( c != '\n' ) && !file.atEnd() )
-            file.getChar( &c );
     }
     return pnew;
 }
