@@ -1,12 +1,13 @@
 #include "mswordextractor.h"
 #include <iostream>
+#include <iomanip>
 
 void WriterF( unsigned short int* pBuf )
 {
     std::cout << "WriterFunc:" << std::endl;
     while( *pBuf )
     {
-        std::cout << std::hex << *pBuf << " ";
+        std::cout << std::hex << std::setw(4) << std::setfill('0') << *pBuf << " ";
         pBuf++;
     }
 }

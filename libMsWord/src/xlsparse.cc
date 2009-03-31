@@ -32,6 +32,23 @@ double date_shift = 25569.0;
 #define MK_FORMAT(x) FLT_FORMAT("%.",x,"g")
 char number_format[8]=MK_FORMAT( DBL_DIG );
 
+const char* cCharsetMap[256] = { "cp1252", "cp1252", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "mac-roman", NULL, NULL,
+                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                 "cp932", "cp949", "johab", NULL, NULL, NULL, "cp936", NULL, "cp950", NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                 NULL, "cp1253", "cp1254", "cp1258", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                 NULL, "cp1255", "cp1256", NULL, NULL, NULL, NULL, NULL, NULL, NULL, "cp1257", NULL, NULL, NULL, NULL, NULL,
+                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "cp1251", NULL, NULL, NULL,
+                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "cp874", NULL,
+                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "cp1250", NULL,
+                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "cp850" };
+
 void CleanUpFormatIdxUsed( void );
 
 void do_table( FILE *input )
@@ -273,10 +290,31 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
         unsigned char **pcell;
         unsigned char *src=( unsigned char * )rec+6;
 
+        qDebug() << "0=" << cCharsetMap[0];
+        qDebug() << "1=" << cCharsetMap[1];
+        qDebug() << "2=" << cCharsetMap[2];
+        qDebug() << "77=" << cCharsetMap[77];
+        qDebug() << "128=" << cCharsetMap[128];
+        qDebug() << "129=" << cCharsetMap[129];
+        qDebug() << "130=" << cCharsetMap[130];
+        qDebug() << "134=" << cCharsetMap[134];
+        qDebug() << "136=" << cCharsetMap[136];
+        qDebug() << "161=" << cCharsetMap[161];
+        qDebug() << "162=" << cCharsetMap[162];
+        qDebug() << "163=" << cCharsetMap[163];
+        qDebug() << "177=" << cCharsetMap[177];
+        qDebug() << "178=" << cCharsetMap[178];
+        qDebug() << "186=" << cCharsetMap[186];
+        qDebug() << "204=" << cCharsetMap[204];
+        qDebug() << "222=" << cCharsetMap[222];
+        qDebug() << "238=" << cCharsetMap[238];
+        qDebug() << "255=" << cCharsetMap[255];
+
         saved_reference=NULL;
         row = getshort(( unsigned char* )rec,0 );
         col = getshort(( unsigned char* )rec,2 );
-        fprintf(stderr,"LABEL!\n");
+        int iXfIndex = getshort( (unsigned char*)rec, 4 );
+        fprintf(stderr,"LABEL!xf=%d\n", iXfIndex );
         pcell=allocate( row,col );
         *pcell=( unsigned char* )copy_unicode_string( &src );
         break;
