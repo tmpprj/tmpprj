@@ -290,33 +290,17 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
         unsigned char **pcell;
         unsigned char *src=( unsigned char * )rec+6;
 
-        qDebug() << "0=" << cCharsetMap[0];
-        qDebug() << "1=" << cCharsetMap[1];
-        qDebug() << "2=" << cCharsetMap[2];
-        qDebug() << "77=" << cCharsetMap[77];
-        qDebug() << "128=" << cCharsetMap[128];
-        qDebug() << "129=" << cCharsetMap[129];
-        qDebug() << "130=" << cCharsetMap[130];
-        qDebug() << "134=" << cCharsetMap[134];
-        qDebug() << "136=" << cCharsetMap[136];
-        qDebug() << "161=" << cCharsetMap[161];
-        qDebug() << "162=" << cCharsetMap[162];
-        qDebug() << "163=" << cCharsetMap[163];
-        qDebug() << "177=" << cCharsetMap[177];
-        qDebug() << "178=" << cCharsetMap[178];
-        qDebug() << "186=" << cCharsetMap[186];
-        qDebug() << "204=" << cCharsetMap[204];
-        qDebug() << "222=" << cCharsetMap[222];
-        qDebug() << "238=" << cCharsetMap[238];
-        qDebug() << "255=" << cCharsetMap[255];
-
         saved_reference=NULL;
         row = getshort(( unsigned char* )rec,0 );
         col = getshort(( unsigned char* )rec,2 );
         int iXfIndex = getshort( (unsigned char*)rec, 4 );
         fprintf(stderr,"LABEL!xf=%d\n", iXfIndex );
         pcell=allocate( row,col );
-        *pcell=( unsigned char* )copy_unicode_string( &src );
+
+        if( iXfIndex < (int)vecXfFonts.size() && vecXfFonts[iXfIndex] > 0 && vecXfFonts[iXfIndex]-1 < vecFontCharsets.size() && vecFontCharsets[vecXfFonts[iXfIndex]-1] < 256 )
+            *pcell=( unsigned char* )copy_unicode_string( &src, cCharsetMap[ vecFontCharsets[ vecXfFonts[iXfIndex]-1 ] ] );
+        else
+            *pcell=( unsigned char* )copy_unicode_string( &src );
         break;
     }
     case BLANK:
@@ -342,43 +326,42 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
     }
     case CONSTANT_STRING:
     {
-        qDebug() << "CONSTANT_STRING";
-        int row = getshort(( unsigned char* )rec,0 );
-        int col = getshort(( unsigned char* )rec,2 );
-        unsigned int iXfIndex = getshort( (unsigned char*)rec,4 );
-        if( iXfIndex > vecXfFonts.size() && vecXfFonts[iXfIndex] > vecFontCharsets.size() )
-            qDebug() << "String charset " << vecFontCharsets[vecXfFonts[iXfIndex] ];
-
-        unsigned char **pcell;
-        int string_no=getshort(( unsigned char* )rec,6 );
-        if ( !sst )
-        {
-            qDebug() << "CONSTANT_STRING before SST parsed";
-            exit( 1 );
-        }
-        /* 									fprintf(stderr,"col=%d row=%d no=%d\n",col,row,string_no); */
-
-        saved_reference=NULL;
-        pcell=allocate( row,col );
-        if ( string_no>=sstsize|| string_no < 0 )
-        {
-            qDebug() << "string index out of boundary";
-            exit( 1 );
-        }
-        else if ( sst[string_no] !=NULL )
-        {
-            int len;
-            char *outptr;
-            len=strlen(( const char* )sst[string_no] );
-            *pcell=( unsigned char* )malloc( len+1 );
-            outptr=( char* )( *pcell );
-            strcpy( outptr,( const char* )sst[string_no] );
-        }
-        else
-        {
-            *pcell=( unsigned char* )malloc( 1 );
-            strcpy(( char* )*pcell,"" );
-        }
+        //SST is always unicode, and get from copy_unicode_string while parsing sst table
+//        int row = getshort(( unsigned char* )rec,0 );
+//        int col = getshort(( unsigned char* )rec,2 );
+//        short int* pCharset = NULL;
+//        unsigned int iXfIndex = getshort( (unsigned char*)rec,4 );
+//
+//        unsigned char **pcell;
+//        int string_no=getshort(( unsigned char* )rec,6 );
+//        if ( !sst )
+//        {
+//            qDebug() << "CONSTANT_STRING before SST parsed";
+//            exit( 1 );
+//        }
+//        /* 									fprintf(stderr,"col=%d row=%d no=%d\n",col,row,string_no); */
+//
+//        saved_reference=NULL;
+//        pcell=allocate( row,col );
+//        if ( string_no>=sstsize|| string_no < 0 )
+//        {
+//            qDebug() << "string index out of boundary";
+//            exit( 1 );
+//        }
+//        else if ( sst[string_no] !=NULL )
+//        {
+//            int len;
+//            char *outptr;
+//            len=strlen(( const char* )sst[string_no] );
+//            *pcell=( unsigned char* )malloc( len+1 );
+//            outptr=( char* )( *pcell );
+//            strcpy( outptr,( const char* )sst[string_no] );
+//        }
+//        else
+//        {
+//            *pcell=( unsigned char* )malloc( 1 );
+//            strcpy(( char* )*pcell,"" );
+//        }
         break;
     }
     case 0x03:
@@ -483,6 +466,7 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
             qDebug() << "String record without preceeding string formula";
             break;
         }
+        qDebug() << "String";
         *saved_reference=( unsigned char* )copy_unicode_string( &src );
         break;
     }
@@ -495,9 +479,10 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
         }
         break;
     }
-    case FONT:
+    case FONT2:
     {
-        vecFontCharsets.push_back( rec[12] );
+//        qDebug() << "FONT: " << hex << (unsigned int)(unsigned char)rec[12];
+        vecFontCharsets.push_back( (unsigned char)rec[12] );
     }break;
     case XF:
     case 0x43: /*from perl module Spreadsheet::ParseExecel */
@@ -554,7 +539,7 @@ void set_xls_writer( boost::function< void ( unsigned short* ) > Func )
 /*
  * Extracts string from sst and returns mallocked copy of it
  */
-char *copy_unicode_string( unsigned char **src )
+char *copy_unicode_string( unsigned char **src, const char* strCharsetName )
 {
     int count=0;
     int flags = 0;
@@ -651,7 +636,6 @@ char *copy_unicode_string( unsigned char **src )
         if ( charsize == 2 )
         {
             u=( unsigned short )getshort(( unsigned char* )s,0 );
-            qDebug() << "push back " << u;
             vecUString.push_back(u);
             //TODO:
             //c=convert_char(u);
@@ -659,14 +643,26 @@ char *copy_unicode_string( unsigned char **src )
         }
         else
         {
-            if ( !source_charset )
+            if( NULL != strCharsetName )
+            {
+                short int* Charset;
+                char* strFileName;
+                check_charset( &strFileName, strCharsetName );
+                /* fprintf(stderr,"charset=%s\n",source_csname);*/
+                Charset = read_charset( strFileName );
+                free( strFileName );
+                u=( unsigned short )to_unicode( Charset,( unsigned char )*s );
+                free( Charset );
+            }
+            else if( !source_charset )
             {
                 check_charset( &source_csname,source_csname );
                 /* fprintf(stderr,"charset=%s\n",source_csname);*/
                 source_charset=read_charset( source_csname );
+                u=( unsigned short )to_unicode( source_charset,( unsigned char )*s );
             }
-            u=( unsigned short )to_unicode( source_charset,( unsigned char )*s );
-            qDebug() << "push back " << u;
+            else
+                u=( unsigned short )to_unicode( source_charset,( unsigned char )*s );
             vecUString.push_back(u);
             //TODO:
             //c=convert_char(u);
@@ -685,6 +681,8 @@ char *copy_unicode_string( unsigned char **src )
             l+=dl;
         }
     }
+
+    qDebug() << "copy_unicode_string: charset name " << strCharsetName;
 
     vecUString.push_back(0);
     if ( !XlsWriterImpl.empty() )
@@ -974,6 +972,7 @@ void parse_sst( char *sstbuf,int bufsize )
     for ( i=0,parsedString=sst,curString=( unsigned char* )sstbuf+8;
             i<sstsize && curString<barrier; i++,parsedString++ )
     {
+        qDebug() << "Parse sst";
         /* 		fprintf(stderr,"copying %d string\n",i); */
         *parsedString = ( unsigned char* )copy_unicode_string( &curString );
     }

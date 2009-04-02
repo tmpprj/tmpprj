@@ -42,7 +42,7 @@ char *gettypename(long rectype);
 void parse_sst(char *sstbuf,int bufsize);
 void process_item (int rectype, int reclen, char *rec, std::vector<unsigned int>&, std::vector<unsigned int>& vecXfFonts );
 unsigned char **allocate(int row,int col);
-char *copy_unicode_string(unsigned char **src);
+char *copy_unicode_string(unsigned char **src, const char* strCharsetName = NULL );
 char convert8to8(char *src,int count);
 char *convert16to8(char *src,int count);
 void do_table(FILE *input);
