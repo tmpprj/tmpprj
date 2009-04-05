@@ -14,7 +14,6 @@ INCLUDEPATH += ./include \
     ../external/boost
 SOURCES += src/mswordextractor.cc \
     src/xlsparse.cc \
-    src/xls2csv.cc \
     src/writer.cc \
     src/strftime.cc \
     src/sheet.cc \

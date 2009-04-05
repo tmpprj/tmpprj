@@ -31,7 +31,7 @@
 
 
 #ifndef SOURCE_CHARSET
-#define SOURCE_CHARSET "cp1251"
+#define SOURCE_CHARSET "cp1252"
 #endif
 
 #ifndef UNKNOWN_CHAR

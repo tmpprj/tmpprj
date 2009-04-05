@@ -131,7 +131,7 @@ void do_table( FILE *input )
     if ( catdoc_eof( input ) )
     {
         qDebug() << ": No BOF record found";
-        exit( 1 );
+        throw std::runtime_error( "ExtractXls: incorrect file format" );
     }
     while( itemsread )
     {
@@ -200,16 +200,9 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
     switch ( rectype )
     {
     case FILEPASS:
-    {
-        qDebug() << "File is encrypted";
-        exit( 69 );
-        break;
-    }
+        throw std::runtime_error( "ExtractXls: file is encrypted" );
     case WRITEPROT:
-    {
-        qDebug() << "File is write protected";
-        break;
-    }
+        throw std::runtime_error( "ExtractXls: file is protected" );
 
     case 0x42:
     {
@@ -261,10 +254,7 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
         sstBuffer=( unsigned char* )malloc( reclen );
         sstBytes = reclen;
         if ( sstBuffer == NULL )
-        {
-            perror( "SSTptr alloc error! " );
-            exit( 1 );
-        }
+            throw std::runtime_error( "ExtractXls: not enough memory" );
         memcpy( sstBuffer,rec,reclen );
         break;
     }
@@ -276,10 +266,7 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
         }
         sstBuffer=( unsigned char* )realloc( sstBuffer,sstBytes+reclen );
         if ( sstBuffer == NULL )
-        {
-            perror( "SSTptr realloc error! " );
-            exit( 1 );
-        }
+            throw std::runtime_error( "ExtractXls: not enough memory" );
         memcpy( sstBuffer+sstBytes,rec,reclen );
         sstBytes+=reclen;
         return;
@@ -495,11 +482,7 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
             formatTable=( short int* )realloc( formatTable, ( formatTableSize+=16 )*sizeof( short int ) );
 
             if ( !formatTable )
-            {
-                qDebug() << "Out of memory for format table";
-                exit( 1 );
-            }
-        }
+                throw std::runtime_error( "ExtractXls: not enough memory" );        }
         formatTable[formatTableIndex++] = formatIndex;
         break;
     }
@@ -610,11 +593,7 @@ char *copy_unicode_string( unsigned char **src, const char* strCharsetName )
     /* 					count, to_skip, start_offset); */
     /* а здесь мы копируем строку	*/
     if (( dest=( char* )malloc( count+1 ) ) == NULL )
-    {
-        perror( "Dest string alloc error" );
-        *src+=( to_skip+start_offset+( count*charsize ) );
-        exit( 0 );
-    }
+        throw std::runtime_error( "MsWord::ExtractXls: not enough memory" );
     *src+=start_offset;
     len = count;
     *dest=0;
@@ -964,10 +943,8 @@ void parse_sst( char *sstbuf,int bufsize )
     sst=( unsigned char** )malloc( sstsize*sizeof( char * ) );
 
     if ( sst == NULL )
-    {
-        perror( "SST allocation error" );
-        exit( 1 );
-    }
+        throw std::runtime_error( "MsWord::ExtractXls: not enough memory" );
+
     memset( sst,0,sstsize*sizeof( char * ) );
     for ( i=0,parsedString=sst,curString=( unsigned char* )sstbuf+8;
             i<sstsize && curString<barrier; i++,parsedString++ )

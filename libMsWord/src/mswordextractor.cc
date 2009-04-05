@@ -34,11 +34,8 @@ namespace MsWord
         c=0;
         f=fopen( strFileName.c_str(),"rb" );
         if ( !f )
-        {
-            c=1;
-            perror( "catdoc" );
-            exit( 0 );
-        }
+            throw std::runtime_error( "MsWord::Extract: file not found" );
+
         if ( input_buffer )
         {
             if ( setvbuf( f,input_buffer,_IOFBF,FILE_BUFFER ) )
@@ -58,21 +55,18 @@ namespace MsWord
         short int *tmp_charset;
         input_buffer=( char* )malloc( FILE_BUFFER );
         if ( !input_buffer )
-            throw std::runtime_error( "MsWord::Extract: memory allocating error" );
+            throw std::runtime_error( "MsWord::ExtractXls: not enough memory" );
 
         source_charset = read_charset( source_csname );
         if ( !source_charset )
-            throw std::runtime_error( "MsWord::Extract: src charset not found" );
+            throw std::runtime_error( "MsWord::ExtractXls: src charset not found" );
 
         set_std_func();
         c=0;
         f=fopen( strFileName.c_str(),"rb" );
         if ( !f )
-        {
-            c=1;
-            perror( "catdoc" );
-            exit( 0 );
-        }
+            throw std::runtime_error( "MsWord::Extract: src charset not found" );
+
         set_xls_writer( XlsWriter );
         if( ( new_file = ole_init( f, NULL, 0 ) ) != NULL )
         {
@@ -80,7 +74,6 @@ namespace MsWord
             while( ( ole_file = ole_readdir( new_file ) ) != NULL )
             {
                 int res=ole_open( ole_file );
-                /* 				fprintf(stderr, "name = %s\n", ((oleEntry*)ole_file)->name); */
                 if( res >= 0 )
                 {
                     if( strcasecmp( ( (oleEntry*)ole_file )->name , "Workbook" ) == 0
@@ -96,6 +89,6 @@ namespace MsWord
             fclose(new_file);
         }
         else
-            throw std::runtime_error( "ExtractXls: not OLE file or Error" );
+            throw std::runtime_error( "ExtractXls: incorrect file format" );
     }
 }

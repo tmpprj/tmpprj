@@ -5,7 +5,7 @@
 static char *badParam="";
 char* __get_dos_codepage( void )
 {
-    static const char* strCp = "cp1251";
+    static const char* strCp = "cp1252";
     //union REGS regs;
     //regs.x.ax=0x6601;
     //intdos(&regs,&regs);

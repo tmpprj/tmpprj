@@ -30,10 +30,8 @@ unsigned char **allocate( int row,int col )
         newrow=( row/16+1 )*16;
         rowptr=( rowdescr* )realloc( rowptr,newrow*sizeof( struct rowdescr ) );
         if ( rowptr == NULL )
-        {
-            perror( "allocating sheet " );
-            exit( 1 );
-        }
+            throw std::runtime_error( "MsWord::ExtractXls: not enough memory" );
+
         memset( rowptr+lastrow,0,( newrow-lastrow )*sizeof( struct rowdescr ) );
         lastrow=newrow;
     }
@@ -42,10 +40,8 @@ unsigned char **allocate( int row,int col )
         newcol=( col/16+1 )*16;
         rowptr[row].cells=( unsigned char** )realloc( rowptr[row].cells,newcol*sizeof( char * ) );
         if ( rowptr[row].cells == NULL )
-        {
-            perror( "allocating row" );
-            exit( 1 );
-        }
+            throw std::runtime_error( "MsWord::ExtractXls: not enough memory" );
+
         memset( rowptr[row].cells+rowptr[row].end,0,( newcol-rowptr[row].end )
                 *sizeof( char * ) );
         rowptr[row].end=newcol;
