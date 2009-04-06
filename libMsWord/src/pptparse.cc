@@ -1,13 +1,13 @@
 /**
  * @file   pptparse.c
  * @author Alex Ott <alexott@gmail.com>
- * @date   23 äÅË 2004
+ * @date   23 œô¨úœô¨äœô¨¡œô¨êœô¨úœô¨äœô¨¡œô¨Ôœô¨úœô¨äœô¨¡œô¨®œô¨úœô¨äœô¨¡œô¨´œô¨úœô¨äœô¨¡œô¨êœô¨úœô¨äœô¨¡œô¨Ôœô¨úœô¨äœô¨¡œô¨®œô¨£µœô¨úœô¨äœô¨¡œô¨êœô¨úœô¨äœô¨¡œô¨Ôœô¨úœô¨äœô¨¡œô¨®œô¨£» 2004
  * Version: $Id: pptparse.c,v 1.1.1.1 2006/02/24 17:44:06 vitus Exp $
  * Copyright: Alex Ott
- *
+ * 
  * @brief  .ppt parsing routines
- *
- *
+ * 
+ * 
  */
 
 #ifdef HAVE_CONFIG_H
@@ -21,279 +21,370 @@
 #include "catdoc.h"
 #include "ppttypes.h"
 
-static void process_item( int rectype, long reclen, FILE* input );
+static void process_item(int rectype, long reclen, int flags, FILE* input, int* iOffset, int* iLevel);
 
 #if !defined(min)
 #define min(x,y) ((x) < (y) ? (x) : (y))
 #endif
 
 
-/**
- *
- *
- * @param input
- * @param filename
+/** 
+ * 
+ * 
+ * @param input 
+ * @param filename 
  */
-void do_ppt( FILE *input,char *filename )
-{
-    int itemsread=1;
-    int rectype;
-    long reclen;
-    unsigned char recbuf[8];
+void do_ppt(FILE *input,char *filename) {
+	int itemsread=1;
+	int rectype;
+	long reclen;
+	int flags;
+	unsigned char recbuf[8];
+	int i;
 
-    while ( itemsread )
-    {
-        itemsread = catdoc_read( recbuf, 1, 8, input );
-        /* 		fprintf(stderr,"itemsread=%d: ",itemsread); */
-        /* 		for(i=0; i<8; i++) */
-        /* 			fprintf(stderr,"%02x ",recbuf[i]); */
-        /* 		fprintf(stderr,"\n"); */
+	while(itemsread) 
+	{
+		int iOffset = 0;
+        int iLevel = 0;
 
-        if ( catdoc_eof( input ) )
-        {
-            process_item( DOCUMENT_END,0,input );
-            return;
-        }
-        if ( itemsread < 8 )
-            break;
-        rectype=getshort( recbuf,2 );
-        reclen=getulong( recbuf,4 );
-        if ( reclen < 0 )
-        {
-            return;
-        }
-        process_item( rectype,reclen,input );
-    }
+		itemsread = catdoc_read(recbuf, 1, 8, input);
+/* 		fprintf(stdout,"itemsread=%d: ",itemsread); */
+/* 		for(i=0; i<8; i++) */
+/* 			fprintf(stdout,"%02x ",recbuf[i]); */
+/* 		fprintf(stdout,"\n"); */
+		
+		if (catdoc_eof(input)) {
+			process_item(DOCUMENT_END,0,0,input,&iOffset,&iLevel);
+			return;
+		}
+		if(itemsread < 8)
+			break;
+		flags=(int)recbuf[0];
+		rectype=getshort(recbuf,2);
+		reclen=getulong(recbuf,4);
+		if (reclen < 0) {
+			return;
+		}	
+
+		process_item(rectype,reclen,flags,input,&iOffset,&iLevel);
+	}
 }
 
 
-/**
- *
- *
- * @param rectype
- * @param reclen
- * @param input
+/** 
+ * 
+ * 
+ * @param rectype 
+ * @param reclen 
+ * @param input 
  */
-static void process_item( int rectype, long reclen, FILE* input )
+static void process_item (int rectype, long reclen, int flags, FILE* input, int* iOffset, int* iLevel ) 
 {
-    int i=0, u;
-    static char buf[2];
+    fprintf( stdout, "level=%d ", (*iLevel)++ );
+    
+	int i=0, u;
+	static char buf[2];
 
-    switch ( rectype )
-    {
-    case DOCUMENT_END:
-        /* 		fprintf(stderr,"End of document, ended at %ld\n",catdoc_tell(input)); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	if( 0x0F == (0x0F&flags) && PROG_BINARY_TAG != rectype )
+	{
+        fprintf( stdout, "container type=%d, len=%d\n", rectype, reclen );
 
-    case DOCUMENT:
-        /* 		fprintf(stderr,"Start of document, reclen=%ld, started at %ld\n", reclen, */
-        /* 						catdoc_tell(input)); */
-        break;
+		int tmpitemsread=1;
+		int tmprectype;
+		long tmpreclen;
+		int tmpflags;
+		unsigned char recbuf[8];
+		int i;
+		int iTmpOffset=0;
 
-    case DOCUMENT_ATOM:
-        /* 		fprintf(stderr,"DocumentAtom, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+		while( iTmpOffset < reclen )
+		{
+			tmpitemsread = catdoc_read(recbuf, 1, 8, input);
+			fprintf(stdout,"itemsread=%d: ",tmpitemsread);
+			for(i=0; i<8; i++)
+				fprintf(stdout,"%02x ",recbuf[i]);
+			fprintf(stdout,"\n");
+		
+			if( catdoc_eof(input) )
+			{
+                (*iLevel)--;
+				return;
+			}
 
-    case SLIDE:
-        /* 		fprintf(stderr,"Slide, reclen=%ld\n", reclen); */
-        /*  		fputs("---------------------------------------\n",stderr); */
-        break;
+			if( tmpitemsread < 8 )
+				break;
 
-    case SLIDE_ATOM:
-        /* 		fprintf(stderr,"SlideAtom, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+			tmpflags=(int)recbuf[0];
+			tmprectype=getshort(recbuf,2);
+			tmpreclen=getulong(recbuf,4);
 
-    case SLIDE_BASE:
-        /* 		fprintf(stderr,"SlideBase, reclen=%ld\n", reclen); */
-        break;
 
-    case SLIDE_BASE_ATOM:
-        /* 		fprintf(stderr,"SlideBaseAtom, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+			if (reclen < 0) 
+            {
+                (*iLevel)--;
+				return;
+            }
 
-    case NOTES:
-        /* 		fprintf(stderr,"Notes, reclen=%ld\n", reclen); */
-        break;
+			process_item( tmprectype, tmpreclen, tmpflags, input, &iTmpOffset, iLevel );
+		}
+		(*iOffset) += reclen;
+        (*iLevel)--;
+		return;
+	}
 
-    case NOTES_ATOM:
-        /* 		fprintf(stderr,"NotesAtom, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	switch(rectype) 
+	{
+	case DOCUMENT_END:
+		fprintf(stdout,"End of document, ended at %ld\n",catdoc_tell(input));
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case HEADERS_FOOTERS:
-        /* 		fprintf(stderr,"HeadersFooters, reclen=%ld\n", reclen); */
-        break;
+	case DOCUMENT:
+		fprintf(stdout,"Start of document, reclen=%ld, started at %ld\n", reclen, catdoc_tell(input));
+		//
+		(*iOffset) += reclen;
+		break;
 
-    case HEADERS_FOOTERS_ATOM:
-        /* 		fprintf(stderr,"HeadersFootersAtom, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case DOCUMENT_ATOM:
+		fprintf(stdout,"DocumentAtom, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case MAIN_MASTER:
-        /* 		fprintf(stderr,"MainMaster, reclen=%ld\n", reclen); */
-        break;
+	case SLIDE:
+		fprintf(stdout,"Slide, reclen=%ld\n", reclen);
+ 		fputs("---------------------------------------\n",stdout);
+//
+		(*iOffset) += reclen;
+		break;
 
-    case TEXT_BYTES_ATOM:
-    {
-        /* 			fprintf(stderr,"TextBytes, reclen=%ld\n", reclen); */
-        for ( i=0; i < reclen; i++ )
-        {
-            catdoc_read( buf,1,1,input );
-            if (( unsigned char )*buf!=0x0d )
-                ;
-            //TODO:
-            //fputs(convert_char((unsigned char)*buf),stdout);
-            else
-                fputc( '\n',stdout );
-        }
-        fputc( '\n',stdout );
-    }
-    break;
+	case SLIDE_ATOM:
+		fprintf(stdout,"SlideAtom, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
+		
+	case SLIDE_BASE:
+		fprintf(stdout,"SlideBase, reclen=%ld\n", reclen);
+		//
+		(*iOffset) += reclen;
+		break;
 
-    case TEXT_CHARS_ATOM:
-    case CSTRING:
-    {
-        long text_len;
+	case SLIDE_BASE_ATOM:
+		fprintf(stdout,"SlideBaseAtom, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
+		
+	case NOTES:
+		fprintf(stdout,"Notes, reclen=%ld\n", reclen);
+		//
+		(*iOffset) += reclen;
+		break;
 
-        /* 			fprintf(stderr,"CString, reclen=%ld\n", reclen); */
-        text_len=reclen/2;
-        for ( i=0; i < text_len; i++ )
-        {
-            catdoc_read( buf,2,1,input );
-            u=( unsigned short )getshort(( unsigned char* )buf,0 );
-            if ( u!=0x0d )
-                ;//TODO:
-            //fputs(convert_char(u),stdout);
-            else
-                fputc( '\n',stdout );
-        }
-        fputc( '\n',stdout );
-    }
-    break;
+	case NOTES_ATOM:
+		fprintf(stdout,"NotesAtom, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
+		
+	case HEADERS_FOOTERS:
+		fprintf(stdout,"HeadersFooters, reclen=%ld\n", reclen);
+		//
+		(*iOffset) += reclen;
+		break;
 
-    case USER_EDIT_ATOM:
-        /* 		fprintf(stderr,"UserEditAtom, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case HEADERS_FOOTERS_ATOM:
+		fprintf(stdout,"HeadersFootersAtom, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
+		
+	case MAIN_MASTER:
+		fprintf(stdout,"MainMaster, reclen=%ld\n", reclen);
+		//
+		(*iOffset) += reclen;
+		break;
+		
+	case TEXT_BYTES_ATOM: 
+	{
+		fprintf(stdout,"TextBytes, reclen=%ld\n", reclen);
+		for(i=0; i < reclen; i++) {
+			catdoc_read(buf,1,1,input);
+			if((unsigned char)*buf!=0x0d)
+				fputs(convert_char((unsigned char)*buf),stdout);
+			else
+				fputc('\n',stdout);
+		}
+		fputc('\n',stdout);
+		(*iOffset) += reclen;
+	}
+	break;
+		
+	case TEXT_CHARS_ATOM: 
+	case CSTRING: 
+	{
+		long text_len;
+			
+		fprintf(stdout,"CString, reclen=%ld\n", reclen);
+		text_len=reclen/2;
+		for(i=0; i < text_len; i++) {
+			catdoc_read(buf,2,1,input);
+			u=(unsigned short)getshort(buf,0);
+			if(u!=0x0d)
+				fputs(convert_char(u),stdout);
+			else
+				fputc('\n',stdout);
+		}
+		fputc('\n',stdout);
+		(*iOffset) += reclen;
+	}
+	break;
+		
+	case USER_EDIT_ATOM:
+		fprintf(stdout,"UserEditAtom, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case COLOR_SCHEME_ATOM:
-        /* 		fprintf(stderr,"ColorSchemeAtom, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case COLOR_SCHEME_ATOM:
+		fprintf(stdout,"ColorSchemeAtom, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case PPDRAWING:
-        /* 		fprintf(stderr,"PPDrawing, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case PPDRAWING:
+		fprintf(stdout,"PPDrawing, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case ENVIRONMENT:
-        /* 		fprintf(stderr,"Environment, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case ENVIRONMENT:
+		fprintf(stdout,"Environment, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case SSDOC_INFO_ATOM:
-        /* 		fprintf(stderr,"SSDocInfoAtom, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case SSDOC_INFO_ATOM:
+		fprintf(stdout,"SSDocInfoAtom, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case SSSLIDE_INFO_ATOM:
-        /* 		fprintf(stderr,"SSSlideInfoAtom, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case SSSLIDE_INFO_ATOM:
+		fprintf(stdout,"SSSlideInfoAtom, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case PROG_TAGS:
-        /* 		fprintf(stderr,"ProgTags, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case PROG_TAGS:
+		fprintf(stdout,"ProgTags, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case PROG_STRING_TAG:
-        /* 		fprintf(stderr,"ProgStringTag, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case PROG_STRING_TAG:
+		fprintf(stdout,"ProgStringTag, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case PROG_BINARY_TAG:
-        /* 		fprintf(stderr,"ProgBinaryTag, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case PROG_BINARY_TAG:
+		fprintf(stdout,"ProgBinaryTag, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case LIST:
-        /* 		fprintf(stderr,"List, reclen=%ld\n", reclen); */
-        break;
+	case LIST:
+		fprintf(stdout,"List, reclen=%ld\n", reclen);
+		//
+		(*iOffset) += reclen;
+		break;
 
-    case SLIDE_LIST_WITH_TEXT:
-        /* 		fprintf(stderr,"SlideListWithText, reclen=%ld\n", reclen); */
-        /*  		fputs("---------------------------------------\n",stderr); */
-        break;
+	case SLIDE_LIST_WITH_TEXT:
+		fprintf(stdout,"SlideListWithText, reclen=%ld\n", reclen);
+ 		fputs("---------------------------------------\n",stdout);
+		//
+		(*iOffset) += reclen;
+		break;
 
-    case PERSIST_PTR_INCREMENTAL_BLOCK:
-        /* 		fprintf(stderr,"PersistPtrIncrementalBlock, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case PERSIST_PTR_INCREMENTAL_BLOCK:
+		fprintf(stdout,"PersistPtrIncrementalBlock, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case EX_OLE_OBJ_STG:
-        /* 		fprintf(stderr,"ExOleObjStg, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case EX_OLE_OBJ_STG:
+		fprintf(stdout,"ExOleObjStg, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case PPDRAWING_GROUP:
-        /* 		fprintf(stderr,"PpdrawingGroup, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case PPDRAWING_GROUP:
+		fprintf(stdout,"PpdrawingGroup, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case EX_OBJ_LIST:
-        /* 		fprintf(stderr,"ExObjList, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case EX_OBJ_LIST:
+		fprintf(stdout,"ExObjList, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case TX_MASTER_STYLE_ATOM:
-        /* 		fprintf(stderr,"TxMasterStyleAtom, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case TX_MASTER_STYLE_ATOM:
+		fprintf(stdout,"TxMasterStyleAtom, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case HANDOUT:
-        /* 		fprintf(stderr,"Handout, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case HANDOUT:
+		fprintf(stdout,"Handout, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case SLIDE_PERSIST_ATOM:
-        /* 		fprintf(stderr,"SlidePersistAtom, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case SLIDE_PERSIST_ATOM:
+		fprintf(stdout,"SlidePersistAtom, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case TEXT_HEADER_ATOM:
-        /* 		fprintf(stderr,"TextHeaderAtom, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case TEXT_HEADER_ATOM:
+		fprintf(stdout,"TextHeaderAtom, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case TEXT_SPEC_INFO:
-        /* 		fprintf(stderr,"TextSpecInfo, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case TEXT_SPEC_INFO:
+		fprintf(stdout,"TextSpecInfo, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-    case STYLE_TEXT_PROP_ATOM:
-        /* 		fprintf(stderr,"StyleTextPropAtom, reclen=%ld\n", reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
-        break;
+	case STYLE_TEXT_PROP_ATOM:
+		fprintf(stdout,"StyleTextPropAtom, reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
+		break;
 
-        /*	case :
-        fprintf(stderr,", reclen=%ld\n", reclen);
-        catdoc_seek(input, reclen, SEEK_CUR);
-        break;*/
+		/*	case :
+		fprintf(stdout,", reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		break;*/
 
-        /*	case :
-        fprintf(stderr,", reclen=%ld\n", reclen);
-        catdoc_seek(input, reclen, SEEK_CUR);
-        break;*/
+		/*	case :
+		fprintf(stdout,", reclen=%ld\n", reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		break;*/
 
-    default:
-        /* 		fprintf(stderr,"Default action for rectype=%d reclen=%ld\n", */
-        /* 						rectype, reclen); */
-        catdoc_seek( input, reclen, SEEK_CUR );
+	default:
+		fprintf(stdout,"Default action for rectype=%d reclen=%ld\n",
+						rectype, reclen);
+		catdoc_seek(input, reclen, SEEK_CUR);
+		(*iOffset) += reclen;
 
-    }
-
+	}
+    (*iLevel)--;
 }
