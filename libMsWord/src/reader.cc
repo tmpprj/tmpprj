@@ -99,7 +99,8 @@ int process_file( FILE *f,long stop )
                     buffer[++bufptr]=' ';
                     break;
                 case 0x0001:
-                    if ( hyperlink_mode )
+//TODO:
+//                    if ( hyperlink_mode )
                         break;
                     /* else fall through */
                 default:
