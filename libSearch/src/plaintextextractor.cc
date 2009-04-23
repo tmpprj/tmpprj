@@ -36,6 +36,7 @@ CTextExtractorFactory::CTextExtractorFactory()
     RegisterExtractor( ".doc", new CMsWordTextExtractor );
     RegisterExtractor( ".rtf", new CMsWordTextExtractor );
     RegisterExtractor( ".xls", new CXlsTextExtractor );
+    RegisterExtractor( ".ppt", new CPptTextExtractor );
 }
 
 CTextExtractorFactory::~CTextExtractorFactory()

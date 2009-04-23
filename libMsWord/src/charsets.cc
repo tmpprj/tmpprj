@@ -15,8 +15,8 @@
 #include <QTextStream>
 #include <QtDebug>
 #include <QStringList>
+#include <boost/concept_check.hpp>
 
-char *charset_path=CHARSETPATH;
 char *source_csname=SOURCE_CHARSET;
 short int * source_charset;
 int unknown_as_hex=0;
@@ -36,7 +36,6 @@ int to_unicode( short int *charset, int c )
 /************************************************************************/
 short int * read_charset( const char *filename )
 {
-    FILE *f;
     short int *pnew=( short int* )calloc( sizeof( short int ),256 );
     int c;
     long int uc;
@@ -90,6 +89,7 @@ short int * read_charset( const char *filename )
 
 int get_8bit_char( FILE *f,long *offset,long fileend )
 {
+    boost::ignore_unused_variable_warning( fileend );
     unsigned char buf;
     if ( catdoc_read( &buf, 1, 1, f )==0 ) return EOF;
     ( *offset )++;

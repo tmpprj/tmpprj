@@ -66,36 +66,8 @@ FILE* ole_init( FILE *f, void *buffer, size_t bufSize )
 
     if ( fseek( f,0,SEEK_SET ) == -1 )
     {
-        if ( errno == ESPIPE )
-        {
-            /* We got non-seekable file, create temp file */
-            if (( newfile=tmpfile() ) == NULL )
-            {
-                perror( "Can't create tmp file" );
-                return NULL;
-            }
-            if ( bufSize > 0 )
-            {
-                ret=fwrite( buffer, 1, bufSize, newfile );
-                if ( ret != ( int )bufSize )
-                {
-                    perror( "Can't write to tmp file" );
-                    return NULL;
-                }
-            }
-
-            while ( !feof( f ) )
-            {
-                ret=fread( oleBuf,1,BBD_BLOCK_SIZE,f );
-                fwrite( oleBuf, 1, ret, newfile );
-            }
-            fseek( newfile,0,SEEK_SET );
-        }
-        else
-        {
-            perror( "Can't seek in file" );
-            return NULL;
-        }
+        perror( "Can't seek in file" );
+        return NULL;
     }
     else
     {

@@ -1,18 +1,10 @@
-/*
-  Copyright 1998-2003 Victor Wagner
-  Copyright 2003 Alex Ott
-  This file is released under the GPL.  Details can be
-  found in the file COPYING accompanying this distribution.
-*/
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <stdio.h>
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
 #include "catdoc.h"
 #include <QtDebug>
+#include <boost/concept_check.hpp>
 
 
 char ole_sign[]={0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A,0xE1,0};
@@ -111,7 +103,8 @@ int analyze_format( FILE *f )
  ********************************************************************/
 int parse_word_header( unsigned char * buffer,FILE *f,int offset,long curpos )
 {
-    int flags,charset, ret_code=0;
+    boost::ignore_unused_variable_warning( curpos );
+    int flags, ret_code=0;
     long textstart,textlen,i;
     char buf[2];
 

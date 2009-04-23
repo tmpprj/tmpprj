@@ -27,4 +27,13 @@ public:
 
 };
 
+class CPptTextExtractor: public CMsWordTextExtractor
+{
+public:
+
+    CPptTextExtractor();
+
+    virtual void Extract( const std::string strFileName, QString& strText );
+
+};
 #endif // CMSWORDTEXTEXTRACTOR_H

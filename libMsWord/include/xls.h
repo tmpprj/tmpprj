@@ -1,10 +1,3 @@
-/*****************************************************************/
-/* Definition specific for Excel file handling                   */
-/*                                                               */
-/* This file is part of catdoc project                           */
-/* (c) Victor Wagner 2003, (c) Alex Ott 2003	                 */
-/*****************************************************************/
-
 #ifndef XLS_CATDOC_H
 #define XLS_CATDOC_H
 
@@ -48,12 +41,7 @@ char *convert16to8(char *src,int count);
 void do_table(FILE *input);
 char *mark_string(char *instr);
 
-/* ---- added by Igor ---- */
 void SetFormatIdxUsed(int format_code);
-/* -- end added by Igor -- */
 
 
-#ifdef __TURBOC__
-#define rint(x) floor((x+0.5))
-#endif
 #endif

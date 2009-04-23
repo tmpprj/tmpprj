@@ -31,3 +31,12 @@ void CXlsTextExtractor::Extract( const std::string strFileName, QString& strText
 {
     MsWord::ExtractXls( boost::bind( &CXlsTextExtractor::WriterFunc, this, boost::ref(strText), _1 ), strFileName );
 }
+
+CPptTextExtractor::CPptTextExtractor()
+{
+}
+
+void CPptTextExtractor::Extract( const std::string strFileName, QString& strText )
+{
+    MsWord::ExtractPpt( boost::bind( &CPptTextExtractor::WriterFunc, this, boost::ref(strText), _1 ), strFileName );
+}

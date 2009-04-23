@@ -1,13 +1,3 @@
-/*****************************************************************/
-/* BIFF-stream (excel file) parsing                              */
-/*                                                               */
-/* This file is part of catdoc project                           */
-/* (c) David Rysdam  1998                                        */
-/* (c) Victor Wagner 1998-2003, (c) Alex Ott 2003	               */
-/*****************************************************************/
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <stdlib.h>
 #include <string.h>
 #include "xls.h"
@@ -19,6 +9,7 @@
 #ifndef HAVE_STRFTIME
 #include "strftime.h"
 #endif
+#include <boost/concept_check.hpp>
 #include <QtDebug>
 
 static unsigned char rec[MAX_MS_RECSIZE];
@@ -665,7 +656,10 @@ char *copy_unicode_string( unsigned char **src, const char* strCharsetName )
 
     vecUString.push_back(0);
     if ( !XlsWriterImpl.empty() )
+    {
         XlsWriterImpl( &vecUString[0] );
+        vecUString.clear();
+    }
 
     *src=( unsigned char* )s+to_skip;
     return dest;
@@ -872,6 +866,7 @@ char *format_double( char *rec,int offset,int format_code )
  */
 char *format_int( int value,int format_code )
 {
+    boost::ignore_unused_variable_warning( format_code );
     static char buffer[12];
     sprintf( buffer,"%i",value );
     return buffer;

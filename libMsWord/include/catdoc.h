@@ -13,38 +13,17 @@
 #include <boost/function.hpp>
 #include "ole.h"
 
-#if defined(__MSDOS__) || defined(_WIN32)
-# ifndef CHARSETPATH
-#  define CHARSETPATH ".\\charsets"
-# endif
-/* Separator of levels inside path */
-# define DIR_SEP '\\'
-#else
-/* On POSIX systems personal configuration files should start with dot*/
-# ifndef CHARSETPATH
-#  define CHARSETPATH "/usr/local/lib/catdoc"
-# endif
-/* Separator of directories in list, such as PATH env var. */
-/* Separator of levels inside path */
-#define DIR_SEP '/'
-#endif
-
 
 #ifndef SOURCE_CHARSET
 #define SOURCE_CHARSET "cp1252"
 #endif
-
 #ifndef UNKNOWN_CHAR
 #define UNKNOWN_CHAR "?"
 #endif
-
-
 /* Buffers for 32-bit and more program */
 #define PARAGRAPH_BUFFER 262144
 #define FILE_BUFFER 262144
 #define PATH_BUF_SIZE 1024
-
-
 /* Buffer for single line. Should be greater than wrap margin +
   longest substitution sequence */
 #define LINE_BUF_SIZE 512
@@ -53,6 +32,7 @@
 #define WRAP_MARGIN 72
 #endif
 /* variable (defined in catdoc.c) which holds actual value of wrap margin*/
+
 extern  int wrap_margin;
 
 /* Structure to store UNICODE -> target charset mappings */
@@ -79,15 +59,9 @@ extern int to_unicode (short int *charset, int c) ;
 
 void set_writer( boost::function< void ( unsigned short* ) > Func );
 
-extern char *charset_path;
 extern int signature_check;
 extern int unknown_as_hex;
-#ifdef HAVE_LANGINFO
-void get_locale_charset(void);
-#if  defined(HAVE_STRFTIME)
-void	set_time_locale();
-#endif
-#endif
+
 int check_charset(char **filename,const char *charset);
 int process_file(FILE *f,long stop);
 void output_paragraph(unsigned short int *buffer) ;
