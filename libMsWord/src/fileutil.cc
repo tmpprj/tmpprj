@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include "catdoc.h"
 #include <unistd.h>
-#include <glob.h>
 #include <QString>
 #include <QFile>
 
