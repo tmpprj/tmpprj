@@ -1,19 +1,10 @@
-/*****************************************************************/
-/* Reading routines for rtf files                                */
-/*                                                               */
-/* This file is part of catdoc project                           */
-/* (c) Victor Wagner 2003, (c) Alex Ott 2003	             */
-/*****************************************************************/
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #include "catdoc.h"
 #include <iostream>
+#include <stdexcept>
 
 /********************************************************
  * Datatypes declaration
@@ -209,11 +200,8 @@ int parse_rtf( FILE *f )
     int bufptr=-1;
     current_charset=source_charset;
     fseek( f,0,SEEK_SET );
-    if (( groups=( RTFGroupData* )calloc( group_store,sizeof( RTFGroupData ) ) ) == NULL )
-    {
-        perror( "Can\'t allocate memory: " );
-        return 1;
-    }
+    if( ( groups=( RTFGroupData* )calloc( group_store,sizeof( RTFGroupData ) ) ) == NULL )
+        throw std::runtime_error( "MsWord::Ole: not enough memory" );
     //PATCH: it was uc=2
     groups[0].uc = 1; /* DEfault uc = 1 */
     while ( !feof( f ) )
@@ -350,13 +338,8 @@ int parse_rtf( FILE *f )
             if ( group_count >= group_store )
             {
                 group_store+=10;
-                if (( groups=( RTFGroupData* )realloc( groups,
-                                                       group_store*sizeof( RTFGroupData ) ) )
-                        == NULL )
-                {
-                    perror( "Can\'t allocate memory: " );
-                    return 1;
-                }
+                if (( groups=( RTFGroupData* )realloc( groups,group_store*sizeof( RTFGroupData ) ) ) == NULL )
+                    throw std::runtime_error( "MsWord::Ole: not enough memory" );
             }
             if ( para_mode )
                 add_to_buffer( &bufptr,0x20 );

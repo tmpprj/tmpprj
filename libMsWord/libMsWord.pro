@@ -25,7 +25,6 @@ SOURCES += src/mswordextractor.cc \
     src/langinfo.cc \
     src/fileutil.cc \
     src/charsets.cc \
-    src/catppt.cc \
     src/analyze.cc
 HEADERS += include/mswordextractor.h \
     include/xltypes.h \

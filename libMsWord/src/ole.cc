@@ -65,14 +65,10 @@ FILE* ole_init( FILE *f, void *buffer, size_t bufSize )
     ole_finish();
 
     if ( fseek( f,0,SEEK_SET ) == -1 )
-    {
-        perror( "Can't seek in file" );
-        return NULL;
-    }
+        throw std::runtime_error( "MsWord::Ole: Can't seek in file" );
     else
-    {
         newfile=f;
-    }
+
     fseek( newfile,0,SEEK_END );
     fileLength=ftell( newfile );
     /* 	fprintf(stderr, "fileLength=%ld\n", fileLength); */
@@ -111,16 +107,15 @@ FILE* ole_init( FILE *f, void *buffer, size_t bufSize )
     {
         unsigned char *newbuf;
         /* 		fprintf(stderr, "i=%d mblock=%ld\n", i, mblock); */
-        if (( newbuf=( unsigned char* )realloc( tmpBuf, sectorSize*( i+1 )+MSAT_ORIG_SIZE ) ) != NULL )
+        if( ( newbuf=( unsigned char* )realloc( tmpBuf, sectorSize*( i+1 )+MSAT_ORIG_SIZE ) ) != NULL )
         {
             tmpBuf=newbuf;
         }
         else
         {
-            perror( "MSAT realloc error" );
             free( tmpBuf );
             ole_finish();
-            return NULL;
+            throw std::runtime_error( "MsWord::Ole: not enough memory" );
         }
 
         fseek( newfile, 512+mblock*sectorSize, SEEK_SET );
@@ -185,9 +180,8 @@ FILE* ole_init( FILE *f, void *buffer, size_t bufSize )
                 }
                 else
                 {
-                    perror( "SBD realloc error" );
                     ole_finish();
-                    return NULL;
+                    throw std::runtime_error( "MsWord::Ole: not enough memory" );
                 }
             }
             sbdCurrent = getlong( BBD, sbdCurrent*4 );
@@ -229,9 +223,8 @@ FILE* ole_init( FILE *f, void *buffer, size_t bufSize )
                     properties=newProp;
                 else
                 {
-                    perror( "Properties realloc error" );
                     ole_finish();
-                    return NULL;
+                    throw std::runtime_error( "MsWord::Ole: not enough memory" );
                 }
             }
 
@@ -320,11 +313,8 @@ FILE *ole_readdir( FILE *f )
     oleBuf=properties + propCurNumber*PROP_BLOCK_SIZE;
     if ( !rightOleType( oleBuf ) )
         return NULL;
-    if (( e = ( oleEntry* )malloc( sizeof( oleEntry ) ) ) == NULL )
-    {
-        perror( "Can\'t allocate memory" );
-        return NULL;
-    }
+    if( ( e = ( oleEntry* )malloc( sizeof( oleEntry ) ) ) == NULL )
+        throw std::runtime_error( "MsWord::Ole: not enough memory" );
     e->dirPos=oleBuf;
     e->type=getOleType( oleBuf );
     e->file=f;
@@ -361,15 +351,13 @@ FILE *ole_readdir( FILE *f )
             {
                 long int *newChain;
                 chainMaxLen+=25;
-                if (( newChain=( long int* )realloc( e->blocks,
-                                                     chainMaxLen*sizeof( long int ) ) ) != NULL )
+                if( ( newChain=( long int* )realloc( e->blocks, chainMaxLen*sizeof( long int ) ) ) != NULL )
                     e->blocks=newChain;
                 else
                 {
-                    perror( "Properties realloc error" );
                     free( e->blocks );
                     e->blocks=NULL;
-                    return NULL;
+                    throw std::runtime_error( "MsWord::Ole: not enough memory" );
                 }
             }
             if ( e->isBigBlock )
