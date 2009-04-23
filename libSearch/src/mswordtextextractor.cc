@@ -13,7 +13,6 @@ void CMsWordTextExtractor::WriterFunc( QString& strBuf, unsigned short* data )
     while( *data )
     {
         strBuf += QChar( *data );
-        qDebug() << "+letter:" << QChar( *data ) << " plain: " << *data;
         data++;
     }
 }
