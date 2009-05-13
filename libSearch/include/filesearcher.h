@@ -16,7 +16,7 @@ class CFileSearcher
     boost::signal1< void , const std::string& > m_sigFileProcessed;
 
     void Search( const std::string& strPath, const Masks_t& vMasks );
-    void ThreadFunc( const std::string& strPath, const Masks_t& vMasks, boost::condition_variable* pvarStarted );
+    void ThreadFunc( const std::string& strPath, const Masks_t& vMasks, boost::mutex* pmtxThreadStarted );
 
 public:
     void StartSearch( const std::string& strPath, const Masks_t& vMasks );

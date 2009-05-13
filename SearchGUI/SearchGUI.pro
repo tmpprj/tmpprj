@@ -4,7 +4,7 @@ TEMPLATE = app
 POST_TARGETDEPS += ../lib/libChardet.a \
     ../lib/libCommon.a \
     ../lib/libMsWord.a
-CONFIG += debug
+CONFIG += debug no_keywords
 SOURCES += src/main.cc \
            src/window.cc
 HEADERS += ./src/window.h
@@ -13,9 +13,23 @@ DEPENDPATH += ./include \
     ../libChardet/include \
     ../libMsWord/include \
     ../libSearch/include 
+RESOURCES += ../libMsWord/charsets.qrc
 INCLUDEPATH += ../external/boost \
     ./include \
     ../libCommon/include \
     ../libChardet/include \
     ../libMsWord/include \
     ../libSearch/include
+LIBS +=     -L../ \
+            -L../lib \
+            -L../external/boost/stage/lib \
+            -Wl,-Bstatic \
+            -lSearch \
+            -lChardet \
+            -lCommon \
+            -lMsWord \
+            -lboost_thread-mt \
+            -lboost_signals-mt \
+            -lboost_system-mt \
+            -Wl,-Bdynamic 
+

@@ -41,3 +41,4 @@ boost::signal2< void, const std::string&, bool >& CSearchFacade::SigFileMatched(
 {
     return m_matcher.SigFileProcessed();
 }
+

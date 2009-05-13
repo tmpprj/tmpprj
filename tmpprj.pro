@@ -9,6 +9,7 @@ SUBDIRS       = \
         libMsWord/tst/PptExtractorTest \
         libSearch \
 	libSearch/tst/ConsoleWrapperTest \
-	libSearch/tst/PlainTextExtractorTest
+	libSearch/tst/PlainTextExtractorTest \
+    SearchGUI
 
               

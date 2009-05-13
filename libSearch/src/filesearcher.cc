@@ -1,5 +1,6 @@
 #include "filesearcher.h"
 #include <globwrap.h>
+#include <iostream>
 
 using namespace std;
 
@@ -26,9 +27,10 @@ void CFileSearcher::Search( const std::string& strPath, const Masks_t& vMasks )
     }
 }
 
-void CFileSearcher::ThreadFunc( const std::string& strPath, const Masks_t& vMasks, boost::condition_variable* pvarStarted )
+void CFileSearcher::ThreadFunc( const std::string& strPath, const Masks_t& vMasks, boost::mutex* pmtxThreadStarted )
 {
-    pvarStarted->notify_all();
+    cout << "StartSearch #2" << endl;
+    pmtxThreadStarted->unlock();
     Search( strPath, vMasks );
 }
 
@@ -36,13 +38,15 @@ void CFileSearcher::StartSearch( const std::string& strPath, const Masks_t& vMas
 {
     OnStop();
     
-    boost::mutex mutStart;
-    boost::unique_lock<boost::mutex> lock( mutStart );
-    boost::condition_variable varStart;
+    boost::mutex mtxThreadStarted;
+    mtxThreadStarted.lock();
     
-    boost::function0< void > threadFunc = boost::bind( &CFileSearcher::ThreadFunc, this, strPath, vMasks, &varStart );
+    boost::function0< void > threadFunc = boost::bind( &CFileSearcher::ThreadFunc, this, 
+            strPath, vMasks, &mtxThreadStarted );
     m_ptrSearchThread = ThreadPtr_t( new boost::thread( threadFunc ) );
-    varStart.wait( lock );
+    
+    mtxThreadStarted.lock();
+    mtxThreadStarted.unlock();
 }
 
 void CFileSearcher::OnStop()

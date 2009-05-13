@@ -51,6 +51,7 @@ public:
             m_pThread->join();
             m_pThread.reset();
             //TODO: clear queue
+            m_Queue.clear();
         }
     }
 

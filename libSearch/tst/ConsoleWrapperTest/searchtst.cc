@@ -30,6 +30,9 @@ void GetPatterns( PatternsContainer& patterns )
         return;
 
     ifstream file( "patterns.txt" );
+    if( !file.is_open() )
+        return;
+
     while( !file.eof() )
     {
         std::string str;
@@ -37,7 +40,6 @@ void GetPatterns( PatternsContainer& patterns )
 
         QString strText = pTextCodec->toUnicode( QByteArray( str.c_str(), str.size() ) );
 
-        qDebug() << "Size: " << strText.count();
         if( !strText.isEmpty() )
             patterns.push_back( std::string( ( const char* )strText.utf16(), strText.size() * 2 ) );
     }
@@ -69,7 +71,8 @@ int main( int argc, char* argv[] )
 
     string str;
     getline( cin, str );
-    
+    qDebug() << "Done" << endl;
+
     return 0;
 }
 
