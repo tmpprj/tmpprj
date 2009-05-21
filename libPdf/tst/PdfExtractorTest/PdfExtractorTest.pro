@@ -1,16 +1,16 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2009-03-16T22:51:10
+# Project created by QtCreator 2009-05-21T16:46:07
 #
 #-------------------------------------------------
 
 QT       -= gui
 
-TARGET = DocExtractorTest
+TARGET = PdfExtractorTest
 CONFIG   += console debug
 CONFIG   -= app_bundle
 
-POST_TARGETDEPS += ../../../lib/libMsWord.a
+POST_TARGETDEPS += ../../../lib/libPdf.a
 DEPENDPATH += ../../include
 INCLUDEPATH += ../../include ../../../external/boost
 RESOURCES += ../../../libMsWord/charsets.qrc
@@ -18,7 +18,7 @@ TEMPLATE = app
 LIBS +=     -L../ \
             -L../../../lib \
             -Wl,-Bstatic \
-            -lMsWord \
+            -lPdf \
             -Wl,-Bdynamic
 
 SOURCES += main.cpp

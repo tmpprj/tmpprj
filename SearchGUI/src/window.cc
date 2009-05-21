@@ -101,7 +101,6 @@ void Window::find()
 
     PatternsContainer patterns;
     QStringList list = text.split( " ", QString::SkipEmptyParts );
-    QTextCodec* pTextCodec = QTextCodec::codecForLocale();
 
     for( int i = 0; i < list.size(); i++ )
     {

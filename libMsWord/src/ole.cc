@@ -20,7 +20,7 @@
 #include <string.h>
 #include <errno.h>
 #include <QtDebug>
-
+#include <boost/concept_check.hpp>
 #include "catdoc.h"
 
 #define min(a,b) ((a) < (b) ? (a) : (b))
@@ -54,6 +54,8 @@ static unsigned char ole_sign[]={0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A,0xE1,0};
  */
 FILE* ole_init( FILE *f, void *buffer, size_t bufSize )
 {
+    boost::ignore_unused_variable_warning( buffer );
+    boost::ignore_unused_variable_warning( bufSize );
     unsigned char oleBuf[BBD_BLOCK_SIZE];
     unsigned char *tmpBuf;
     FILE *newfile;
