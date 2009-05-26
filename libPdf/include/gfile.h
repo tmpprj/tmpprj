@@ -123,7 +123,7 @@ private:
   GString *path;		// directory path
   GBool doStat;			// call stat() for each entry?
 #if defined(WIN32)
-  WIN32_FIND_DATA ffd;
+  WIN32_FIND_DATAA ffd;
   HANDLE hnd;
 #elif defined(ACORN)
 #elif defined(MACOS)

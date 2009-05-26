@@ -80,7 +80,7 @@
 //------------------------------------------------------------------------
 
 #ifdef WIN32 // this works around a bug in the VC7 compiler
-#  pragma optimize("",off)
+//#  pragma optimize("",off)
 #endif
 
 Operator Gfx::opTab[] = {
@@ -253,7 +253,7 @@ Operator Gfx::opTab[] = {
 };
 
 #ifdef WIN32 // this works around a bug in the VC7 compiler
-#  pragma optimize("",on)
+//#  pragma optimize("",on)
 #endif
 
 #define numOps (sizeof(opTab) / sizeof(Operator))

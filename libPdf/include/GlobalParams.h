@@ -37,7 +37,7 @@ class CMapCache;
 struct XpdfSecurityHandler;
 class GlobalParams;
 #ifdef WIN32
-class WinFontList;
+//class WinFontList;
 #endif
 
 //------------------------------------------------------------------------
@@ -384,7 +384,7 @@ private:
   GHash *displayFonts;		// display font info, indexed by font name
 				//   [DisplayFontParam]
 #ifdef WIN32
-  WinFontList *winFontList;	// system TrueType fonts
+  //WinFontList *winFontList;	// system TrueType fonts
 #endif
   GHash *displayCIDFonts;	// display CID font info, indexed by
 				//   collection [DisplayFontParam]

@@ -603,16 +603,8 @@ Stream *FileStream::makeSubStream(Guint startA, GBool limitedA,
 }
 
 void FileStream::reset() {
-#if HAVE_FSEEKO
-  savePos = (Guint)ftello(f);
-  fseeko(f, start, SEEK_SET);
-#elif HAVE_FSEEK64
-  savePos = (Guint)ftell64(f);
-  fseek64(f, start, SEEK_SET);
-#else
   savePos = (Guint)ftell(f);
   fseek(f, start, SEEK_SET);
-#endif
   saved = gTrue;
   bufPtr = bufEnd = buf;
   bufPos = start;
@@ -620,13 +612,7 @@ void FileStream::reset() {
 
 void FileStream::close() {
   if (saved) {
-#if HAVE_FSEEKO
-    fseeko(f, savePos, SEEK_SET);
-#elif HAVE_FSEEK64
-    fseek64(f, savePos, SEEK_SET);
-#else
     fseek(f, savePos, SEEK_SET);
-#endif
     saved = gFalse;
   }
 }
@@ -656,41 +642,19 @@ void FileStream::setPos(Guint pos, int dir) {
   Guint size;
 
   if (dir >= 0) {
-#if HAVE_FSEEKO
-    fseeko(f, pos, SEEK_SET);
-#elif HAVE_FSEEK64
-    fseek64(f, pos, SEEK_SET);
-#else
     fseek(f, pos, SEEK_SET);
-#endif
     bufPos = pos;
   } else {
-#if HAVE_FSEEKO
-    fseeko(f, 0, SEEK_END);
-    size = (Guint)ftello(f);
-#elif HAVE_FSEEK64
-    fseek64(f, 0, SEEK_END);
-    size = (Guint)ftell64(f);
-#else
     fseek(f, 0, SEEK_END);
     size = (Guint)ftell(f);
-#endif
     if (pos > size)
       pos = (Guint)size;
 #ifdef __CYGWIN32__
     //~ work around a bug in cygwin's implementation of fseek
     rewind(f);
 #endif
-#if HAVE_FSEEKO
-    fseeko(f, -(int)pos, SEEK_END);
-    bufPos = (Guint)ftello(f);
-#elif HAVE_FSEEK64
-    fseek64(f, -(int)pos, SEEK_END);
-    bufPos = (Guint)ftell64(f);
-#else
     fseek(f, -(int)pos, SEEK_END);
     bufPos = (Guint)ftell(f);
-#endif
   }
   bufPtr = bufEnd = buf;
 }

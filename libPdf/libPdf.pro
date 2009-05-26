@@ -13,7 +13,6 @@ INCLUDEPATH += ./include \
     ../libCommon/include \
     ../external/boost
 SOURCES += src/XRef.cc \
-    src/XPDFTree.cc \
     src/XpdfPluginAPI.cc \
     src/UnicodeTypeTable.cc \
     src/UnicodeMap.cc \
@@ -66,8 +65,6 @@ SOURCES += src/XRef.cc \
     src/Annot.cc \
     src/pdfextractor.cc
 HEADERS += include/XRef.h \
-    include/XPDFTreeP.h \
-    include/XPDFTree.h \
     include/XpdfPluginAPI.h \
     include/vms_unix_time.h \
     include/vms_sys_dirent.h \

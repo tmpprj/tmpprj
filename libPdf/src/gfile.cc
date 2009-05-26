@@ -92,7 +92,7 @@ GString *getCurrentDir() {
 #if defined(__EMX__)
   if (_getcwd2(buf, sizeof(buf)))
 #elif defined(WIN32)
-  if (GetCurrentDirectory(sizeof(buf), buf))
+  if (GetCurrentDirectoryA(sizeof(buf), buf))
 #elif defined(ACORN)
   if (strcpy(buf, "@"))
 #elif defined(MACOS)
@@ -154,7 +154,7 @@ GString *appendToPath(GString *path, char *fileName) {
   tmp = new GString(path);
   tmp->append('/');
   tmp->append(fileName);
-  GetFullPathName(tmp->getCString(), sizeof(buf), buf, &fp);
+  GetFullPathNameA(tmp->getCString(), sizeof(buf), buf, &fp);
   delete tmp;
   path->clear();
   path->append(buf);
@@ -361,7 +361,7 @@ GString *makePathAbsolute(GString *path) {
   char *fp;
 
   buf[0] = '\0';
-  if (!GetFullPathName(path->getCString(), _MAX_PATH, buf, &fp)) {
+  if (!GetFullPathNameA(path->getCString(), _MAX_PATH, buf, &fp)) {
     path->clear();
     return path;
   }
@@ -596,8 +596,8 @@ GDirEntry::GDirEntry(char *dirPath, char *nameA, GBool doStat) {
     s = new GString(dirPath);
     appendToPath(s, nameA);
 #ifdef WIN32
-    fa = GetFileAttributes(s->getCString());
-    dir = (fa != 0xFFFFFFFF && (fa & FILE_ATTRIBUTE_DIRECTORY));
+    fa = GetFileAttributesA(s->getCString());
+    dir = (fa != (int)0xFFFFFFFF && (fa & FILE_ATTRIBUTE_DIRECTORY));
 #else
     if (stat(s->getCString(), &st) == 0)
       dir = S_ISDIR(st.st_mode);
@@ -619,7 +619,7 @@ GDir::GDir(char *name, GBool doStatA) {
 
   tmp = path->copy();
   tmp->append("/*.*");
-  hnd = FindFirstFile(tmp->getCString(), &ffd);
+  hnd = FindFirstFileA(tmp->getCString(), &ffd);
   delete tmp;
 #elif defined(ACORN)
 #elif defined(MACOS)
@@ -650,31 +650,31 @@ GDirEntry *GDir::getNextEntry() {
   GDirEntry *e;
 
 #if defined(WIN32)
-  if (hnd) {
-    e = new GDirEntry(path->getCString(), ffd.cFileName, doStat);
-    if (hnd  && !FindNextFile(hnd, &ffd)) {
-      FindClose(hnd);
-      hnd = NULL;
-    }
-  } else {
-    e = NULL;
-  }
-#elif defined(ACORN)
-#elif defined(MACOS)
-#elif defined(VMS)
-  struct dirent *ent;
-  e = NULL;
-  if (dir) {
-    if (needParent) {
-      e = new GDirEntry(path->getCString(), "-", doStat);
-      needParent = gFalse;
-      return e;
-    }
-    ent = readdir(dir);
-    if (ent) {
-      e = new GDirEntry(path->getCString(), ent->d_name, doStat);
-    }
-  }
+//  if (hnd) {
+//    e = new GDirEntry(path->getCString(), ffd.cFileName, doStat);
+//    if (hnd  && !FindNextFile(hnd, &ffd)) {
+//      FindClose(hnd);
+//      hnd = NULL;
+//    }
+//  } else {
+//    e = NULL;
+//  }
+//#elif defined(ACORN)
+//#elif defined(MACOS)
+//#elif defined(VMS)
+//  struct dirent *ent;
+//  e = NULL;
+//  if (dir) {
+//    if (needParent) {
+//      e = new GDirEntry(path->getCString(), "-", doStat);
+//      needParent = gFalse;
+//      return e;
+//    }
+//    ent = readdir(dir);
+//    if (ent) {
+//      e = new GDirEntry(path->getCString(), ent->d_name, doStat);
+//    }
+//  }
 #else
   struct dirent *ent;
   e = NULL;
@@ -700,7 +700,7 @@ void GDir::rewind() {
     FindClose(hnd);
   tmp = path->copy();
   tmp->append("/*.*");
-  hnd = FindFirstFile(tmp->getCString(), &ffd);
+  hnd = FindFirstFileA(tmp->getCString(), &ffd);
   delete tmp;
 #elif defined(ACORN)
 #elif defined(MACOS)
