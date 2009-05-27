@@ -12,6 +12,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <limits.h>
+#include <stdexcept.h>
 #include "gmem.h"
 
 #ifdef DEBUG_MEM
@@ -60,12 +61,7 @@ void *gmalloc(int size) GMEM_EXCEP {
   }
   size1 = gMemDataSize(size);
   if (!(mem = (char *)malloc(size1 + gMemHdrSize + gMemTrlSize))) {
-#if USE_EXCEPTIONS
-    throw GMemException();
-#else
-    fprintf(stderr, "Out of memory\n");
-    exit(1);
-#endif
+    throw std::runtime_error("Out of memory");
   }
   hdr = (GMemHdr *)mem;
   data = (void *)(mem + gMemHdrSize);
@@ -95,12 +91,7 @@ void *gmalloc(int size) GMEM_EXCEP {
     return NULL;
   }
   if (!(p = malloc(size))) {
-#if USE_EXCEPTIONS
-    throw GMemException();
-#else
-    fprintf(stderr, "Out of memory\n");
-    exit(1);
-#endif
+    throw std::runtime_error("Out of memory");
   }
   return p;
 #endif
@@ -143,12 +134,7 @@ void *grealloc(void *p, int size) GMEM_EXCEP {
     q = malloc(size);
   }
   if (!q) {
-#if USE_EXCEPTIONS
-    throw GMemException();
-#else
-    fprintf(stderr, "Out of memory\n");
-    exit(1);
-#endif
+    throw std::runtime_error("Out of memory");
   }
   return q;
 #endif
@@ -162,12 +148,7 @@ void *gmallocn(int nObjs, int objSize) GMEM_EXCEP {
   }
   n = nObjs * objSize;
   if (objSize <= 0 || nObjs < 0 || nObjs >= INT_MAX / objSize) {
-#if USE_EXCEPTIONS
-    throw GMemException();
-#else
-    fprintf(stderr, "Bogus memory allocation size\n");
-    exit(1);
-#endif
+    throw std::runtime_error("Out of memory");
   }
   return gmalloc(n);
 }
@@ -183,12 +164,7 @@ void *greallocn(void *p, int nObjs, int objSize) GMEM_EXCEP {
   }
   n = nObjs * objSize;
   if (objSize <= 0 || nObjs < 0 || nObjs >= INT_MAX / objSize) {
-#if USE_EXCEPTIONS
-    throw GMemException();
-#else
-    fprintf(stderr, "Bogus memory allocation size\n");
-    exit(1);
-#endif
+    throw std::runtime_error("Out of memory");
   }
   return grealloc(p, n);
 }
