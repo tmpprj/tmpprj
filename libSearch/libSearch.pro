@@ -6,7 +6,8 @@ DESTDIR = ../lib
 TEMPLATE = lib
 POST_TARGETDEPS += ../lib/libChardet.a \
     ../lib/libCommon.a \
-    ../lib/libMsWord.a
+    ../lib/libMsWord.a \
+    ../lib/libPdf.a
 CONFIG += staticlib \
     debug
 SOURCES += src/filesearcher.cc \
@@ -15,7 +16,8 @@ SOURCES += src/filesearcher.cc \
     src/txttextextractor.cc \
     src/multipatternsearcher.cc \
     src/patternmatcher.cc \
-    src/mswordtextextractor.cc
+    src/mswordtextextractor.cc \
+    src/pdftextextractor.cc
 HEADERS += ./include/searchfacade.h \
     ./include/searchdefines.h \
     ./include/filesearcher.h \
@@ -23,7 +25,8 @@ HEADERS += ./include/searchfacade.h \
     include/txttextextractor.h \
     include/multipatternsearcher.h \
     include/patternmatcher.h \
-    include/mswordtextextractor.h
+    include/mswordtextextractor.h \
+    include/pdftextextractor.h
 DEPENDPATH += ./include \
     ../libCommon/include \
     ../libChardet/include \
@@ -32,4 +35,5 @@ INCLUDEPATH += ../external/boost \
     ./include \
     ../libCommon/include \
     ../libChardet/include \
-    ../libMsWord/include
+    ../libMsWord/include \
+    ../libPdf/include

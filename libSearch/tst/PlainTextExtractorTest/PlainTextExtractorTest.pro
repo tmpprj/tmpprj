@@ -22,6 +22,7 @@ LIBS +=     -L../ \
             -lChardet \
             -lCommon \
             -lMsWord \
+            -lPdf \
             -lboost_thread-mt \
             -lboost_signals-mt \
             -lboost_system-mt \

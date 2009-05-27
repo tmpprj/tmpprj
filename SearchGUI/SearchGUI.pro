@@ -3,7 +3,8 @@ DESTDIR = ../bin
 TEMPLATE = app
 POST_TARGETDEPS += ../lib/libChardet.a \
     ../lib/libCommon.a \
-    ../lib/libMsWord.a
+    ../lib/libMsWord.a \
+    ../lib/libPdf.a
 CONFIG += debug no_keywords
 SOURCES += src/main.cc \
            src/window.cc
@@ -28,6 +29,7 @@ LIBS +=     -L../ \
             -lChardet \
             -lCommon \
             -lMsWord \
+            -lPdf \
             -lboost_thread-mt \
             -lboost_signals-mt \
             -lboost_system-mt \

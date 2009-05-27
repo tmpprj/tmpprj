@@ -1,6 +1,7 @@
 #include "txttextextractor.h"
 #include "plaintextextractor.h"
 #include "mswordtextextractor.h"
+#include "pdftextextractor.h"
 #include "log.hpp"
 #include <boost/foreach.hpp>
 
@@ -37,6 +38,7 @@ CTextExtractorFactory::CTextExtractorFactory()
     RegisterExtractor( ".rtf", new CMsWordTextExtractor );
     RegisterExtractor( ".xls", new CXlsTextExtractor );
     RegisterExtractor( ".ppt", new CPptTextExtractor );
+    RegisterExtractor( ".pdf", new CPdfTextExtractor );
 }
 
 CTextExtractorFactory::~CTextExtractorFactory()
