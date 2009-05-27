@@ -52,22 +52,14 @@ void Array::add(Object *elem) {
 
 Object *Array::get(int i, Object *obj) {
   if (i < 0 || i >= length) {
-#ifdef DEBUG_MEM
-    abort();
-#else
     return obj->initNull();
-#endif
   }
   return elems[i].fetch(xref, obj);
 }
 
 Object *Array::getNF(int i, Object *obj) {
   if (i < 0 || i >= length) {
-#ifdef DEBUG_MEM
-    abort();
-#else
     return obj->initNull();
-#endif
   }
   return elems[i].copy(obj);
 }
