@@ -12,7 +12,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <limits.h>
-#include <stdexcept.h>
+#include <stdexcept>
 #include "gmem.h"
 
 #ifdef DEBUG_MEM
