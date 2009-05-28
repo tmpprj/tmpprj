@@ -26,7 +26,7 @@ namespace Pdf
     void Extract( boost::function<void (unsigned int*, size_t)> Writer, const std::string& strFileName )
     {
         std::auto_ptr<PDFDoc> pDoc;
-        std::auto_ptr<GString> fileName( new GString( strFileName.c_str() ) );
+        GString* fileName = new GString( strFileName.c_str() );
         std::auto_ptr<TextOutputDev> textOut;
         UnicodeMap* uMap;
         Object info;
@@ -38,19 +38,10 @@ namespace Pdf
         // get mapping to output encoding
         if( !(uMap = globalParams->getTextEncoding()) )
             throw std::runtime_error( "PdfExtractor: unable to read file: " + strFileName );
-//        {
-//            error(-1, "Couldn't get text encoding");
-//            delete fileName;
-//            goto err1;
-//        }
 
-        pDoc = std::auto_ptr<PDFDoc>( new PDFDoc(fileName.get(), NULL, NULL) );
+        pDoc = std::auto_ptr<PDFDoc>( new PDFDoc(fileName, NULL, NULL) );
         if (!pDoc->isOk())
             throw std::runtime_error( "PdfExtractor: unable to read file: " + strFileName );
-//        {
-//            exitCode = 1;
-//            goto err2;
-//        }
 
         int firstPage = 1;
         int lastPage = pDoc->getNumPages();
