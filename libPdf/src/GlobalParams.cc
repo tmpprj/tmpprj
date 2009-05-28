@@ -1898,7 +1898,7 @@ void GlobalParams::setupBaseFonts(char *dir) {
 //      }
 //    }
 #else
-    for (j = 0; !fileName && displayFontDirs[j]; ++j) {
+    for (int j = 0; !fileName && displayFontDirs[j]; ++j) {
       fileName = appendToPath(new GString(displayFontDirs[j]),
 			      displayFontTab[i].t1FileName);
       kind = displayFontT1;
