@@ -8,18 +8,16 @@ class QComboBox;
 class QDir;
 class QLabel;
 class QPushButton;
-class QTableWidget;
+class QFilesTable;
 
-class Window : public QDialog
+class QSearchWindow : public QDialog
 {
     Q_OBJECT
 
     CSearchFacade m_search;
 
 public:
-    Window(QWidget *parent = 0);
-    void AddFile( const QString& filename, size_t nFileSize );
-    void ClearList();
+    QSearchWindow(QWidget *parent = 0);
 
 private Q_SLOTS:
     void browse();
@@ -29,7 +27,7 @@ private:
     void FileMatched( const std::string& strFilename, bool bMatchOk );
     void FileProcessed( const std::string& strFileName, const QString& strFileData );
     void FileFound( const std::string& strFilename );
-    
+
     QPushButton *createButton(const QString &text, const char *member);
     QComboBox *createComboBox(const QString &text = QString());
     void createFilesTable();
@@ -43,7 +41,7 @@ private:
     QLabel *filesFoundLabel;
     QPushButton *browseButton;
     QPushButton *findButton;
-    QTableWidget *filesTable;
+    QFilesTable *filesTable;
 };
 
 #endif

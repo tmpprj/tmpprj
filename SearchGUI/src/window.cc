@@ -1,8 +1,10 @@
 #include <QtGui>
 #include <QtCore>
-#include "window.h"
 
-Window::Window(QWidget *parent)
+#include "window.h"
+#include "filestable.h"
+
+QSearchWindow::QSearchWindow(QWidget *parent)
     : QDialog(parent)
 {
     browseButton = createButton(tr("&Browse..."), SLOT(browse()));
@@ -39,47 +41,26 @@ Window::Window(QWidget *parent)
     setWindowTitle(tr("Find Files"));
     resize(700, 300);
 
-    m_search.SigFileMatched().connect( boost::bind( &Window::FileMatched, this, _1, _2 ) );
-    m_search.SigFileProcessed().connect( boost::bind( &Window::FileProcessed, this, _1, _2 ) );
-    m_search.SigFileFound().connect( boost::bind( &Window::FileFound, this, _1 ) );
+    m_search.SigFileMatched().connect( boost::bind( &QSearchWindow::FileMatched, this, _1, _2 ) );
+    m_search.SigFileProcessed().connect( boost::bind( &QSearchWindow::FileProcessed, this, _1, _2 ) );
+    m_search.SigFileFound().connect( boost::bind( &QSearchWindow::FileFound, this, _1 ) );
 }
 
-void Window::AddFile( const QString& filename, size_t nFileSize )
-{
-    QTableWidgetItem *fileNameItem = new QTableWidgetItem( filename );
-    fileNameItem->setFlags(Qt::ItemIsEnabled);
-    QTableWidgetItem *sizeItem = new QTableWidgetItem( tr( "%1 KB" )
-                              .arg( int( ( nFileSize + 1023) / 1024) ) );
-    sizeItem->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    sizeItem->setFlags(Qt::ItemIsEnabled);
-
-    int row = filesTable->rowCount();
-    filesTable->insertRow(row);
-    filesTable->setItem( row, 0, fileNameItem );
-    filesTable->setItem( row, 1, sizeItem );
-}
-
-void Window::ClearList()
-{
-    filesTable->clearContents();
-    filesTable->setRowCount( 0 );
-}
-
-void Window::FileMatched( const std::string& strFilename, bool bMatchOk )
+void QSearchWindow::FileMatched( const std::string& strFilename, bool bMatchOk )
 {
     if( bMatchOk )
-        AddFile( strFilename.c_str(), 0 );
+        filesTable->AddFile( strFilename.c_str() );
 }
 
-void Window::FileProcessed( const std::string& strFilename, const QString& strFileData )
+void QSearchWindow::FileProcessed( const std::string& strFilename, const QString& strFileData )
 {
 }
 
-void Window::FileFound( const std::string& strFilename )
+void QSearchWindow::FileFound( const std::string& strFilename )
 {
 }
 
-void Window::browse()
+void QSearchWindow::browse()
 {
     QString directory = QFileDialog::getExistingDirectory(this,
                             tr("Find Files"), QDir::currentPath());
@@ -90,10 +71,10 @@ void Window::browse()
     }
 }
 
-void Window::find()
+void QSearchWindow::find()
 {
     m_search.Stop();
-    ClearList();
+    filesTable->ClearList();
 
     QString fileName = fileComboBox->currentText();
     QString text = textComboBox->currentText();
@@ -118,14 +99,14 @@ void Window::find()
     m_search.Start( qPrintable( path ), patterns, masks );
 }
 
-QPushButton *Window::createButton(const QString &text, const char *member)
+QPushButton *QSearchWindow::createButton(const QString &text, const char *member)
 {
     QPushButton *button = new QPushButton(text);
     connect(button, SIGNAL(clicked()), this, member);
     return button;
 }
 
-QComboBox *Window::createComboBox(const QString &text)
+QComboBox *QSearchWindow::createComboBox(const QString &text)
 {
     QComboBox *comboBox = new QComboBox;
     comboBox->setEditable(true);
@@ -134,9 +115,9 @@ QComboBox *Window::createComboBox(const QString &text)
     return comboBox;
 }
 
-void Window::createFilesTable()
+void QSearchWindow::createFilesTable()
 {
-    filesTable = new QTableWidget(0, 2);
+    filesTable = new QFilesTable;
     QStringList labels;
     labels << tr("File Name") << tr("Size");
     filesTable->setHorizontalHeaderLabels(labels);

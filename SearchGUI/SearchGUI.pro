@@ -7,8 +7,10 @@ POST_TARGETDEPS += ../lib/libChardet.a \
     ../lib/libPdf.a
 CONFIG += debug no_keywords
 SOURCES += src/main.cc \
-           src/window.cc
-HEADERS += ./src/window.h
+           src/window.cc \
+           src/filestable.cc
+HEADERS += ./src/window.h \
+           ./src/filestable.h
 DEPENDPATH += ./include \
     ../libCommon/include \
     ../libChardet/include \
