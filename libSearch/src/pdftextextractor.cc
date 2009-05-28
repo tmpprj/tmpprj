@@ -1,4 +1,4 @@
-#include "include\pdftextextractor.h"
+#include "pdftextextractor.h"
 #include "pdfextractor.h"
 #include <boost/bind.hpp>
 
