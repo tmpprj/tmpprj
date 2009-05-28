@@ -10,20 +10,20 @@ void CFileSearcher::Search( const std::string& strPath, const Masks_t& vMasks )
     {
         GlobWrap globFiles( strPath, vMasks[ i ] );
 
-        const char* szFilename;
-        while( ( szFilename = globFiles.NextFilename() ) != NULL )
+        std::string strFilename;
+        while( !( strFilename = globFiles.NextFilename() ).empty() )
         {
             boost::this_thread::interruption_point();
-            m_sigFileProcessed( szFilename );
+            m_sigFileProcessed( strFilename );
         }
     }
 
     GlobWrap globFolders( strPath );
-    const char* szFilename;
-    while( ( szFilename = globFolders.NextFilename() ) != NULL )
+    std::string strFilename;
+    while( !( strFilename = globFolders.NextFilename() ).empty() )
     {
         boost::this_thread::interruption_point();
-        Search( szFilename, vMasks );
+        Search( strFilename, vMasks );
     }
 }
 
