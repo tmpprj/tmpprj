@@ -6,6 +6,7 @@ DESTDIR = ../lib
 TEMPLATE = lib
 CONFIG += staticlib \
     debug
-SOURCES += src/globwrap.cc
+SOURCES += src/globwrap.cc src/log.cc
 HEADERS += ./include/globwrap.h
-INCLUDEPATH += ./include
+INCLUDEPATH += ../external/boost \
+    ./include 
