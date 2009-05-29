@@ -35,7 +35,7 @@ void QFilesTable::mouseMoveEvent( QMouseEvent *event )
     QMimeData *mimeData = new QMimeData;
 
     QList<QUrl> list;
-    list.append( QUrl( "file://" + currentItem()->text() ) );
+    list.append( QUrl( "file:/" + currentItem()->text() ) );
     mimeData->setUrls( list ); 
     
     drag->setMimeData( mimeData );

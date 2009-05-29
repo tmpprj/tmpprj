@@ -13,7 +13,10 @@
 class GlobWrap
 {
 #ifdef WIN32
-    HANDLE handle;
+    WIN32_FIND_DATAA m_Data;
+    HANDLE m_Handle;
+    std::string m_strBuf;
+    std::string m_strPath;
 #else
     size_t nCurrentIndex;
     glob_t gt;
@@ -21,7 +24,7 @@ class GlobWrap
 public:
     GlobWrap( const std::string& strPath, const std::string& strMask );
     GlobWrap( const std::string& strPath );
-    const char* NextFilename();
+    std::string NextFilename();
     ~GlobWrap();
 };
 
