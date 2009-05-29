@@ -20,8 +20,8 @@ LIBS +=     -L../ \
             -Wl,-Bstatic \
             -lSearch \
             -lChardet \
-            -lCommon \
             -lMsWord \
+            -lCommon \
             -lPdf \
             -lboost_thread-mt \
             -lboost_signals-mt \

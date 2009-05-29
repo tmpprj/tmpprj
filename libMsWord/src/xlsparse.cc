@@ -10,7 +10,7 @@
 #include "strftime.h"
 #endif
 #include <boost/concept_check.hpp>
-#include <QtDebug>
+#include "log.hpp"
 
 static unsigned char rec[MAX_MS_RECSIZE];
 int biff_version=0;
@@ -68,10 +68,10 @@ void do_table( FILE *input )
                     itemsread=catdoc_read( rec,4,1,input );
                     //build_year=getshort(( unsigned char* )rec+2,0 );
                     //build_rel=getshort(( unsigned char* )rec,0 );
-                    qDebug() << "ver=" << hex << getshort( (unsigned char*)rec,0 );
+                    CLog() << debug << "ver=" << std::hex << getshort( (unsigned char*)rec,0 );
                     unsigned short usVer = getshort( (unsigned char*)rec,0 );
                     if( 0x600 == usVer )
-                    //qDebug() << "y = " << hex << build_year << " r = " << build_rel;
+                    //CLog() << debug << "y = " << hex << build_year << " r = " << build_rel;
 //                    if ( build_year > 5 )
                     {
                         itemsread=catdoc_read( rec,8,1,input );
@@ -109,7 +109,7 @@ void do_table( FILE *input )
             }
             else
             {
-                qDebug() << ": Invalid BOF record";
+                CLog() << debug << ": Invalid BOF record";
                 return;
             }
         }
@@ -121,7 +121,7 @@ void do_table( FILE *input )
 
     if ( catdoc_eof( input ) )
     {
-        qDebug() << ": No BOF record found";
+        CLog() << debug << ": No BOF record found";
         throw std::runtime_error( "ExtractXls: incorrect file format" );
     }
     while( itemsread )
@@ -314,7 +314,7 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
 //        int string_no=getshort(( unsigned char* )rec,6 );
 //        if ( !sst )
 //        {
-//            qDebug() << "CONSTANT_STRING before SST parsed";
+//            CLog() << debug << "CONSTANT_STRING before SST parsed";
 //            exit( 1 );
 //        }
 //        /* 									fprintf(stderr,"col=%d row=%d no=%d\n",col,row,string_no); */
@@ -323,7 +323,7 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
 //        pcell=allocate( row,col );
 //        if ( string_no>=sstsize|| string_no < 0 )
 //        {
-//            qDebug() << "string index out of boundary";
+//            CLog() << debug << "string index out of boundary";
 //            exit( 1 );
 //        }
 //        else if ( sst[string_no] !=NULL )
@@ -441,10 +441,10 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
         unsigned char *src=( unsigned char * )rec;
         if ( !saved_reference )
         {
-            qDebug() << "String record without preceeding string formula";
+            CLog() << debug << "String record without preceeding string formula";
             break;
         }
-        qDebug() << "String";
+        CLog() << debug << "String";
         *saved_reference=( unsigned char* )copy_unicode_string( &src );
         break;
     }
@@ -452,14 +452,14 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
     {
         if ( rowptr )
         {
-            qDebug() << "BOF when current sheet is not flushed";
+            CLog() << debug << "BOF when current sheet is not flushed";
             free_sheet();
         }
         break;
     }
     case FONT2:
     {
-//        qDebug() << "FONT: " << hex << (unsigned int)(unsigned char)rec[12];
+//        CLog() << debug << "FONT: " << hex << (unsigned int)(unsigned char)rec[12];
         vecFontCharsets.push_back( (unsigned char)rec[12] );
     }break;
     case XF:
@@ -518,12 +518,12 @@ char *copy_unicode_string( unsigned char **src, const char* strCharsetName )
     int count=0;
     int flags = 0;
     int start_offset=0;
-    int to_skip=0;								/* ÉÓÐÏÌØÚÕÅÔÓÑ ÄÌÑ ÐÏÄÓÞÅÔÁ ÄÌÉÎÙ ÄÁÎÎÙÈ
-                                                                 * ÚÁ ËÏÎÃÏÍ ÓÔÒÏËÉ */
-    int offset = 1;								/* ÄÌÑ ÕÞÅÔÁ ÐÅÒÅÍÅÎÎÏÊ ÄÌÉÎÙ ÐÅÒ×ÏÇÏ ÐÏÌÑ  */
+    int to_skip=0;								/* œô¨¹œô¨Ãœô¨Àœô¨¿œô¨¼œô¨Èœô¨Êœô¨Åœô¨µœô¨Äœô¨Ãœô¨Á œô¨´œô¨¼œô¨Á œô¨Àœô¨¿œô¨´œô¨Ãœô¨Îœô¨µœô¨Äœô¨± œô¨´œô¨¼œô¨¹œô¨¾œô¨É œô¨´œô¨±œô¨¾œô¨¾œô¨Éœô¨¸
+                                                                 * œô¨Êœô¨± œô¨»œô¨¿œô¨¾œô¨³œô¨¿œô¨½ œô¨Ãœô¨Äœô¨Âœô¨¿œô¨»œô¨¹ */
+    int offset = 1;								/* œô¨´œô¨¼œô¨Á œô¨Åœô¨Îœô¨µœô¨Äœô¨± œô¨Àœô¨µœô¨Âœô¨µœô¨½œô¨µœô¨¾œô¨¾œô¨¿œô¨º œô¨´œô¨¼œô¨¹œô¨¾œô¨É œô¨Àœô¨µœô¨Âœô¨Çœô¨¿œô¨·œô¨¿ œô¨Àœô¨¿œô¨¼œô¨Á  */
     int charsize;
     /* 	char *realstart=*src; */
-    char *dest;										/* ËÕÄÁ ÂÕÄÅÍ ËÏÐÉÒÏ×ÁÔØ ÓÔÒÏËÕ */
+    char *dest;										/* œô¨»œô¨Åœô¨´œô¨± œô¨²œô¨Åœô¨´œô¨µœô¨½ œô¨»œô¨¿œô¨Àœô¨¹œô¨Âœô¨¿œô¨Çœô¨±œô¨Äœô¨È œô¨Ãœô¨Äœô¨Âœô¨¿œô¨»œô¨Å */
     unsigned char *s = NULL;
     char *d = NULL,*c = NULL;
 
@@ -582,7 +582,7 @@ char *copy_unicode_string( unsigned char **src, const char* strCharsetName )
 
     /* 	fprintf(stderr,"count=%d skip=%d start_offset=%d\n", */
     /* 					count, to_skip, start_offset); */
-    /* Á ÚÄÅÓØ ÍÙ ËÏÐÉÒÕÅÍ ÓÔÒÏËÕ	*/
+    /* œô¨± œô¨Êœô¨´œô¨µœô¨Ãœô¨È œô¨½œô¨É œô¨»œô¨¿œô¨Àœô¨¹œô¨Âœô¨Åœô¨µœô¨½ œô¨Ãœô¨Äœô¨Âœô¨¿œô¨»œô¨Å	*/
     if (( dest=( char* )malloc( count+1 ) ) == NULL )
         throw std::runtime_error( "MsWord::ExtractXls: not enough memory" );
     *src+=start_offset;
@@ -652,7 +652,7 @@ char *copy_unicode_string( unsigned char **src, const char* strCharsetName )
         }
     }
 
-    qDebug() << "copy_unicode_string: charset name " << strCharsetName;
+    CLog() << debug << "copy_unicode_string: charset name " << strCharsetName;
 
     vecUString.push_back(0);
     if ( !XlsWriterImpl.empty() )
@@ -800,14 +800,14 @@ char *isDateFormat( int format_code )
     int dateindex;
     if ( format_code>=( int )formatTableIndex )
     {
-        qDebug() << "Format code " << format_code << " is used before definition";
+        CLog() << debug << "Format code " << format_code << " is used before definition";
         return NULL;
     }
 
     index = formatTable[format_code];
     if ( IsFormatIdxUsed( index ) )
     {
-        qDebug() << "Format " << index << " is redefined";
+        CLog() << debug << "Format " << index << " is redefined";
         /* this format is something user-defined --- not a standard built-in date*/
         return NULL;
     }
@@ -944,7 +944,7 @@ void parse_sst( char *sstbuf,int bufsize )
     for ( i=0,parsedString=sst,curString=( unsigned char* )sstbuf+8;
             i<sstsize && curString<barrier; i++,parsedString++ )
     {
-        qDebug() << "Parse sst";
+        CLog() << debug << "Parse sst";
         /* 		fprintf(stderr,"copying %d string\n",i); */
         *parsedString = ( unsigned char* )copy_unicode_string( &curString );
     }

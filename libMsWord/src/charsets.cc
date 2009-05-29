@@ -13,7 +13,7 @@
 #include "catdoc.h"
 #include <QFile>
 #include <QTextStream>
-#include <QtDebug>
+#include <log.hpp>
 #include <QStringList>
 #include <boost/concept_check.hpp>
 
@@ -43,13 +43,13 @@ short int * read_charset( const char *filename )
     QFile file( ":/libmsword/charsets/" + QString( filename ) + ".txt" );
     if ( !file.exists() )
     {
-        qDebug() << "Cannot load charset " << filename << " - file not found";
+        CLog() << debug << "Cannot load charset " << filename << " - file not found";
         return NULL;
     }
 
     if ( !file.open( QIODevice::ReadOnly ) )
     {
-        qDebug() << "Cannot open file " << filename;
+        CLog() << debug << "Cannot open file " << filename;
         return NULL;
     }
 
@@ -73,7 +73,7 @@ short int * read_charset( const char *filename )
         {
             if ( c<0 || c>255 || uc<0 || ( uc>0xFEFE && uc!=0xFFFE ) )
             {
-                qDebug() << "Invalid charset file " << filename;
+                CLog() << debug << "Invalid charset file " << filename;
                 return NULL;
             }
             pnew[c]=uc;

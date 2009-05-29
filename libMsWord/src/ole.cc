@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include <QtDebug>
+#include "log.hpp"
 #include <boost/concept_check.hpp>
 #include "catdoc.h"
 
@@ -124,7 +124,7 @@ FILE* ole_init( FILE *f, void *buffer, size_t bufSize )
         if ( fread( tmpBuf+MSAT_ORIG_SIZE+( sectorSize-4 )*i,
                     1, sectorSize, newfile ) != ( size_t )sectorSize )
         {
-            qDebug() << "Error read MSAT!";
+            CLog() << debug << "Error read MSAT!";
             ole_finish();
             return NULL;
         }
@@ -140,14 +140,14 @@ FILE* ole_init( FILE *f, void *buffer, size_t bufSize )
 
         if ( bbdSector >= fileLength/sectorSize || bbdSector < 0 )
         {
-            qDebug() << "Bad BBD entry!";
+            CLog() << debug << "Bad BBD entry!";
             ole_finish();
             return NULL;
         }
         fseek( newfile, 512+bbdSector*sectorSize, SEEK_SET );
         if ( fread( BBD+i*sectorSize, 1, sectorSize, newfile ) != ( size_t )sectorSize )
         {
-            qDebug() << "Can't read BBD!";
+            CLog() << debug << "Can't read BBD!";
             free( tmpBuf );
             ole_finish();
             return NULL;
@@ -263,7 +263,7 @@ FILE* ole_init( FILE *f, void *buffer, size_t bufSize )
     fseek( newfile, 0, SEEK_SET );
     if ( !rootEntry )
     {
-        qDebug() << "Broken OLE structure. Cannot find root entry in this file!";
+        CLog() << debug << "Broken OLE structure. Cannot find root entry in this file!";
         ole_finish();
         return NULL;
     }

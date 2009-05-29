@@ -17,8 +17,13 @@ RESOURCES += ../../../libMsWord/charsets.qrc
 TEMPLATE = app
 LIBS +=     -L../ \
             -L../../../lib \
+            -L../../../external/boost/stage/lib \
             -Wl,-Bstatic \
             -lMsWord \
+            -lCommon \
+            -lboost_thread-mt \
+            -lboost_signals-mt \
+            -lboost_system-mt \
             -Wl,-Bdynamic
 
 SOURCES += main.cpp
