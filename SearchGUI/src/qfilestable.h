@@ -1,5 +1,5 @@
-#ifndef _FILESTABLE_H_
-#define _FILESTABLE_H_
+#ifndef _QFILESTABLE_H_
+#define _QFILESTABLE_H_
 
 #include <QTableWidget>
 

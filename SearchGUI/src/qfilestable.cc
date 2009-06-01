@@ -1,10 +1,15 @@
 #include <QtGui>
-#include "filestable.h"
+#include "qfilestable.h"
 
 QFilesTable::QFilesTable( QWidget *parent )
-    : QTableWidget( 0, 2, parent )
+    : QTableWidget( 0, 1, parent )
 {
-
+    QStringList labels;
+    labels << tr("File Name");
+    setHorizontalHeaderLabels(labels);
+    horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    verticalHeader()->hide();
+    setShowGrid( true );
 }
 
 void QFilesTable::AddFile( const QString& filename )

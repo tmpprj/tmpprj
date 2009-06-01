@@ -6,11 +6,18 @@ POST_TARGETDEPS += ../lib/libChardet.a \
     ../lib/libMsWord.a \
     ../lib/libPdf.a
 CONFIG += debug no_keywords
-SOURCES += src/main.cc \
-           src/window.cc \
-           src/filestable.cc
-HEADERS += ./src/window.h \
-           ./src/filestable.h
+SOURCES += ./src/main.cc \
+           ./src/qsearchwindow.cc \
+           ./src/qsettingswindow.cc \
+           ./src/qfilestable.cc \
+           ./src/qsettingstable.cc \
+           ./src/settings.cc
+HEADERS += ./src/qsearchwindow.h \
+           ./src/qsettingswindow.h \
+           ./src/qfilestable.h \
+           ./src/qsettingstable.h
+FORMS += ./src/searchwindow.ui \
+         ./src/settingswindow.ui
 DEPENDPATH += ./include \
     ../libCommon/include \
     ../libChardet/include \
@@ -19,6 +26,7 @@ DEPENDPATH += ./include \
 RESOURCES += ../libMsWord/charsets.qrc
 INCLUDEPATH += ../external/boost \
     ./include \
+    ./src \
     ../libCommon/include \
     ../libChardet/include \
     ../libMsWord/include \

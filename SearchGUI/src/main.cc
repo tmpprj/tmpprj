@@ -1,6 +1,6 @@
 #include <QApplication>
 #include <log.hpp>
-#include "window.h"
+#include "qsearchwindow.h"
 
 int main(int argc, char *argv[])
 {
