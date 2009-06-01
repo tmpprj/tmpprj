@@ -5,6 +5,7 @@
 #include "catdoc.h"
 #include <iostream>
 #include <stdexcept>
+#include <boost/thread.hpp>
 
 /********************************************************
  * Datatypes declaration
@@ -206,6 +207,7 @@ int parse_rtf( FILE *f )
     groups[0].uc = 1; /* DEfault uc = 1 */
     while ( !feof( f ) )
     {
+        boost::this_thread::interruption_point();
         int c = fgetc( f );
         if ( feof( f ) )
             break;

@@ -33,6 +33,7 @@
 #include "Annot.h"
 #include "Error.h"
 #include "Gfx.h"
+#include <boost/thread.hpp>
 
 // the MSVC math.h doesn't define this
 #ifndef M_PI
@@ -567,6 +568,7 @@ void Gfx::go(GBool topLevel) {
   parser->getObj(&obj);
   while (!obj.isEOF()) {
 
+      boost::this_thread::interruption_point();
     // got a command - execute it
     if (obj.isCmd()) {
       if (printCommands) {

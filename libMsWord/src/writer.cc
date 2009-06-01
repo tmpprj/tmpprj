@@ -12,6 +12,7 @@
 #include <ctype.h>
 #include <string.h>
 #include "catdoc.h"
+#include <boost/thread.hpp>
 
 boost::function< void ( unsigned short* ) > WriterImpl;
 
@@ -28,6 +29,7 @@ void set_writer( boost::function< void ( unsigned short* ) > Func )
  ************************************************************************/
 void output_paragraph( unsigned short int *buffer )
 {
+    boost::this_thread::interruption_point();
     if ( !WriterImpl.empty() )
         WriterImpl( buffer );
 }

@@ -10,6 +10,8 @@
 #include <string.h>
 #include <stdio.h>
 #include "catdoc.h"
+#include <boost/thread.hpp>
+
 unsigned short int buffer[PARAGRAPH_BUFFER];
 static unsigned char read_buf[256];
 static int buf_is_unicode;
@@ -32,6 +34,7 @@ int process_file( FILE *f,long stop )
         bufptr = -1;
         do
         {
+            boost::this_thread::interruption_point();
             c=get_unicode_char( f,&offset,stop );
             /* Following symbols below 32 are allowed inside paragraph:
                0x0002 - footnote mark

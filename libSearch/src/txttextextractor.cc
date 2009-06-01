@@ -37,7 +37,7 @@ void CTxtTextExtractor::Extract( const std::string strFileName, QString& strText
     QTextCodec* pTextCodec = strCharset.empty() ? QTextCodec::codecForLocale() : QTextCodec::codecForName( strCharset.c_str() );
     if( NULL == pTextCodec )
     {
-        CLog() << "Cant get codec" << std::endl;
+        CLog() << debug << "Cant get codec" << std::endl;
         strText.fromAscii( (const char*)&vecBuf[0], vecBuf.size() );
     }
     else
@@ -45,13 +45,3 @@ void CTxtTextExtractor::Extract( const std::string strFileName, QString& strText
         strText = pTextCodec->toUnicode( QByteArray( (const char*)&vecBuf[0], vecBuf.size() ) );
     }
 }
-
-//namespace
-//{
-//    ITextExtractor* CreateTxt()
-//    {
-//        return new CTxtTextExtractor;
-//    }
-//
-//    const bool bTxtReged = TextExtractorFactory::Instance().RegisterExtractor( ".txt", CreateTxt() );
-//}

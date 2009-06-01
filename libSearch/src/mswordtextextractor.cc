@@ -1,8 +1,9 @@
 #include "mswordtextextractor.h"
 #include "mswordextractor.h"
 #include <boost/bind.hpp>
-#include <QtDebug>
+#include <boost/thread.hpp>
 #include <QTextCodec>
+
 
 CMsWordTextExtractor::CMsWordTextExtractor()
 {
@@ -10,10 +11,14 @@ CMsWordTextExtractor::CMsWordTextExtractor()
 
 void CMsWordTextExtractor::WriterFunc( QString& strBuf, unsigned short* data )
 {
+    unsigned short* start = data;
     while( *data )
     {
         strBuf += QChar( *data );
         data++;
+
+        if( (data - start)%100 == 0 )
+            boost::this_thread::interruption_point();
     }
 }
 
