@@ -1,0 +1,33 @@
+<ui version="4.0" >
+ <class>SettingsWindowBase</class>
+ <widget class="QDialog" name="SettingsWindowBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Dialog</string>
+  </property>
+  <widget class="QTableWidget" name="QtableSettings" >
+   <property name="geometry" >
+    <rect>
+     <x>9</x>
+     <y>9</y>
+     <width>382</width>
+     <height>241</height>
+    </rect>
+   </property>
+   <property name="columnCount" >
+    <number>2</number>
+   </property>
+   <column/>
+   <column/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
