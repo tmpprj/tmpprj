@@ -15,7 +15,8 @@ SOURCES += ./src/main.cc \
 HEADERS += ./src/qsearchwindow.h \
            ./src/qsettingswindow.h \
            ./src/qfilestable.h \
-           ./src/qsettingstable.h
+           ./src/qsettingstable.h \
+           ./src/settings.h
 FORMS += ./src/searchwindow.ui \
          ./src/settingswindow.ui
 DEPENDPATH += ./include \
