@@ -44,6 +44,7 @@
 #include "nsLatin1Prober.h"
 #include <stdexcept>
 #include <iostream>
+#include <boost/thread.hpp>
 
 nsUniversalDetector::nsUniversalDetector(PRUint32 aLanguageFilter)
 {
@@ -155,6 +156,7 @@ void nsUniversalDetector::HandleData(const char* aBuf, PRUint32 aLen)
   PRUint32 i;
   for (i = 0; i < aLen; i++)
   {
+    boost::this_thread::interruption_point();
     //other than 0xa0, if every othe character is ascii, the page is ascii
     if (aBuf[i] & '\x80' && aBuf[i] != '\xA0')  //Since many Ascii only page contains NBSP 
     {
