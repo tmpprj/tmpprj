@@ -4,3 +4,8 @@ QSettingsWindow::QSettingsWindow( QWidget *parent )
     : QDialog( parent )
 {
 }
+
+QSettingsWindow::~QSettingsWindow()
+{
+}
+

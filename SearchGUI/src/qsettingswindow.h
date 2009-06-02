@@ -11,6 +11,7 @@ class QSettingsWindow : public QDialog, private Ui::SettingsWindowBase
 
 public:
     QSettingsWindow(QWidget *parent = 0);
+    virtual ~QSettingsWindow();
 };
 
 #endif
