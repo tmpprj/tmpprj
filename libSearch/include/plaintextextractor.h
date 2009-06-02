@@ -87,11 +87,17 @@ public:
 
     ITextExtractor* GetExtractor( const std::string& strFileName );
 
-    bool RegisterExtractor( const std::string& strFormat, ITextExtractor* pTextExtractor );
+    bool RegisterName( const std::string& strName, ITextExtractor* pTextExtractor );
+    bool RegisterExtension( const std::string& strExt, const std::string& strName );
 
 private:
+    typedef std::map< std::string, std::string > MapExtensionName_t;
+    MapExtensionName_t mapExtensionName;
 
-    std::map< std::string, ITextExtractor* > mapExtractors;
+    typedef std::map< std::string, ITextExtractor* > MapNameExtractors_t;
+    MapNameExtractors_t mapNameExtractors;
+
+    ITextExtractor* m_pDefaultExtractor;
 
 };
 
