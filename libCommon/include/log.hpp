@@ -5,6 +5,9 @@
 #include <boost/thread/locks.hpp>
 #include <iostream>
 #include <fstream>
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 typedef std::ostream&( *Manip_t )( std::ostream& );
 
@@ -23,6 +26,20 @@ class CLog
     }
     
     boost::mutex m_mtxLock;
+
+#ifdef WIN32
+    int gettimeofday (struct timeval *tv, void* tz) 
+        { 
+            union { 
+                long long ns100; /*time since 1 Jan 1601 in 100ns units */ 
+                FILETIME ft; 
+            } now; 
+            GetSystemTimeAsFileTime (&now.ft); 
+            tv->tv_usec = (long) ((now.ns100 / 10LL) % 1000000LL); 
+            tv->tv_sec = (long) ((now.ns100 - 116444736000000000LL) / 10000000LL); 
+            return (0); 
+        } 
+#endif
 
 public:
     CLog()

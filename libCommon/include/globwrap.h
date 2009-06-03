@@ -17,6 +17,7 @@ class GlobWrap
     HANDLE m_Handle;
     std::string m_strBuf;
     std::string m_strPath;
+    bool m_bOnlyDir;
 #else
     size_t nCurrentIndex;
     glob_t gt;

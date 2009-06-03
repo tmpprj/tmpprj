@@ -6,17 +6,25 @@
 
     GlobWrap::GlobWrap( const std::string& strPath, const std::string& strMask )
             :m_strPath( strPath )
+            ,m_bOnlyDir( false )
     {
-        m_Handle = ::FindFirstFileA( ( strPath + "/" + strMask ).c_str(), &m_Data );
-        if( INVALID_HANDLE_VALUE != m_Handle )
+        m_Handle = ::FindFirstFileA( strPath.c_str(), &m_Data );
+        
+        while( INVALID_HANDLE_VALUE != m_Handle && = ::FindFirstFileA( strPath.c_str(), &m_Data ) ) 
+               && 0 != m_Data.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY );
+
+        if( INVALID_HANDLE_VALUE != m_Handle && 0 == m_Data.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY )
             m_strBuf = m_Data.cFileName;
     }
 
     GlobWrap::GlobWrap( const std::string& strPath )
             :m_strPath( strPath )
+            ,m_bOnlyDir( true )
     {
-        m_Handle = ::FindFirstFileA( strPath.c_str(), &m_Data );
-        if( INVALID_HANDLE_VALUE != m_Handle )
+        while( INVALID_HANDLE_VALUE != ( m_Handle = ::FindFirstFileA( strPath.c_str(), &m_Data ) ) 
+               && 0 == m_Data.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY );
+
+        if( INVALID_HANDLE_VALUE != m_Handle && 0 != m_Data.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
             m_strBuf = m_Data.cFileName;
     }
 
@@ -26,7 +34,13 @@
         {
             std::string strTmp = m_strBuf;
 
-            if( ::FindNextFileA( m_Handle, &m_Data ) )
+            BOOL bRes = FALSE;
+            if( m_bOnlyDir )
+                while( bRes = ::FindNextFileA( m_Handle, &m_Data ) && 0 == m_Data.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY );
+            else
+                while( bRes = ::FindNextFileA( m_Handle, &m_Data ) && 0 != m_Data.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY );
+            
+            if( bRes )
                 m_strBuf = m_Data.cFileName;
             else
                 m_strBuf.clear();
