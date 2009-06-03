@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>464</width>
-    <height>402</height>
+    <height>378</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -108,13 +108,20 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="journalButton" >
+       <property name="text" >
+        <string>&amp;Journal</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer>
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" >
         <size>
-         <width>161</width>
+         <width>101</width>
          <height>28</height>
         </size>
        </property>

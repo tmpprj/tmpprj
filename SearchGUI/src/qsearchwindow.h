@@ -20,6 +20,7 @@ private Q_SLOTS:
     void find();
     void stop();
     void settings();
+    void journal();
 
     void searchTextChanged();
     void searchDirChanged();

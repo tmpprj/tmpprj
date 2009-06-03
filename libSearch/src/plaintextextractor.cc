@@ -34,53 +34,68 @@ void CPlainTextExtractor::ThreadFunc( boost::mutex* pmtxThreadStarted )
 CTextExtractorFactory::CTextExtractorFactory()
     : m_pDefaultExtractor( NULL )
 {
-    RegisterName( "TextParser", new CTxtTextExtractor );
-    RegisterName( "DocParser", new CMsWordTextExtractor );
-    RegisterName( "XlsParser", new CXlsTextExtractor );
-    RegisterName( "PptParser", new CPptTextExtractor );
-    RegisterName( "PdfParser", new CPdfTextExtractor );
+    RegisterName( "TXT Parser", new CTxtTextExtractor );
+    RegisterName( "DOC Parser", new CMsWordTextExtractor );
+    RegisterName( "XLS Parser", new CXlsTextExtractor );
+    RegisterName( "PPT Parser", new CPptTextExtractor );
+    RegisterName( "PDF Parser", new CPdfTextExtractor );
 
-    m_pDefaultExtractor = mapNameExtractors[ "TextParser" ];
+    m_pDefaultExtractor = m_mapNameExtractor[ "TXT Parser" ];
 }
 
 CTextExtractorFactory::~CTextExtractorFactory()
 {
-    BOOST_FOREACH( MapNameExtractors_t::value_type& p, mapNameExtractors )
-        delete p.second;
+    BOOST_FOREACH( MapNameExtractor_t::value_type& p, m_mapNameExtractor )
+            delete p.second;
 }
 
 ITextExtractor* CTextExtractorFactory::GetExtractor( const std::string& strFileName )
 {
     boost::filesystem::path file( strFileName );
-    
-    MapExtensionName_t::iterator pName = mapExtensionName.find( file.extension() );
-    if( pName == mapExtensionName.end() )
-        return m_pDefaultExtractor;
-    
-    MapNameExtractors_t::iterator pExtractor = mapNameExtractors.find( pName->second );
-    if( pExtractor == mapNameExtractors.end() )
+
+    MapExtensionName_t::iterator pExtName = m_mapExtensionName.find( file.extension() );
+    if( pExtName == m_mapExtensionName.end() )
         return m_pDefaultExtractor;
 
-    return pExtractor->second;
+    MapNameExtractor_t::iterator pNameExtractor = m_mapNameExtractor.find( pExtName->second );
+    if( pNameExtractor == m_mapNameExtractor.end() )
+        return m_pDefaultExtractor;
+    
+    return pNameExtractor->second;
 }
+
 
 bool CTextExtractorFactory::RegisterName( const std::string& strName, ITextExtractor* pTextExtractor )
 {
-    if( mapNameExtractors.count( strName ) == 0 )
-    {
-        mapNameExtractors[ strName ] = pTextExtractor;
-        return true;
-    }
-    return false;
+    MapNameExtractor_t::iterator p = m_mapNameExtractor.find( strName );
+
+    if( p != m_mapNameExtractor.end() )
+        return false;
+    
+    m_mapNameExtractor[ strName ] = pTextExtractor;
+    return true;
 }
 
-bool CTextExtractorFactory::RegisterExtension( const std::string& strExt, const std::string& strName )
+bool CTextExtractorFactory::RegisterExtension( const std::string& strExtension, const std::string& strName )
 {
-    if( mapNameExtractors.count( strName ) > 0 )
-    {
-        mapExtensionName[ strExt ] = strName; 
-        return true;
-    }
-    return false;
+    if( m_mapNameExtractor.count( strName ) == 0 )
+        return false;
+
+    MapExtensionName_t::iterator p = m_mapExtensionName.find( strExtension );
+    if( p != m_mapExtensionName.end() )
+        return false;
+
+    m_mapExtensionName[ strExtension ] = strName;
+    return true;
+}
+
+const CTextExtractorFactory::MapExtensionName_t& CTextExtractorFactory::GetMapExtensionName()
+{
+    return m_mapExtensionName;
+}
+
+const CTextExtractorFactory::MapNameExtractor_t& CTextExtractorFactory::GetMapNameExtractor()
+{
+    return m_mapNameExtractor;
 }
 
