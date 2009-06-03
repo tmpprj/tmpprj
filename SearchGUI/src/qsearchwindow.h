@@ -26,6 +26,7 @@ private Q_SLOTS:
     void reloadSettings();
 
 private:
+    void PutCurrentTextsInCombo();
     void SaveSettingsTextCombo();
     void SaveSettingsFoldersCombo();
     
