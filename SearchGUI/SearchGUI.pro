@@ -5,7 +5,7 @@ POST_TARGETDEPS += ../lib/libChardet.a \
     ../lib/libCommon.a \
     ../lib/libMsWord.a \
     ../lib/libPdf.a
-CONFIG += no_keywords
+CONFIG += no_keywords 
 SOURCES += ./src/main.cc \
            ./src/qsearchwindow.cc \
            ./src/qsettingswindow.cc \
