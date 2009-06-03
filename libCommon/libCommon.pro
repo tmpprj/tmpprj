@@ -4,8 +4,7 @@
 TARGET = Common
 DESTDIR = ../lib
 TEMPLATE = lib
-CONFIG += staticlib \
-    debug
+CONFIG += staticlib
 SOURCES += src/globwrap.cc src/log.cc
 HEADERS += ./include/globwrap.h
 INCLUDEPATH += ../external/boost \

@@ -8,7 +8,7 @@ QT       -= gui
 
 TARGET = PlainTextExtractorTest
 POST_TARGETDEPS += ../../../lib/libSearch.a ../../../lib/libChardet.a ../../../lib/libCommon.a ../../../lib/libMsWord.a
-CONFIG   += console debug
+CONFIG   += console
 CONFIG   -= app_bundle
 DEPENDPATH += ../../include ../../../libCommon/include
 INCLUDEPATH += ../../../external/boost ../../include ../../../libCommon/include
