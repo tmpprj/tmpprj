@@ -87,6 +87,7 @@ public:
 
     bool RegisterName( const std::string& strName, ITextExtractor* pTextExtractor );
     bool RegisterExtension( const std::string& strExtension, const std::string& strName );
+    void ClearExtensions();
 
     typedef std::map< std::string, std::string > MapExtensionName_t;
     const MapExtensionName_t& GetMapExtensionName();

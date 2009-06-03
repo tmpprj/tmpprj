@@ -89,6 +89,11 @@ bool CTextExtractorFactory::RegisterExtension( const std::string& strExtension, 
     return true;
 }
 
+void CTextExtractorFactory::ClearExtensions()
+{
+    m_mapExtensionName.clear();
+}
+
 const CTextExtractorFactory::MapExtensionName_t& CTextExtractorFactory::GetMapExtensionName()
 {
     return m_mapExtensionName;

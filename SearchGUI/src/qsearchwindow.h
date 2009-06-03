@@ -14,20 +14,18 @@ class QSearchWindow : public QDialog, private Ui::SearchWindowBase
 
 public:
     QSearchWindow(QWidget *parent = 0);
+    ~QSearchWindow();
 
 private Q_SLOTS:
     void browse();
     void find();
     void stop();
-    void settings();
-    void journal();
-
-    void searchTextChanged();
-    void searchDirChanged();
+    void showSettings();
+    void showJournal();
+    void reloadExtensions();
+    void reloadSettings();
 
 private:
-    void LoadSettingsToUi();
-    void SaveSettingsCombo( QComboBox* pComboBox, QString paramName );
     void SaveSettingsTextCombo();
     void SaveSettingsFoldersCombo();
     

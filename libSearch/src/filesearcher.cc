@@ -29,7 +29,6 @@ void CFileSearcher::Search( const std::string& strPath, const Masks_t& vMasks )
 
 void CFileSearcher::ThreadFunc( const std::string& strPath, const Masks_t& vMasks, boost::mutex* pmtxThreadStarted )
 {
-    cout << "StartSearch #2" << endl;
     pmtxThreadStarted->unlock();
     Search( strPath, vMasks );
 }

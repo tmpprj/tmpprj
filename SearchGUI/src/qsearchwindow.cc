@@ -1,11 +1,14 @@
 #include <QtGui>
 #include <QtCore>
+#include <boost/foreach.hpp>
 
 #include "qsearchwindow.h"
 #include "qfilestable.h"
 #include "qsettingswindow.h"
 #include "qjournalwindow.h"
 #include "settings.h"
+#include "searchgui_conf.h"
+#include "guicommon.h"
 
 #include <log.hpp>
 
@@ -28,49 +31,28 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     connect( findButton, SIGNAL( clicked() ), this, SLOT( find() ) );
     connect( stopButton, SIGNAL( clicked() ), this, SLOT( stop() ) );
     connect( browseButton, SIGNAL( clicked() ), this, SLOT( browse() ) );
-    connect( settingsButton, SIGNAL( clicked() ), this, SLOT( settings() ) );
-    connect( journalButton, SIGNAL( clicked() ), this, SLOT( journal() ) );
+    connect( settingsButton, SIGNAL( clicked() ), this, SLOT( showSettings() ) );
+    connect( journalButton, SIGNAL( clicked() ), this, SLOT( showJournal() ) );
 
-    connect( textComboBox, SIGNAL( editTextChanged( const QString& ) ), this, SLOT( searchTextChanged() ) );
-    connect( directoryComboBox, SIGNAL( editTextChanged( const QString& ) ), this, SLOT( searchDirChanged() ) );
-
-    LoadSettingsToUi();
+    reloadSettings();
     if( directoryComboBox->count() == 0 )
         directoryComboBox->addItem( QDir::currentPath() );
 }
 
-void QSearchWindow::LoadSettingsToUi()
+QSearchWindow::~QSearchWindow()
 {
-    QStringList listTexts = Settings().value( "texts" ).toStringList();
-    textComboBox->addItems( listTexts );
-    
-    QStringList listPaths = Settings().value( "dirs" ).toStringList();
-    directoryComboBox->addItems( listPaths );
-}
-
-void QSearchWindow::SaveSettingsCombo( QComboBox* pComboBox, QString paramName )
-{
-    QStringList listElements;
-
-    for( int i = 0; i < pComboBox->count(); i++ )
-        listElements << pComboBox->itemText( i );
-
-    if( !pComboBox->currentText().isEmpty() &&
-            ( pComboBox->count() == 0 || 
-              pComboBox->currentText() != pComboBox->itemText( pComboBox->currentIndex() ) ) )
-        listElements << pComboBox->currentText();
-    
-    Settings().setValue( paramName, listElements ); 
+    SaveSettingsTextCombo();
+    SaveSettingsFoldersCombo();
 }
 
 void QSearchWindow::SaveSettingsTextCombo()
 {
-    SaveSettingsCombo( textComboBox, "texts" );
+    SearchGUI::Conf().searches = GetComboStringList( textComboBox );
 }
 
 void QSearchWindow::SaveSettingsFoldersCombo()
 {
-    SaveSettingsCombo( directoryComboBox, "dirs" );
+    SearchGUI::Conf().searchPaths = GetComboStringList( directoryComboBox );
 }
 
 void QSearchWindow::FileMatched( const std::string& strFilename, bool bMatchOk )
@@ -139,25 +121,34 @@ void QSearchWindow::stop()
     m_search.Stop();
 }
 
-void QSearchWindow::settings()
+void QSearchWindow::showSettings()
 {
     QSettingsWindow* pSettings = new QSettingsWindow( this );
+    connect( pSettings, SIGNAL( settingsChanged() ), this, SLOT( reloadExtensions() ) ); 
     pSettings->show();
 }
 
-void QSearchWindow::journal()
+void QSearchWindow::showJournal()
 {
     QJournalWindow* pJournal = new QJournalWindow( this );
     pJournal->show();
 }
 
-void QSearchWindow::searchTextChanged()
+void QSearchWindow::reloadExtensions()
 {
-    SaveSettingsTextCombo();
+    TextExtractorFactory::Instance().ClearExtensions();
+
+    typedef QMap< QString, QVariant >::iterator ExtensionsMappedType_t;
+    for( ExtensionsMappedType_t p = SearchGUI::Conf().extensions.begin();
+            p != SearchGUI::Conf().extensions.end(); p++ )
+        TextExtractorFactory::Instance().RegisterExtension( qPrintable( "." + p.key() ), 
+                qPrintable( p.value().toString() ) );
 }
 
-void QSearchWindow::searchDirChanged()
+void QSearchWindow::reloadSettings()
 {
-    SaveSettingsFoldersCombo();
+    textComboBox->addItems( SearchGUI::Conf().searches );
+    directoryComboBox->addItems( SearchGUI::Conf().searchPaths );
+    reloadExtensions();
 }
 

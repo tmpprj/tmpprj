@@ -1,8 +1,12 @@
+#include <QtCore>
 #include <QtGui>
+#include <QObject>
+
 #include "qsettingswindow.h"
 #include "settings.h"
 #include "plaintextextractor.h"
 #include "log.hpp"
+#include "searchgui_conf.h"
 
 QSettingsWindow::QSettingsWindow( QWidget *parent )
     : QDialog( parent )
@@ -16,11 +20,37 @@ QSettingsWindow::QSettingsWindow( QWidget *parent )
     tableExtensions->verticalHeader()->hide();
     tableExtensions->setShowGrid( true );
 
-    connect( addButton, SIGNAL( clicked() ), this, SLOT( addext() ) );
-    
-    QMap< QString, QVariant > mapExtensions = Settings().value( "extensions" ).toMap();
-    for( QMap< QString, QVariant >::iterator p = mapExtensions.begin(); p != mapExtensions.end(); p++ )
+    connect( addButton, SIGNAL( clicked() ), this, SLOT( addextension() ) );
+    connect( okButton, SIGNAL( clicked() ), this, SLOT( savesettings() ) );
+    connect( removeButton, SIGNAL( clicked() ), this, SLOT( removecurrent() ) );
+
+    LoadSettings();
+}
+
+void QSettingsWindow::LoadSettings()
+{
+    typedef QMap< QString, QVariant >::iterator ExtensionsMappedType_t;
+    for( ExtensionsMappedType_t p = SearchGUI::Conf().extensions.begin();
+            p != SearchGUI::Conf().extensions.end(); p++ )
         AddExtension( p.key(), p.value().toString() );
+}
+
+void QSettingsWindow::SaveSettings()
+{
+    SearchGUI::Conf().extensions.clear();
+
+    for( int i = 0; i < tableExtensions->rowCount(); i++ )
+    {
+        QString strExt = tableExtensions->item( i, 0 )->text().trimmed();
+        if( strExt.isEmpty() )
+            continue;
+
+        QComboBox* pParserCombo = dynamic_cast< QComboBox* >( tableExtensions->cellWidget( i, 1 ) );
+        QString strParser = pParserCombo->currentText();
+
+        SearchGUI::Conf().extensions[ strExt ] = strParser; 
+        CUserLog() << qPrintable( strExt ) << ": " << qPrintable( strParser ) << std::endl;
+    }
 }
 
 void QSettingsWindow::InitParserCombo( QComboBox* pParserCombo )
@@ -49,10 +79,24 @@ void QSettingsWindow::AddExtension( const QString& strExt, const QString& strPar
     tableExtensions->insertRow(row);
     tableExtensions->setItem( row, 0, extensionItem );
     tableExtensions->setCellWidget( row, 1, pParserCombo );
+    tableExtensions->setSelectionBehavior( QAbstractItemView::SelectRows );
 }
 
-void QSettingsWindow::addext()
+void QSettingsWindow::addextension()
 {
     AddExtension( "", "" );
+}
+
+void QSettingsWindow::savesettings()
+{
+    SaveSettings();
+    Q_EMIT settingsChanged();
+
+    close();
+}
+
+void QSettingsWindow::removecurrent()
+{
+    tableExtensions->removeRow( tableExtensions->currentRow() );
 }
 

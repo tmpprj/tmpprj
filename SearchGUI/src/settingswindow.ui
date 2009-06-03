@@ -27,7 +27,14 @@
      <item>
       <widget class="QPushButton" name="addButton" >
        <property name="text" >
-        <string>Add</string>
+        <string>&amp;Add</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="removeButton" >
+       <property name="text" >
+        <string>&amp;Remove</string>
        </property>
       </widget>
      </item>
@@ -38,8 +45,8 @@
        </property>
        <property name="sizeHint" >
         <size>
-         <width>201</width>
-         <height>20</height>
+         <width>111</width>
+         <height>28</height>
         </size>
        </property>
       </spacer>
@@ -47,7 +54,7 @@
      <item>
       <widget class="QPushButton" name="okButton" >
        <property name="text" >
-        <string>Ok</string>
+        <string>&amp;Ok</string>
        </property>
       </widget>
      </item>
