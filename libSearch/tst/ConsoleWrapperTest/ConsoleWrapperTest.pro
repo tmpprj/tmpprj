@@ -4,7 +4,7 @@
 TARGET = SearchTest
 TEMPLATE = app
 POST_TARGETDEPS += ../../../lib/libMsWord.a ../../../lib/libSearch.a ../../../lib/libChardet.a ../../../lib/libCommon.a ../../../lib/libPdf.a
-CONFIG += console debug
+CONFIG += console
 SOURCES += searchtst.cc
 DEPENDPATH +=  ../../include ../../../libCommon/include
 INCLUDEPATH += ../../../external/boost ../../include ../../../libCommon/include

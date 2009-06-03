@@ -7,7 +7,7 @@
 QT       -= gui
 
 TARGET = DocExtractorTest
-CONFIG   += console debug
+CONFIG   += console
 CONFIG   -= app_bundle
 
 POST_TARGETDEPS += ../../../lib/libMsWord.a

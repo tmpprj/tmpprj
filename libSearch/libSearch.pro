@@ -8,8 +8,7 @@ POST_TARGETDEPS += ../lib/libChardet.a \
     ../lib/libCommon.a \
     ../lib/libMsWord.a \
     ../lib/libPdf.a
-CONFIG += staticlib \
-    debug
+CONFIG += staticlib
 SOURCES += src/filesearcher.cc \
     src/searchfacade.cc \
     src/plaintextextractor.cc \

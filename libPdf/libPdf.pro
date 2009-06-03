@@ -4,7 +4,7 @@
 QT -= gui
 TARGET = Pdf
 TEMPLATE = lib
-CONFIG += staticlib debug
+CONFIG += staticlib
 DESTDIR = ../lib
 POST_TARGETDEPS += ../lib/libCommon.a
 DEPENDPATH += ./include \

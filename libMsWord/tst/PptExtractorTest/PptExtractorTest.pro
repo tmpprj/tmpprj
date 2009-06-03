@@ -6,7 +6,7 @@
 QT       -= gui
 
 TARGET = PptExtractorTest
-CONFIG   += console debug
+CONFIG   += console
 CONFIG   -= app_bundle
 QMAKE_CXXFLAGS_DEBUG += -O0
 POST_TARGETDEPS += ../../../lib/libMsWord.a
