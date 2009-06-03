@@ -17,7 +17,8 @@ SOURCES += src/filesearcher.cc \
     src/multipatternsearcher.cc \
     src/patternmatcher.cc \
     src/mswordtextextractor.cc \
-    src/pdftextextractor.cc
+    src/pdftextextractor.cc \
+    src/settings.cc
 HEADERS += ./include/searchfacade.h \
     ./include/searchdefines.h \
     ./include/filesearcher.h \
@@ -26,7 +27,8 @@ HEADERS += ./include/searchfacade.h \
     include/multipatternsearcher.h \
     include/patternmatcher.h \
     include/mswordtextextractor.h \
-    include/pdftextextractor.h
+    include/pdftextextractor.h \
+    include/settings.h
 DEPENDPATH += ./include \
     ../libCommon/include \
     ../libChardet/include \

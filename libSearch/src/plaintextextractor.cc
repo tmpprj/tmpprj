@@ -32,33 +32,55 @@ void CPlainTextExtractor::ThreadFunc( boost::mutex* pmtxThreadStarted )
 }
 
 CTextExtractorFactory::CTextExtractorFactory()
+    : m_pDefaultExtractor( NULL )
 {
-    RegisterExtractor( ".txt", new CTxtTextExtractor );
-    RegisterExtractor( ".doc", new CMsWordTextExtractor );
-    RegisterExtractor( ".rtf", new CMsWordTextExtractor );
-    RegisterExtractor( ".xls", new CXlsTextExtractor );
-    RegisterExtractor( ".ppt", new CPptTextExtractor );
-    RegisterExtractor( ".pdf", new CPdfTextExtractor );
+    RegisterName( "TextParser", new CTxtTextExtractor );
+    RegisterName( "DocParser", new CMsWordTextExtractor );
+    RegisterName( "XlsParser", new CXlsTextExtractor );
+    RegisterName( "PptParser", new CPptTextExtractor );
+    RegisterName( "PdfParser", new CPdfTextExtractor );
+
+    m_pDefaultExtractor = mapNameExtractors[ "TextParser" ];
 }
 
 CTextExtractorFactory::~CTextExtractorFactory()
 {
-    typedef std::pair<const std::string, ITextExtractor*>& pair_t_ref;
-    BOOST_FOREACH( pair_t_ref p, mapExtractors )
-            delete p.second;
+    BOOST_FOREACH( MapNameExtractors_t::value_type& p, mapNameExtractors )
+        delete p.second;
 }
 
 ITextExtractor* CTextExtractorFactory::GetExtractor( const std::string& strFileName )
 {
     boost::filesystem::path file( strFileName );
-    if( mapExtractors.end() == mapExtractors.find( file.extension() ) )
-        return mapExtractors[ ".txt" ];
-    else
-        return mapExtractors[ file.extension() ];
+    
+    MapExtensionName_t::iterator pName = mapExtensionName.find( file.extension() );
+    if( pName == mapExtensionName.end() )
+        return m_pDefaultExtractor;
+    
+    MapNameExtractors_t::iterator pExtractor = mapNameExtractors.find( pName->second );
+    if( pExtractor == mapNameExtractors.end() )
+        return m_pDefaultExtractor;
+
+    return pExtractor->second;
 }
 
-bool CTextExtractorFactory::RegisterExtractor( const std::string& strFormat, ITextExtractor* pTextExtractor )
+bool CTextExtractorFactory::RegisterName( const std::string& strName, ITextExtractor* pTextExtractor )
 {
-    mapExtractors[ strFormat ] = pTextExtractor;
-    return true;
+    if( mapNameExtractors.count( strName ) == 0 )
+    {
+        mapNameExtractors[ strName ] = pTextExtractor;
+        return true;
+    }
+    return false;
 }
+
+bool CTextExtractorFactory::RegisterExtension( const std::string& strExt, const std::string& strName )
+{
+    if( mapNameExtractors.count( strName ) > 0 )
+    {
+        mapExtensionName[ strExt ] = strName; 
+        return true;
+    }
+    return false;
+}
+
