@@ -28,7 +28,7 @@ class CPatternMatcher
     };
     mt_queue< FileInfo > m_Queue;
         
-    void ThreadFunc( boost::barrier* pvarBarrier );
+    void ThreadFunc( boost::mutex* pmtxThreadStarted );
 
 public:
     CPatternMatcher();

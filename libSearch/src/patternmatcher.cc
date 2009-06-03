@@ -5,9 +5,9 @@ CPatternMatcher::CPatternMatcher()
 {
 }
 
-void CPatternMatcher::ThreadFunc( boost::barrier* pvarBarrier )
+void CPatternMatcher::ThreadFunc( boost::mutex* pmtxThreadStarted )
 {
-    pvarBarrier->wait();
+    pmtxThreadStarted->unlock();
     
     m_searcher.LoadPatterns( m_patterns );
 
@@ -37,11 +37,14 @@ void CPatternMatcher::OnNewFile( const std::string& strFilename, const QString& 
     boost::unique_lock<boost::mutex> lock( m_mutAccess );
     if( !m_ptrThread.get() )
     {
-        boost::barrier varBarrier( 2 );
+        boost::mutex mtxThreadStarted;
+        mtxThreadStarted.lock();
         
-        boost::function0< void > threadFunc = boost::bind( &CPatternMatcher::ThreadFunc, this, &varBarrier );
+        boost::function0< void > threadFunc = boost::bind( &CPatternMatcher::ThreadFunc, this, &mtxThreadStarted );
         m_ptrThread = ThreadPtr_t( new boost::thread( threadFunc ) );
-        varBarrier.wait();
+        
+        mtxThreadStarted.lock();
+        mtxThreadStarted.unlock();
     }
 }
 
