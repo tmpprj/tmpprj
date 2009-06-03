@@ -61,14 +61,12 @@ void QSearchWindow::FileMatched( const std::string& strFilename, bool bMatchOk )
         filesTable->AddFile( strFilename.c_str() );
 }
 
-void QSearchWindow::FileProcessed( const std::string& strFilename, const QString& )
+void QSearchWindow::FileProcessed( const std::string&, const QString& )
 {
-    CLog() << debug << "FileProcessed: " << strFilename << endl;
 }
 
-void QSearchWindow::FileFound( const std::string& strFilename )
+void QSearchWindow::FileFound( const std::string& )
 {
-    CLog() << debug << "FileFound: " << strFilename << endl;
 }
 
 void QSearchWindow::browse()
