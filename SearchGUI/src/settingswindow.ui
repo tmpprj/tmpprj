@@ -12,21 +12,48 @@
   <property name="windowTitle" >
    <string>Dialog</string>
   </property>
-  <widget class="QTableWidget" name="QtableSettings" >
-   <property name="geometry" >
-    <rect>
-     <x>9</x>
-     <y>9</y>
-     <width>382</width>
-     <height>241</height>
-    </rect>
-   </property>
-   <property name="columnCount" >
-    <number>2</number>
-   </property>
-   <column/>
-   <column/>
-  </widget>
+  <layout class="QVBoxLayout" >
+   <item>
+    <widget class="QTableWidget" name="tableExtensions" >
+     <property name="columnCount" >
+      <number>2</number>
+     </property>
+     <column/>
+     <column/>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <item>
+      <widget class="QPushButton" name="addButton" >
+       <property name="text" >
+        <string>Add</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>201</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="okButton" >
+       <property name="text" >
+        <string>Ok</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

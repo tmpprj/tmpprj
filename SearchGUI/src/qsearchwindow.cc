@@ -4,6 +4,7 @@
 #include "qsearchwindow.h"
 #include "qfilestable.h"
 #include "qsettingswindow.h"
+#include "qjournalwindow.h"
 #include "settings.h"
 
 #include <log.hpp>
@@ -15,7 +16,6 @@ QSearchWindow::QSearchWindow(QWidget *parent)
 {
     setupUi( this );
     setWindowTitle( tr( "Find Files" ) );
-    resize( 700, 300 );
 
     QCompleter *completer = new QCompleter( this );
     completer->setModel( new QDirModel( completer ) );
@@ -29,6 +29,7 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     connect( stopButton, SIGNAL( clicked() ), this, SLOT( stop() ) );
     connect( browseButton, SIGNAL( clicked() ), this, SLOT( browse() ) );
     connect( settingsButton, SIGNAL( clicked() ), this, SLOT( settings() ) );
+    connect( journalButton, SIGNAL( clicked() ), this, SLOT( journal() ) );
 
     connect( textComboBox, SIGNAL( editTextChanged( const QString& ) ), this, SLOT( searchTextChanged() ) );
     connect( directoryComboBox, SIGNAL( editTextChanged( const QString& ) ), this, SLOT( searchDirChanged() ) );
@@ -140,8 +141,14 @@ void QSearchWindow::stop()
 
 void QSearchWindow::settings()
 {
-    QSettingsWindow settings( this );
-    settings.show();
+    QSettingsWindow* pSettings = new QSettingsWindow( this );
+    pSettings->show();
+}
+
+void QSearchWindow::journal()
+{
+    QJournalWindow* pJournal = new QJournalWindow( this );
+    pJournal->show();
 }
 
 void QSearchWindow::searchTextChanged()

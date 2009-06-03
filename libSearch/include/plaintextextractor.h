@@ -79,7 +79,6 @@ public:
 class CTextExtractorFactory
 {
 public:
-
     CTextExtractorFactory();
 
     ~CTextExtractorFactory();
@@ -87,17 +86,20 @@ public:
     ITextExtractor* GetExtractor( const std::string& strFileName );
 
     bool RegisterName( const std::string& strName, ITextExtractor* pTextExtractor );
-    bool RegisterExtension( const std::string& strExt, const std::string& strName );
+    bool RegisterExtension( const std::string& strExtension, const std::string& strName );
+
+    typedef std::map< std::string, std::string > MapExtensionName_t;
+    const MapExtensionName_t& GetMapExtensionName();
+    
+    typedef std::map< std::string, ITextExtractor* > MapNameExtractor_t;
+    const MapNameExtractor_t& GetMapNameExtractor();
 
 private:
-    typedef std::map< std::string, std::string > MapExtensionName_t;
-    MapExtensionName_t mapExtensionName;
+    MapNameExtractor_t m_mapNameExtractor;
 
-    typedef std::map< std::string, ITextExtractor* > MapNameExtractors_t;
-    MapNameExtractors_t mapNameExtractors;
+    MapExtensionName_t m_mapExtensionName;
 
     ITextExtractor* m_pDefaultExtractor;
-
 };
 
 typedef Singleton<CTextExtractorFactory> TextExtractorFactory;
