@@ -2,29 +2,30 @@
 #include "charsetdetector.h"
 #include <fstream>
 #include <QTextCodec>
+#include <QFile>
 #include "log.hpp"
+#include <boost/thread.hpp>
 
 
 void CTxtTextExtractor::Extract( const QString& strFileName, QString& strText )
 {
     std::string strLine;
-    std::ifstream file( strFileName.toStdString().c_str(), std::ios::in|std::ios::binary|std::ios::ate );
+    QFile file( strFileName );
+    if( !file.open(QIODevice::ReadOnly) )
+        return;
 
     CCharsetDetector CharDet;
-    std::vector<unsigned char> vecBuf;
-
-    if (file.is_open())
+    std::vector<unsigned char> vecBuf(1024000);
+    size_t stBytesRead = 0;
+    while( !file.atEnd() ) 
     {
-//TODO: add interruption point
-        size_t stFileSize = file.tellg();
-        vecBuf.resize( stFileSize );
-        file.seekg( 0, std::ios::beg );
-        file.read( (char*)&vecBuf[0], stFileSize );
-        file.close();
+        stBytesRead = file.read( (char*)&vecBuf[0], vecBuf.size() );
+        boost::this_thread::interruption_point();
+        //TODO:maybe it`s faster to handle data blocks of some size, 1024 bytes for example
+        CharDet.HandleData( (char*)&vecBuf[0], stBytesRead );
+        CharDet.DataEnd();
     }
-    //TODO:maybe it`s faster to handle data blocks of some size, 1024 bytes for example
-    CharDet.HandleData( (char*)&vecBuf[0], vecBuf.size() );
-    CharDet.DataEnd();
+
 
     std::string strCharset = CharDet.GetCharset();
 
