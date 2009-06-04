@@ -18,6 +18,9 @@ QSettingsWindow::QSettingsWindow( QWidget *parent )
     tableExtensions->setHorizontalHeaderLabels( labels );
     tableExtensions->horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch );
     tableExtensions->verticalHeader()->hide();
+    tableExtensions->setSelectionBehavior( QAbstractItemView::SelectRows );
+
+    tableExtensions->setEditTriggers( tableExtensions->editTriggers() | QAbstractItemView::CurrentChanged  );
     tableExtensions->setShowGrid( true );
 
     connect( addButton, SIGNAL( clicked() ), this, SLOT( addextension() ) );
@@ -79,7 +82,9 @@ void QSettingsWindow::AddExtension( const QString& strExt, const QString& strPar
     tableExtensions->insertRow(row);
     tableExtensions->setItem( row, 0, extensionItem );
     tableExtensions->setCellWidget( row, 1, pParserCombo );
-    tableExtensions->setSelectionBehavior( QAbstractItemView::SelectRows );
+
+    tableExtensions->setFocus( Qt::TabFocusReason );
+    tableExtensions->setCurrentCell( row, 0 );
 }
 
 void QSettingsWindow::addextension()

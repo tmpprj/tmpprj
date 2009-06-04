@@ -161,10 +161,13 @@
       <number>1</number>
      </property>
      <property name="text" >
-      <string/>
+      <string>Label control for search animation</string>
      </property>
      <property name="scaledContents" >
       <bool>true</bool>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>

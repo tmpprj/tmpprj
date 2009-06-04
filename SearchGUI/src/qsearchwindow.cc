@@ -208,6 +208,7 @@ void QSearchWindow::reloadSettings()
 
 void QSearchWindow::closing()
 {
+    // disconnect done signal to not receive signal after form closed
     m_search.SigSearchDone().disconnect( boost::bind( &QSearchWindow::OnSearchDone, this ) );
 }
 
