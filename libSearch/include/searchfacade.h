@@ -18,6 +18,9 @@ class CSearchFacade : public boost::noncopyable
     CPlainTextExtractor m_extractor;
     CPatternMatcher m_matcher;
     boost::signal0< void > m_sigStop;
+    boost::signal0< void > m_sigDone;
+
+    void OnSomeQueueEmpty();
 
 public:
     CSearchFacade();
@@ -25,13 +28,10 @@ public:
     void Stop();
     ~CSearchFacade();
 
-    boost::signal1< void, const std::string& >& SigFileFound();
-    boost::signal2< void, const std::string&, const QString& >& SigFileProcessed();
-    boost::signal2< void, const std::string&, bool >& SigFileMatched();
-
-/* TODO: Future work
-    boost::singal0< void >& SigDone();
-*/
+    boost::signal1< void, const QString& >& SigFileFound();
+    boost::signal1< void, const CPlainTextExtractor::structFileData& >& SigFileProcessed();
+    boost::signal1< void, const CPatternMatcher::structFindData& >& SigFileMatched();
+    boost::signal0< void >& SigSearchDone();
 };
 
 

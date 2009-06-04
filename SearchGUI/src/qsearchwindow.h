@@ -28,16 +28,17 @@ private Q_SLOTS:
     void showJournal();
     void reloadExtensions();
     void reloadSettings();
+    void closing();
 
 private:
     void PutCurrentTextsInCombo();
     void SaveSettingsTextCombo();
     void SaveSettingsFoldersCombo();
     
-    void FileMatched( const std::string& strFilename, bool bMatchOk );
-    void FileProcessed( const std::string& strFileName, const QString& );
-    void FileFound( const std::string& strFilename );
-    void SearchDone();
+    void OnFileMatched( const CPatternMatcher::structFindData& );
+    void OnFileProcessed( const CPlainTextExtractor::structFileData& );
+    void OnFileFound( const QString& strFilename );
+    void OnSearchDone();
 };
 
 #endif

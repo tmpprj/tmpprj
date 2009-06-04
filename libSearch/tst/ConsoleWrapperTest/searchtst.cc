@@ -8,19 +8,19 @@
 
 using namespace std;
 
-void FileProcessed( const std::string& strFileName, const QString& strFileData )
+void FileProcessed( const CPlainTextExtractor::structFileData&  )
 {
 //    qDebug() << "FILE: " << strFileName.c_str() << " DATA: " << strFileData << endl;
 }
 
-void FileFound( const std::string& strFilename )
+void FileFound( const QString& strFilename )
 {
-    qDebug() << "FOUND: " << strFilename.c_str() << endl;
+    qDebug() << "FOUND: " << strFilename << endl;
 }
 
-void FileMatched( const std::string& strFilename, bool bMatchOk )
+void FileMatched( const CPatternMatcher::structFindData& Data )
 {
-    qDebug() << "MATCHED: " << strFilename.c_str() << '\t' << bMatchOk << endl;
+    qDebug() << "MATCHED: " << Data.strFileName << '\t' << Data.bFound << endl;
 }
 
 void GetPatterns( PatternsContainer& patterns )

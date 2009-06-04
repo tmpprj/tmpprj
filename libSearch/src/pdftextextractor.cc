@@ -12,7 +12,7 @@ void CPdfTextExtractor::WriterFunc( QString& strBuf, unsigned int* data, size_t 
         strBuf += QChar( data[i] );
 }
 
-void CPdfTextExtractor::Extract( const std::string strFileName, QString& strText )
+void CPdfTextExtractor::Extract( const QString& strFileName, QString& strText )
 {
     Pdf::Extract( boost::bind( &CPdfTextExtractor::WriterFunc, this, boost::ref(strText), _1, _2 ), strFileName );
 }

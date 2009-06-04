@@ -48,13 +48,23 @@ public:
         m_smpQueue.post();
     }
 
-    const T pop()
+    bool pop()
     {
         m_smpQueue.wait();
         boost::unique_lock< boost::shared_mutex > lock( m_mtxAccess );
 
         const T elem = m_queue.front();
         m_queue.pop();
+        return m_queue.empty();
+    }
+
+    const T front()
+    {
+        m_smpQueue.wait();
+        boost::unique_lock< boost::shared_mutex > lock( m_mtxAccess );
+
+        const T elem = m_queue.front();
+        m_smpQueue.post();
         return elem;
     }
 };

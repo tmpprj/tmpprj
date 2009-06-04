@@ -11,32 +11,31 @@
 
 #include "searchdefines.h"
 #include "multipatternsearcher.h"
+#include "datahandler.hpp"
+#include "plaintextextractor.h"
 
-class CPatternMatcher
+class CPatternMatcher: public CDataHandler< CPlainTextExtractor::structFileData >
 {
-    typedef std::auto_ptr< boost::thread > ThreadPtr_t;
-    ThreadPtr_t m_ptrThread;
+public:
+
+    struct structFindData
+    {
+        const QString strFileName;
+        bool bFound;
+    };
+
+    void SetPatterns( const PatternsContainer& patterns );
+
+    boost::signal1< void, const structFindData& >& SigFileProcessed();
+
+    virtual void WorkerFunc( const CPlainTextExtractor::structFileData& Data );
+
+private:
+
     PatternsContainer m_patterns;
     MultiPatternSearcher m_searcher;
-    boost::mutex m_mutAccess;
-    boost::signal2< void , const std::string&, bool > m_sigFileProcessed;
+    boost::signal1< void , const structFindData& > m_sigFileProcessed;
 
-    struct FileInfo
-    {
-        std::string strFilename;
-        QString strFiledata;
-    };
-    mt_queue< FileInfo > m_Queue;
-        
-    void ThreadFunc( boost::mutex* pmtxThreadStarted );
-
-public:
-    CPatternMatcher();
-    void SetPatterns( const PatternsContainer& patterns );
-    void OnNewFile( const std::string& strFilename, const QString& strFiledata );
-    void OnStop();
-    boost::signal2< void, const std::string&, bool >& SigFileProcessed();
-    ~CPatternMatcher();
 };
 
 #endif

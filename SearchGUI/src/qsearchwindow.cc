@@ -28,16 +28,17 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     completer->setModel( new QDirModel( completer ) );
     directoryComboBox->setCompleter( completer );
 
-    m_search.SigFileMatched().connect( boost::bind( &QSearchWindow::FileMatched, this, _1, _2 ) );
-    m_search.SigFileProcessed().connect( boost::bind( &QSearchWindow::FileProcessed, this, _1, _2 ) );
-    m_search.SigFileFound().connect( boost::bind( &QSearchWindow::FileFound, this, _1 ) );
-    m_search.SigSearchDone().connect( boost::bind( &QSearchWindow::SearchDone, this, _1 ) );
+    m_search.SigFileMatched().connect( boost::bind( &QSearchWindow::OnFileMatched, this, _1 ) );
+    m_search.SigFileProcessed().connect( boost::bind( &QSearchWindow::OnFileProcessed, this, _1 ) );
+    m_search.SigFileFound().connect( boost::bind( &QSearchWindow::OnFileFound, this, _1 ) );
+    m_search.SigSearchDone().connect( boost::bind( &QSearchWindow::OnSearchDone, this ) );
 
     connect( findButton, SIGNAL( clicked() ), this, SLOT( find() ) );
     connect( stopButton, SIGNAL( clicked() ), this, SLOT( stop() ) );
     connect( browseButton, SIGNAL( clicked() ), this, SLOT( browse() ) );
     connect( settingsButton, SIGNAL( clicked() ), this, SLOT( showSettings() ) );
     connect( journalButton, SIGNAL( clicked() ), this, SLOT( showJournal() ) );
+    connect( this, SIGNAL( finished( int ) ), this, SLOT( closing() ) );
 
     reloadSettings();
     if( directoryComboBox->count() == 0 )
@@ -67,21 +68,21 @@ void QSearchWindow::SaveSettingsFoldersCombo()
     SearchGUI::Conf().searchPaths = GetComboStringList( directoryComboBox );
 }
 
-void QSearchWindow::FileMatched( const std::string& strFilename, bool bMatchOk )
+void QSearchWindow::OnFileMatched( const CPatternMatcher::structFindData& Data )
 {
-    if( bMatchOk )
-        filesTable->AddFile( strFilename.c_str() );
+    if( Data.bFound )
+        filesTable->AddFile( Data.strFileName );
 }
 
-void QSearchWindow::FileProcessed( const std::string&, const QString& )
-{
-}
-
-void QSearchWindow::FileFound( const std::string& )
+void QSearchWindow::OnFileProcessed( const CPlainTextExtractor::structFileData& )
 {
 }
 
-void QSearchWindow::SearchDone()
+void QSearchWindow::OnFileFound( const QString& )
+{
+}
+
+void QSearchWindow::OnSearchDone()
 {
     m_progressMovie.stop();
 }
@@ -203,5 +204,10 @@ void QSearchWindow::reloadSettings()
         if( !str.isEmpty() )
             directoryComboBox->addItem( str );
     reloadExtensions();
+}
+
+void QSearchWindow::closing()
+{
+    m_search.SigSearchDone().disconnect( boost::bind( &QSearchWindow::OnSearchDone, this ) );
 }
 
