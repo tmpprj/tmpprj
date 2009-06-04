@@ -14,7 +14,8 @@ void CFileSearcher::Search( const std::string& strPath, const Masks_t& vMasks )
         while( !( strFilename = globFiles.NextFilename() ).empty() )
         {
             boost::this_thread::interruption_point();
-            m_sigFileProcessed( strFilename );
+            if( strFilename[ strFilename.size() - 1 ] != '/' )
+                m_sigFileProcessed( strFilename );
         }
     }
 

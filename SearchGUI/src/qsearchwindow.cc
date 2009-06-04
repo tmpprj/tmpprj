@@ -20,6 +20,10 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     setupUi( this );
     setWindowTitle( tr( "Find Files" ) );
 
+    m_progressMovie.setFileName( ":/animation/progress.gif" );
+    progressLabel->setMovie( &m_progressMovie );
+    m_progressMovie.jumpToNextFrame();
+
     QCompleter *completer = new QCompleter( this );
     completer->setModel( new QDirModel( completer ) );
     directoryComboBox->setCompleter( completer );
@@ -27,6 +31,7 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     m_search.SigFileMatched().connect( boost::bind( &QSearchWindow::FileMatched, this, _1, _2 ) );
     m_search.SigFileProcessed().connect( boost::bind( &QSearchWindow::FileProcessed, this, _1, _2 ) );
     m_search.SigFileFound().connect( boost::bind( &QSearchWindow::FileFound, this, _1 ) );
+    m_search.SigSearchDone().connect( boost::bind( &QSearchWindow::SearchDone, this, _1 ) );
 
     connect( findButton, SIGNAL( clicked() ), this, SLOT( find() ) );
     connect( stopButton, SIGNAL( clicked() ), this, SLOT( stop() ) );
@@ -74,6 +79,11 @@ void QSearchWindow::FileProcessed( const std::string&, const QString& )
 
 void QSearchWindow::FileFound( const std::string& )
 {
+}
+
+void QSearchWindow::SearchDone()
+{
+    m_progressMovie.stop();
 }
 
 void QSearchWindow::browse()
@@ -152,6 +162,7 @@ void QSearchWindow::find()
         masks.push_back( qPrintable( listMasks[ i ].trimmed() ) );
 
     m_search.Start( qPrintable( path ), patterns, masks );
+    m_progressMovie.start();
 }
 
 void QSearchWindow::stop()

@@ -3,14 +3,18 @@
 
 #include <searchfacade.h>
 #include <QDialog>
+#include <QMovie>
 
 #include "ui_searchwindow.h"
+
+class QMovie;
 
 class QSearchWindow : public QDialog, private Ui::SearchWindowBase
 {
     Q_OBJECT
 
     CSearchFacade m_search;
+    QMovie m_progressMovie;
 
 public:
     QSearchWindow(QWidget *parent = 0);
@@ -33,6 +37,7 @@ private:
     void FileMatched( const std::string& strFilename, bool bMatchOk );
     void FileProcessed( const std::string& strFileName, const QString& );
     void FileFound( const std::string& strFilename );
+    void SearchDone();
 };
 
 #endif

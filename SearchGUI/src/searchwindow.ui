@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>464</width>
-    <height>378</height>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -121,8 +121,8 @@
        </property>
        <property name="sizeHint" >
         <size>
-         <width>101</width>
-         <height>28</height>
+         <width>40</width>
+         <height>20</height>
         </size>
        </property>
       </spacer>
@@ -143,6 +143,31 @@
      </item>
     </layout>
    </item>
+   <item>
+    <widget class="QLabel" name="progressLabel" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="autoFillBackground" >
+      <bool>false</bool>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth" >
+      <number>1</number>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="scaledContents" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -152,6 +177,8 @@
    <header>qfilestable.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../res/SearchGUI.qrc" />
+ </resources>
  <connections/>
 </ui>

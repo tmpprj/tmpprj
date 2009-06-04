@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/animation" >
+        <file>progress.gif</file>
+    </qresource>
+</RCC>

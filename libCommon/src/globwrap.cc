@@ -65,7 +65,7 @@
     GlobWrap::GlobWrap( const std::string& strPath, const std::string& strMask )
     : nCurrentIndex( 0 )
     {
-        glob( ( strPath + "/" + strMask ).c_str(), GLOB_NOSORT, NULL, &gt );
+        glob( ( strPath + "/" + strMask ).c_str(), GLOB_NOSORT | GLOB_MARK, NULL, &gt );
     }
 
     GlobWrap::GlobWrap( const std::string& strPath )
