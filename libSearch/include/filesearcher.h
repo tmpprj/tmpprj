@@ -6,23 +6,34 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <QString>
 
 #include "searchdefines.h"
+#include "datahandler.hpp"
 
-class CFileSearcher
+
+namespace FileSearcher
 {
-    typedef std::auto_ptr< boost::thread > ThreadPtr_t;
-    ThreadPtr_t m_ptrSearchThread;
-    boost::signal1< void , const std::string& > m_sigFileProcessed;
+    struct structParams
+    {
+        std::string strPath;
+        Masks_t vMasks;
+    };
+};
+
+class CFileSearcher: public CDataHandler< FileSearcher::structParams >
+{
+    boost::signal1< void , const QString& > m_sigFileProcessed;
 
     void Search( const std::string& strPath, const Masks_t& vMasks );
-    void ThreadFunc( const std::string& strPath, const Masks_t& vMasks, boost::mutex* pmtxThreadStarted );
+
+    virtual void WorkerFunc( const FileSearcher::structParams& Params );
 
 public:
+
     void StartSearch( const std::string& strPath, const Masks_t& vMasks );
-    void OnStop();
-    boost::signal1< void, const std::string& >& SigFileProcessed();
-    ~CFileSearcher();
+
+    boost::signal1< void, const QString& >& SigFileProcessed();
 };
 
 #endif

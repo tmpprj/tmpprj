@@ -5,7 +5,11 @@ TARGET = Common
 DESTDIR = ../lib
 TEMPLATE = lib
 CONFIG += staticlib
-SOURCES += src/globwrap.cc src/log.cc
-HEADERS += ./include/globwrap.h
+SOURCES += src/globwrap.cc \
+           src/log.cc
+HEADERS += include/globwrap.h \
+           include/log.hpp \
+           include/mt_queue.hpp \
+           include/singleton.hpp
 INCLUDEPATH += ../external/boost \
     ./include 

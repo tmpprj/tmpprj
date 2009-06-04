@@ -24,8 +24,8 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     completer->setModel( new QDirModel( completer ) );
     directoryComboBox->setCompleter( completer );
 
-    m_search.SigFileMatched().connect( boost::bind( &QSearchWindow::FileMatched, this, _1, _2 ) );
-    m_search.SigFileProcessed().connect( boost::bind( &QSearchWindow::FileProcessed, this, _1, _2 ) );
+    m_search.SigFileMatched().connect( boost::bind( &QSearchWindow::FileMatched, this, _1 ) );
+    m_search.SigFileProcessed().connect( boost::bind( &QSearchWindow::FileProcessed, this, _1 ) );
     m_search.SigFileFound().connect( boost::bind( &QSearchWindow::FileFound, this, _1 ) );
 
     connect( findButton, SIGNAL( clicked() ), this, SLOT( find() ) );
@@ -55,17 +55,17 @@ void QSearchWindow::SaveSettingsFoldersCombo()
     SearchGUI::Conf().searchPaths = GetComboStringList( directoryComboBox );
 }
 
-void QSearchWindow::FileMatched( const std::string& strFilename, bool bMatchOk )
+void QSearchWindow::FileMatched( const CPatternMatcher::structFindData& Data )
 {
-    if( bMatchOk )
-        filesTable->AddFile( strFilename.c_str() );
+    if( Data.bFound )
+        filesTable->AddFile( Data.strFileName );
 }
 
-void QSearchWindow::FileProcessed( const std::string&, const QString& )
+void QSearchWindow::FileProcessed( const CPlainTextExtractor::structFileData& Data )
 {
 }
 
-void QSearchWindow::FileFound( const std::string& )
+void QSearchWindow::FileFound( const QString& )
 {
 }
 

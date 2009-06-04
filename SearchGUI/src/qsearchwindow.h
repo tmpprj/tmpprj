@@ -29,9 +29,9 @@ private:
     void SaveSettingsTextCombo();
     void SaveSettingsFoldersCombo();
     
-    void FileMatched( const std::string& strFilename, bool bMatchOk );
-    void FileProcessed( const std::string& strFileName, const QString& );
-    void FileFound( const std::string& strFilename );
+    void FileMatched( const CPatternMatcher::structFindData& );
+    void FileProcessed( const CPlainTextExtractor::structFileData& );
+    void FileFound( const QString& strFilename );
 };
 
 #endif

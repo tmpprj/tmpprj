@@ -18,7 +18,7 @@ char *input_buffer;
 
 namespace MsWord
 {
-    void Extract( boost::function<void ( unsigned short* )> Writer, const std::string& strFileName )
+    void Extract( boost::function<void ( unsigned short* )> Writer, const QString& strFileName )
     {
         FILE *f;
         source_charset = read_charset( source_csname );
@@ -26,7 +26,7 @@ namespace MsWord
             throw std::runtime_error( "MsWord::Extract: src charset not found" );
 
         set_std_func();
-        f=fopen( strFileName.c_str(),"rb" );
+        f=fopen( strFileName.toStdString().c_str(),"rb" );
         if ( !f )
             throw std::runtime_error( "MsWord::Extract: file not found" );
 
@@ -35,7 +35,7 @@ namespace MsWord
         fclose( f );
     }
 
-    void ExtractXls( boost::function<void ( unsigned short* )> XlsWriter, const std::string& strFileName )
+    void ExtractXls( boost::function<void ( unsigned short* )> XlsWriter, const QString& strFileName )
     {
         FILE *f, *new_file, *ole_file;
 
@@ -44,7 +44,7 @@ namespace MsWord
             throw std::runtime_error( "MsWord::ExtractXls: src charset not found" );
 
         set_std_func();
-        f=fopen( strFileName.c_str(),"rb" );
+        f=fopen( strFileName.toStdString().c_str(),"rb" );
         if ( !f )
             throw std::runtime_error( "MsWord::ExtractXls: src charset not found" );
 
@@ -77,9 +77,9 @@ namespace MsWord
         }
     }
 
-    void ExtractPpt( boost::function<void ( unsigned short* )> PptWriter, const std::string& strFileName )
+    void ExtractPpt( boost::function<void ( unsigned short* )> PptWriter, const QString& strFileName )
     {
-        FILE *f = fopen( strFileName.c_str(),"rb"), *new_file, *ole_file;
+        FILE *f = fopen( strFileName.toStdString().c_str(),"rb"), *new_file, *ole_file;
 
         if(!f)
             throw std::runtime_error( "MsWord::ExtractPpt: src charset not found" );

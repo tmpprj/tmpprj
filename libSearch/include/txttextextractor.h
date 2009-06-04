@@ -2,15 +2,13 @@
 #define CTXTTEXTEXTRACTOR_H
 
 #include "plaintextextractor.h"
-#include <string>
+#include <QString>
 
 class CTxtTextExtractor: public ITextExtractor
 {
 public:
 
-    CTxtTextExtractor();
-
-    virtual void Extract( const std::string strFileName, QString& strText );
+    virtual void Extract( const QString& strFileName, QString& strText );
 
 private:
 

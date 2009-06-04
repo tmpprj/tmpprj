@@ -27,7 +27,8 @@ HEADERS += ./include/searchfacade.h \
     include/patternmatcher.h \
     include/mswordtextextractor.h \
     include/pdftextextractor.h \
-    include/settings.h
+    include/settings.h \
+    include/datahandler.hpp
 DEPENDPATH += ./include \
     ../libCommon/include \
     ../libChardet/include \

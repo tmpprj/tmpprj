@@ -25,9 +25,9 @@ public:
     void Stop();
     ~CSearchFacade();
 
-    boost::signal1< void, const std::string& >& SigFileFound();
-    boost::signal2< void, const std::string&, const QString& >& SigFileProcessed();
-    boost::signal2< void, const std::string&, bool >& SigFileMatched();
+    boost::signal1< void, const QString& >& SigFileFound();
+    boost::signal1< void, const CPlainTextExtractor::structFileData& >& SigFileProcessed();
+    boost::signal1< void, const CPatternMatcher::structFindData& >& SigFileMatched();
 
 /* TODO: Future work
     boost::singal0< void >& SigDone();

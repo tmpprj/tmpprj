@@ -9,62 +9,25 @@
 #include <QString>
 #include <singleton.hpp>
 #include <mt_queue.hpp>
+#include <datahandler.hpp>
 
-class CPlainTextExtractor: private boost::noncopyable
+class CPlainTextExtractor: public CDataHandler< QString >
 {
 public:
 
-    CPlainTextExtractor();
-
-    ~CPlainTextExtractor()
+    struct structFileData
     {
-        OnStop();
-    }
+        const QString strFileName;
+        const QString strFileData;
+    };
 
-    boost::signal2< void, const std::string&, const QString& >& SigDataObtained();
-
-    void OnNewFile( const std::string& strFileName )
-    {
-        if( !strFileName.empty() )
-            m_Queue.push( strFileName );
-
-        if( NULL == m_pThread.get() )
-        {
-            boost::lock_guard<boost::mutex> lock( m_mtxStopSync );
-            boost::mutex mtxThreadStarted;
-            mtxThreadStarted.lock();
-
-            m_pThread = boost::shared_ptr<boost::thread>( new boost::thread( boost::bind( &CPlainTextExtractor::ThreadFunc, this, &mtxThreadStarted ) ) );
-
-            mtxThreadStarted.lock();
-            mtxThreadStarted.unlock();
-        }
-    }
-
-    void OnStop()
-    {
-        boost::lock_guard<boost::mutex> lock( m_mtxStopSync );
-        if( NULL != m_pThread.get() )
-        {
-            m_pThread->interrupt();
-            m_Queue.push( "" );
-            m_pThread->join();
-            m_pThread.reset();
-            m_Queue.clear();
-        }
-    }
+    boost::signal1< void, const structFileData& >& SigDataObtained();
 
 private:
 
-    boost::mutex m_mtxStopSync;
+    virtual void WorkerFunc( const QString& strFileName );
 
-    boost::shared_ptr< boost::thread > m_pThread;
-
-    void ThreadFunc( boost::mutex* pmtxThreadStarted );
-
-    boost::signal2< void, const std::string&, const QString& > m_sigDataObtained;
-
-    mt_queue<std::string> m_Queue;
+    boost::signal1< void, const structFileData& > m_sigDataObtained;
 };
 
 class ITextExtractor: public boost::noncopyable
@@ -73,7 +36,7 @@ public:
 
     virtual ~ITextExtractor(){}
 
-    virtual void Extract( const std::string strFileName, QString& strText ) = 0;
+    virtual void Extract( const QString& strFileNmae, QString& strText ) = 0;
 };
 
 class CTextExtractorFactory
@@ -83,7 +46,7 @@ public:
 
     ~CTextExtractorFactory();
 
-    ITextExtractor* GetExtractor( const std::string& strFileName );
+    ITextExtractor* GetExtractor( const QString& strFileName );
 
     bool RegisterName( const std::string& strName, ITextExtractor* pTextExtractor );
     bool RegisterExtension( const std::string& strExtension, const std::string& strName );

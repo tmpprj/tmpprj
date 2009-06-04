@@ -9,7 +9,7 @@ public:
 
     CMsWordTextExtractor();
 
-    virtual void Extract( const std::string strFileName, QString& strText );
+    virtual void Extract( const QString& strFileName, QString& strText );
 
 protected:
 
@@ -23,7 +23,7 @@ public:
 
     CXlsTextExtractor();
 
-    virtual void Extract( const std::string strFileName, QString& strText );
+    virtual void Extract( const QString& strFileName, QString& strText );
 
 };
 
@@ -33,7 +33,7 @@ public:
 
     CPptTextExtractor();
 
-    virtual void Extract( const std::string strFileName, QString& strText );
+    virtual void Extract( const QString& strFileName, QString& strText );
 
 };
 #endif // CMSWORDTEXTEXTRACTOR_H

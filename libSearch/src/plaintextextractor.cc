@@ -5,30 +5,18 @@
 #include "log.hpp"
 #include <boost/foreach.hpp>
 
-CPlainTextExtractor::CPlainTextExtractor()
-{
-}
-
-boost::signal2< void, const std::string&, const QString& >& CPlainTextExtractor::SigDataObtained()
+boost::signal1< void, const CPlainTextExtractor::structFileData& >& CPlainTextExtractor::SigDataObtained()
 {
     return m_sigDataObtained;
 }
 
-void CPlainTextExtractor::ThreadFunc( boost::mutex* pmtxThreadStarted )
+void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
 {
-    pmtxThreadStarted->unlock();
-
-    for(;;)
-    {
-        std::string strFileName = m_Queue.pop();
-
-        boost::this_thread::interruption_point();
-
-        //Process file
-        QString strContent;
-        TextExtractorFactory::Instance().GetExtractor( strFileName )->Extract( strFileName, strContent );
-        m_sigDataObtained( strFileName, strContent );
-    }
+    //Process file
+    QString strContent;
+    TextExtractorFactory::Instance().GetExtractor( strFileName )->Extract( strFileName, strContent );
+    structFileData Data = { strFileName, strContent };
+    m_sigDataObtained( Data );
 }
 
 CTextExtractorFactory::CTextExtractorFactory()
@@ -49,9 +37,9 @@ CTextExtractorFactory::~CTextExtractorFactory()
             delete p.second;
 }
 
-ITextExtractor* CTextExtractorFactory::GetExtractor( const std::string& strFileName )
+ITextExtractor* CTextExtractorFactory::GetExtractor( const QString& strFileName )
 {
-    boost::filesystem::path file( strFileName );
+    boost::filesystem::path file( strFileName.toStdString() );
 
     MapExtensionName_t::iterator pExtName = m_mapExtensionName.find( file.extension() );
     if( pExtName == m_mapExtensionName.end() )
