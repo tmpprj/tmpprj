@@ -4,5 +4,7 @@
 #include <QtGui>
 
 QStringList GetComboStringList( const QComboBox* pComboBox );
+bool TextExistInCombo( const QComboBox* pComboBox, const QString& str );
+void ComboInsertCurrentToTop( QComboBox* pComboBox );
 
 #endif

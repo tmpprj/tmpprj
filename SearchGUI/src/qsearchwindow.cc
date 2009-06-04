@@ -41,8 +41,15 @@ QSearchWindow::QSearchWindow(QWidget *parent)
 
 QSearchWindow::~QSearchWindow()
 {
+    PutCurrentTextsInCombo();
     SaveSettingsTextCombo();
     SaveSettingsFoldersCombo();
+}
+
+void QSearchWindow::PutCurrentTextsInCombo()
+{
+    ComboInsertCurrentToTop( textComboBox );
+    ComboInsertCurrentToTop( directoryComboBox );
 }
 
 void QSearchWindow::SaveSettingsTextCombo()
@@ -86,8 +93,48 @@ void QSearchWindow::browse()
     }
 }
 
+void AddPattern( PatternsContainer& patterns, const QString& strText )
+{
+    if( strText.isEmpty() )
+        return;
+
+    CLog() << "PATTERN: " << qPrintable( strText ) << std::endl;
+    patterns.push_back( std::string( ( const char* )strText.unicode(), strText.size() * sizeof( QChar ) ) );
+}
+
+void ParsePatterns( const QString& text, PatternsContainer& patterns )
+{
+    int nStart = 0;
+    bool bCommaBlock = false;
+
+    for( int i = 0; i <= text.size(); i++ )
+        if( i == text.size() )
+        {
+            if( !bCommaBlock )
+                AddPattern( patterns, text.mid( nStart, i - nStart ).trimmed() );
+        }
+        else if( text[ i ] == '"' )
+        {
+            if( bCommaBlock )
+                AddPattern( patterns, text.mid( nStart, i - nStart ).trimmed() );
+
+            bCommaBlock = !bCommaBlock;
+            nStart = i + 1;
+        }
+        else if( text[ i ] == ' ' )
+        {
+            if( !bCommaBlock )
+            {
+                AddPattern( patterns, text.mid( nStart, i - nStart ).trimmed() );
+                nStart = i + 1;
+            }
+        }
+}
+
 void QSearchWindow::find()
 {
+    PutCurrentTextsInCombo();
+    
     m_search.Stop();
     filesTable->ClearList();
 
@@ -96,15 +143,8 @@ void QSearchWindow::find()
     QString path = directoryComboBox->currentText();
 
     PatternsContainer patterns;
-    QStringList list = text.split( " ", QString::SkipEmptyParts );
-
-    for( int i = 0; i < list.size(); i++ )
-    {
-        QString strPattern = list[ i ].trimmed();
-        if( strPattern.size() > 0 )
-            patterns.push_back( std::string( ( const char* )strPattern.unicode(), strPattern.size() * sizeof( QChar ) ) );
-    }
-
+    ParsePatterns( text, patterns );
+   
     Masks_t masks;
     QStringList listMasks = fileName.split( ";", QString::SkipEmptyParts );
 
@@ -145,8 +185,12 @@ void QSearchWindow::reloadExtensions()
 
 void QSearchWindow::reloadSettings()
 {
-    textComboBox->addItems( SearchGUI::Conf().searches );
-    directoryComboBox->addItems( SearchGUI::Conf().searchPaths );
+    BOOST_FOREACH( QString str, SearchGUI::Conf().searches )
+        if( !str.isEmpty() )
+            textComboBox->addItem( str );
+    BOOST_FOREACH( QString str, SearchGUI::Conf().searchPaths )
+        if( !str.isEmpty() )
+            directoryComboBox->addItem( str );
     reloadExtensions();
 }
 
