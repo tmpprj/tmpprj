@@ -1,31 +1,54 @@
 #include "filesearcher.h"
 #include <globwrap.h>
 #include <iostream>
+#include <QDir>
 
 using namespace std;
 
-void CFileSearcher::Search( const std::string& strPath, const Masks_t& vMasks )
+void CFileSearcher::Search( const QString& strPath, const Masks_t& vMasks )
 {
+    QString strMask;
     for( size_t i = 0; i < vMasks.size(); i++ )
-    {
-        GlobWrap globFiles( strPath, vMasks[ i ] );
+       strMask += QString::fromStdString(vMasks[i]) + ";";
 
-        std::string strFilename;
-        while( !( strFilename = globFiles.NextFilename() ).empty() )
+    {
+        QDir dirFiles( strPath, strMask, QDir::Unsorted, QDir::Files );
+        QFileInfoList listFiles = dirFiles.entryInfoList();
+        for (int i = 0; i < listFiles.size(); ++i)
         {
             boost::this_thread::interruption_point();
-            if( strFilename[ strFilename.size() - 1 ] != '/' )
-                m_sigFileProcessed( QString::fromStdString(strFilename) );
+            m_sigFileProcessed( dirFiles.absoluteFilePath(listFiles.at(i).fileName()) );
         }
     }
 
-    GlobWrap globFolders( strPath );
-    std::string strFilename;
-    while( !( strFilename = globFolders.NextFilename() ).empty() )
     {
-        boost::this_thread::interruption_point();
-        Search( strFilename, vMasks );
+        QDir dirDirs( strPath, QString(""), QDir::Unsorted, QDir::AllDirs | QDir::NoDotAndDotDot );
+        QFileInfoList listDirs= dirDirs.entryInfoList();
+        for (int i = 0; i < listDirs.size(); ++i)
+        {
+            boost::this_thread::interruption_point();
+            Search( dirDirs.absoluteFilePath(listDirs.at(i).fileName()), vMasks );
+        }
     }
+
+//        GlobWrap globFiles( strPath, vMasks[ i ] );
+//
+//        std::string strFilename;
+//        while( !( strFilename = globFiles.NextFilename() ).empty() )
+//        {
+//            boost::this_thread::interruption_point();
+//            if( strFilename[ strFilename.size() - 1 ] != '/' )
+//                m_sigFileProcessed( QString::fromStdString(strFilename) );
+//        }
+//    }
+//
+//    GlobWrap globFolders( strPath );
+//    std::string strFilename;
+//    while( !( strFilename = globFolders.NextFilename() ).empty() )
+//    {
+//        boost::this_thread::interruption_point();
+//        Search( strFilename, vMasks );
+//    }
 }
 
 void CFileSearcher::WorkerFunc( const FileSearcher::structParams& Params )
@@ -34,7 +57,7 @@ void CFileSearcher::WorkerFunc( const FileSearcher::structParams& Params )
 }
 
 
-void CFileSearcher::StartSearch( const std::string& strPath, const Masks_t& vMasks )
+void CFileSearcher::StartSearch( const QString& strPath, const Masks_t& vMasks )
 {
     FileSearcher::structParams Params = { strPath, vMasks };
     OnData( Params );
