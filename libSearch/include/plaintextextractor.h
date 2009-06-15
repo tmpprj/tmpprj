@@ -17,8 +17,8 @@ public:
 
     struct structFileData
     {
-        const QString strFileName;
-        const QString strFileData;
+        QString strFileName;
+        QString strFileData;
     };
 
     boost::signal1< void, const structFileData& >& SigDataObtained();

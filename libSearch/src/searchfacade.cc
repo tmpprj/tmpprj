@@ -16,7 +16,7 @@ CSearchFacade::CSearchFacade()
     m_matcher.SigQueueEmpty().connect( boost::bind( &CSearchFacade::OnSomeQueueEmpty, this ) );
 }
 
-void CSearchFacade::Start( const std::string& strPath, const PatternsContainer& patterns, const Masks_t& vMasks )
+void CSearchFacade::Start( const QString& strPath, const PatternsContainer& patterns, const Masks_t& vMasks )
 {
     m_matcher.SetPatterns( patterns );
     m_searcher.StartSearch( strPath, vMasks );

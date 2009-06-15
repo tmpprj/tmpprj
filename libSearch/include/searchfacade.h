@@ -24,7 +24,7 @@ class CSearchFacade : public boost::noncopyable
 
 public:
     CSearchFacade();
-    void Start( const std::string& strPath, const PatternsContainer& patterns, const Masks_t& vMasks );
+    void Start( const QString& strPath, const PatternsContainer& patterns, const Masks_t& vMasks );
     void Stop();
     ~CSearchFacade();
 
