@@ -8,8 +8,9 @@ namespace SearchGUI
     struct Params
     {
         QMap< QString, QVariant > extensions;
-        QStringList searchPaths;
+        QStringList masks;
         QStringList searches;
+        QStringList searchPaths;
 
         Params();
         ~Params();

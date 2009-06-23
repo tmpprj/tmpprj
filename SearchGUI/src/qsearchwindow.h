@@ -1,7 +1,7 @@
 #ifndef _QSEARCHWINDOW_H
 #define _QSEARCHWINDOW_H
 
-#include <searchfacade.h>
+#include <qsearchfacade.h>
 #include <QDialog>
 #include <QMovie>
 
@@ -13,7 +13,7 @@ class QSearchWindow : public QDialog, private Ui::SearchWindowBase
 {
     Q_OBJECT
 
-    CSearchFacade m_search;
+    QSearchFacade m_search;
     QMovie m_progressMovie;
 
 public:
@@ -28,17 +28,18 @@ private Q_SLOTS:
     void showJournal();
     void reloadExtensions();
     void reloadSettings();
+    void saveSettings();
     void closing();
 
+    void fileMatched( const QString& strFilename, bool bFound ); 
+    void searchDone();
+
 private:
-    void PutCurrentTextsInCombo();
-    void SaveSettingsTextCombo();
-    void SaveSettingsFoldersCombo();
-    
-    void OnFileMatched( const CPatternMatcher::structFindData& );
-    void OnFileProcessed( const CPlainTextExtractor::structFileData& );
-    void OnFileFound( const QString& strFilename );
-    void OnSearchDone();
+    void setupProgressAnimation();
+    void setupControls();
+    void connectSearcher();
+    void connectWidgets();
+    void acceptCurrentItems();
 };
 
 #endif

@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>464</width>
-    <height>400</height>
+    <height>441</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -16,6 +16,42 @@
    <bool>false</bool>
   </property>
   <layout class="QVBoxLayout" >
+   <item>
+    <layout class="QHBoxLayout" >
+     <item>
+      <widget class="QLabel" name="label_3" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>55</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>Masks:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="masksComboBox" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="editable" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item>
     <layout class="QHBoxLayout" >
      <item>
@@ -89,7 +125,7 @@
      <item>
       <widget class="QPushButton" name="browseButton" >
        <property name="text" >
-        <string>Browse...</string>
+        <string>&amp;Browse...</string>
        </property>
       </widget>
      </item>

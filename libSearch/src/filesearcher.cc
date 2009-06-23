@@ -1,33 +1,30 @@
 #include "filesearcher.h"
+
+#include <log.hpp>
 #include <globwrap.h>
 #include <iostream>
 #include <QDir>
 
 using namespace std;
 
-void CFileSearcher::Search( const QString& strPath, const Masks_t& vMasks )
+void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks )
 {
-    QString strMask;
-    for( size_t i = 0; i < vMasks.size(); i++ )
-       strMask += QString::fromStdString(vMasks[i]) + ";";
-
     {
-        QDir dirFiles( strPath, strMask, QDir::Unsorted, QDir::Files );
-        QFileInfoList listFiles = dirFiles.entryInfoList();
+        QDir dirFiles( strPath, "", QDir::Unsorted );
+        QFileInfoList listFiles = dirFiles.entryInfoList( listMasks, 
+                QDir::AllDirs | QDir::Files | QDir::Hidden | QDir::System );
+
         for (int i = 0; i < listFiles.size(); ++i)
         {
             boost::this_thread::interruption_point();
-            m_sigFileProcessed( dirFiles.absoluteFilePath(listFiles.at(i).fileName()) );
-        }
-    }
-
-    {
-        QDir dirDirs( strPath, QString(""), QDir::Unsorted, QDir::AllDirs | QDir::NoDotAndDotDot );
-        QFileInfoList listDirs= dirDirs.entryInfoList();
-        for (int i = 0; i < listDirs.size(); ++i)
-        {
-            boost::this_thread::interruption_point();
-            Search( dirDirs.absoluteFilePath(listDirs.at(i).fileName()), vMasks );
+            CLog() << "Search: " << qPrintable( listFiles[ i ].fileName() ) << std::endl;
+            if( listFiles[ i ].isDir() )
+            {
+                if( listFiles[ i ].fileName() != "." && listFiles[ i ].fileName() != ".." )
+                    Search( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ), listMasks );
+            }
+            else
+                m_sigFileProcessed( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ) );
         }
     }
 

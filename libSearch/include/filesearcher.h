@@ -25,7 +25,7 @@ class CFileSearcher: public CDataHandler< FileSearcher::structParams >
 {
     boost::signal1< void , const QString& > m_sigFileProcessed;
 
-    void Search( const QString& strPath, const Masks_t& vMasks );
+    void Search( const QString& strPath, const QStringList& listMasks );
 
     virtual void WorkerFunc( const FileSearcher::structParams& Params );
 

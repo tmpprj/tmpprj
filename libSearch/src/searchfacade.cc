@@ -18,6 +18,7 @@ CSearchFacade::CSearchFacade()
 
 void CSearchFacade::Start( const QString& strPath, const PatternsContainer& patterns, const Masks_t& vMasks )
 {
+    CLog() << "CSearchFacade::Start" << std::endl;
     m_matcher.SetPatterns( patterns );
     m_searcher.StartSearch( strPath, vMasks );
 }
@@ -40,7 +41,7 @@ void CSearchFacade::OnSomeQueueEmpty()
 
 boost::signal1< void, const QString& >& CSearchFacade::SigFileFound()
 {
-    return m_searcher.SigFileProcessed();
+    return m_searcher.SigFileFound();
 }
 
 boost::signal1< void, const CPlainTextExtractor::structFileData& >& CSearchFacade::SigFileProcessed()
@@ -50,7 +51,7 @@ boost::signal1< void, const CPlainTextExtractor::structFileData& >& CSearchFacad
 
 boost::signal1< void, const CPatternMatcher::structFindData& >& CSearchFacade::SigFileMatched()
 {
-    return m_matcher.SigFileProcessed();
+    return m_matcher.SigFileMatched();
 }
 
 boost::signal0< void >& CSearchFacade::SigSearchDone()

@@ -8,7 +8,7 @@ POST_TARGETDEPS += ../lib/libChardet.a \
     ../lib/libCommon.a \
     ../lib/libMsWord.a \
     ../lib/libPdf.a
-CONFIG += staticlib
+CONFIG += no_keywords staticlib
 SOURCES += src/filesearcher.cc \
     src/searchfacade.cc \
     src/plaintextextractor.cc \
@@ -17,7 +17,8 @@ SOURCES += src/filesearcher.cc \
     src/patternmatcher.cc \
     src/mswordtextextractor.cc \
     src/pdftextextractor.cc \
-    src/settings.cc
+    src/settings.cc \
+    src/qsearchfacade.cc
 HEADERS += ./include/searchfacade.h \
     ./include/searchdefines.h \
     ./include/filesearcher.h \
@@ -28,7 +29,8 @@ HEADERS += ./include/searchfacade.h \
     include/mswordtextextractor.h \
     include/pdftextextractor.h \
     include/settings.h \
-    include/datahandler.hpp
+    include/datahandler.hpp \
+    include/qsearchfacade.h
 DEPENDPATH += ./include \
     ../libCommon/include \
     ../libChardet/include \

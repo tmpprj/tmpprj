@@ -26,7 +26,7 @@ public:
 
     void SetPatterns( const PatternsContainer& patterns );
 
-    boost::signal1< void, const structFindData& >& SigFileProcessed();
+    boost::signal1< void, const structFindData& >& SigFileMatched();
 
     virtual void WorkerFunc( const CPlainTextExtractor::structFileData& Data );
 
@@ -34,7 +34,7 @@ private:
 
     PatternsContainer m_patterns;
     MultiPatternSearcher m_searcher;
-    boost::signal1< void , const structFindData& > m_sigFileProcessed;
+    boost::signal1< void , const structFindData& > m_sigFileMatched;
 
 };
 

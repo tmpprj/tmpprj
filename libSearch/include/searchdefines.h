@@ -1,10 +1,9 @@
 #ifndef _SEARCHDEFINES_H_
 #define _SEARCHDEFINES_H_
 
-#include <vector>
-#include <string>
+#include <QStringList>
 
-typedef std::vector< std::string > Masks_t;
+typedef QStringList Masks_t;
 
 #endif
 
