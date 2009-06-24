@@ -29,7 +29,7 @@ public:
     ~CSearchFacade();
 
     boost::signal1< void, const QString& >& SigFileFound();
-    boost::signal1< void, const CPlainTextExtractor::structFileData& >& SigFileProcessed();
+    boost::signal1< void, const CPlainTextExtractor::structFileData& >& SigDataObtained();
     boost::signal1< void, const CPatternMatcher::structFindData& >& SigFileMatched();
     boost::signal0< void >& SigSearchDone();
 };

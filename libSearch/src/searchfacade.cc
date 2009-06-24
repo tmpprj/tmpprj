@@ -8,7 +8,7 @@ CSearchFacade::CSearchFacade()
     m_sigStop.connect( 1, boost::bind( &CPlainTextExtractor::OnStop, &m_extractor ) );
     m_sigStop.connect( 2, boost::bind( &CPatternMatcher::OnStop, &m_matcher ) );
 
-    m_searcher.SigFileProcessed().connect( boost::bind( &CPlainTextExtractor::OnData, &m_extractor, _1 ) );
+    m_searcher.SigFileFound().connect( boost::bind( &CPlainTextExtractor::OnData, &m_extractor, _1 ) );
     m_extractor.SigDataObtained().connect( boost::bind( &CPatternMatcher::OnData, &m_matcher, _1 ) );
     
     m_searcher.SigQueueEmpty().connect( boost::bind( &CSearchFacade::OnSomeQueueEmpty, this ) );
@@ -44,7 +44,7 @@ boost::signal1< void, const QString& >& CSearchFacade::SigFileFound()
     return m_searcher.SigFileFound();
 }
 
-boost::signal1< void, const CPlainTextExtractor::structFileData& >& CSearchFacade::SigFileProcessed()
+boost::signal1< void, const CPlainTextExtractor::structFileData& >& CSearchFacade::SigDataObtained()
 {
     return m_extractor.SigDataObtained();
 }

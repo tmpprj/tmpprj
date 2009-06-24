@@ -23,7 +23,7 @@ namespace FileSearcher
 
 class CFileSearcher: public CDataHandler< FileSearcher::structParams >
 {
-    boost::signal1< void , const QString& > m_sigFileProcessed;
+    boost::signal1< void , const QString& > m_sigFileFound;
 
     void Search( const QString& strPath, const QStringList& listMasks );
 
@@ -33,7 +33,7 @@ public:
 
     void StartSearch( const QString& strPath, const Masks_t& vMasks );
 
-    boost::signal1< void, const QString& >& SigFileProcessed();
+    boost::signal1< void, const QString& >& SigFileFound();
 };
 
 #endif

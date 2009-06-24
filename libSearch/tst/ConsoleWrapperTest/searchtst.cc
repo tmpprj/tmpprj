@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void FileProcessed( const CPlainTextExtractor::structFileData&  )
+void DataObtained( const CPlainTextExtractor::structFileData&  )
 {
 //    qDebug() << "FILE: " << strFileName.c_str() << " DATA: " << strFileData << endl;
 }
@@ -63,7 +63,7 @@ int main( int argc, char* argv[] )
 
     Masks_t masks;
     masks.push_back( argv[ 2 ] );
-    search.SigFileProcessed().connect( FileProcessed );
+    search.SigDataObtained().connect( DataObtained );
     search.SigFileFound().connect( FileFound );
     search.SigFileMatched().connect( FileMatched );
 

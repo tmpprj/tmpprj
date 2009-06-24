@@ -24,7 +24,7 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
                     Search( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ), listMasks );
             }
             else
-                m_sigFileProcessed( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ) );
+                m_sigFileFound( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ) );
         }
     }
 
@@ -61,9 +61,9 @@ void CFileSearcher::StartSearch( const QString& strPath, const Masks_t& vMasks )
 }
 
 
-boost::signal1< void, const QString& >& CFileSearcher::SigFileProcessed()
+boost::signal1< void, const QString& >& CFileSearcher::SigFileFound()
 {
-    return m_sigFileProcessed;
+    return m_sigFileFound;
 }
 
 

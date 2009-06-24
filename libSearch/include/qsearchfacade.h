@@ -11,7 +11,7 @@ class QSearchFacade : public QObject
     CSearchFacade m_search;
 
     void OnFileFound( const QString& strFilename );
-    void OnFileProcessed( const CPlainTextExtractor::structFileData& );
+    void OnDataObtained( const CPlainTextExtractor::structFileData& );
     void OnFileMatched( const CPatternMatcher::structFindData& );
     void OnSearchDone();
 public:
@@ -20,7 +20,7 @@ public:
 
 Q_SIGNALS:
     void fileFound( const QString& strFileName );
-    void fileProcessed( const QString& strFileName, const QString& strFileData );
+    void dataObtained( const QString& strFileName, const QString& strFileData );
     void fileMatched( const QString& strFileName, bool bFound ); 
     void searchDone();
 };
