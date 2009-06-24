@@ -32,7 +32,6 @@ public:
 
 private:
 
-    PatternsContainer m_patterns;
     MultiPatternSearcher m_searcher;
     boost::signal1< void , const structFindData& > m_sigFileMatched;
 

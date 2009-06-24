@@ -18,7 +18,7 @@ CSearchFacade::CSearchFacade()
 
 void CSearchFacade::Start( const QString& strPath, const PatternsContainer& patterns, const Masks_t& vMasks )
 {
-    CLog() << "CSearchFacade::Start" << std::endl;
+    CLog() << "CSearchFacade::Start: pattern count - " << patterns.size() << std::endl;
     m_matcher.SetPatterns( patterns );
     m_searcher.StartSearch( strPath, vMasks );
 }

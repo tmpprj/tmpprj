@@ -171,7 +171,6 @@ void QSearchWindow::saveSettings()
     SearchGUI::Conf().searchPaths = GetComboStringList( directoryComboBox, true );
 }
 
-
 void QSearchWindow::closing()
 {
     // disconnect all searcher signals to not receive signal after form closed

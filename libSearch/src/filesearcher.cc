@@ -24,7 +24,10 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
                     Search( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ), listMasks );
             }
             else
+            {
+                CLog() << "Call found" << std::endl;
                 m_sigFileFound( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ) );
+            }
         }
     }
 
