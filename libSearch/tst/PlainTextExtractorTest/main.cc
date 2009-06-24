@@ -15,13 +15,20 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    TextExtractorFactory::Instance().RegisterExtension( ".txt", "TXT Parser" );
+    TextExtractorFactory::Instance().RegisterExtension( ".doc", "DOC Parser" );
+    TextExtractorFactory::Instance().RegisterExtension( ".rtf", "DOC Parser" );
+    TextExtractorFactory::Instance().RegisterExtension( ".xls", "XLS Parser" );
+    TextExtractorFactory::Instance().RegisterExtension( ".ppt", "PPT Parser" );
+    TextExtractorFactory::Instance().RegisterExtension( ".pdf", "PDF Parser" );
+
     CPlainTextExtractor TextExt;
 
     TextExt.SigDataObtained().connect( OnData );
     TextExt.OnData( argv[1] );
 
-    std::string s;
-    std::cin >> s;
+    std::string str;
+    std::cin >> str;
 
     TextExt.OnStop();
 

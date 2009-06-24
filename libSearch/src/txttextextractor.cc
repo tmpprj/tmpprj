@@ -21,7 +21,6 @@ void CTxtTextExtractor::Extract( const QString& strFileName, QString& strText )
     {
         stBytesRead = file.read( (char*)&vecBuf[0], vecBuf.size() );
         boost::this_thread::interruption_point();
-        //TODO:maybe it`s faster to handle data blocks of some size, 1024 bytes for example
         CharDet.HandleData( (char*)&vecBuf[0], stBytesRead );
         CharDet.DataEnd();
     }
