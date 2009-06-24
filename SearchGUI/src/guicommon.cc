@@ -36,16 +36,7 @@ void MoveCurrentToTop( QComboBox* pComboBox )
     LoadStringListToCombo( pComboBox, list );
 }
 
-void AddPattern( PatternsContainer& patterns, const QString& strText )
-{
-    if( strText.isEmpty() )
-        return;
-
-    CLog() << "Pattern: " << qPrintable( strText ) << std::endl;
-    patterns.push_back( std::string( ( const char* )strText.unicode(), strText.size() * sizeof( QChar ) ) );
-}
-
-void ParsePatterns( const QString& text, PatternsContainer& patterns )
+void ParsePatterns( const QString& text, QStringList& listPatterns )
 {
     int nStart = 0;
     bool bCommaBlock = false;
@@ -54,12 +45,12 @@ void ParsePatterns( const QString& text, PatternsContainer& patterns )
         if( i == text.size() )
         {
             if( !bCommaBlock )
-                AddPattern( patterns, text.mid( nStart, i - nStart ).trimmed() );
+                listPatterns.push_back( text.mid( nStart, i - nStart ).trimmed() );
         }
         else if( text[ i ] == '"' )
         {
             if( bCommaBlock )
-                AddPattern( patterns, text.mid( nStart, i - nStart ).trimmed() );
+                listPatterns.push_back( text.mid( nStart, i - nStart ).trimmed() );
 
             bCommaBlock = !bCommaBlock;
             nStart = i + 1;
@@ -68,7 +59,7 @@ void ParsePatterns( const QString& text, PatternsContainer& patterns )
         {
             if( !bCommaBlock )
             {
-                AddPattern( patterns, text.mid( nStart, i - nStart ).trimmed() );
+                listPatterns.push_back( text.mid( nStart, i - nStart ).trimmed() );
                 nStart = i + 1;
             }
         }

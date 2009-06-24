@@ -7,8 +7,8 @@
 #include <string>
 #include <memory>
 #include <QString>
+#include <QStringList>
 
-#include "searchdefines.h"
 #include "datahandler.hpp"
 
 
@@ -17,7 +17,7 @@ namespace FileSearcher
     struct structParams
     {
         QString strPath;
-        Masks_t vMasks;
+        QStringList listMasks;
     };
 }
 
@@ -31,7 +31,7 @@ class CFileSearcher: public CDataHandler< FileSearcher::structParams >
 
 public:
 
-    void StartSearch( const QString& strPath, const Masks_t& vMasks );
+    void StartSearch( const QString& strPath, const QStringList& listMasks );
 
     boost::signal1< void, const QString& >& SigFileFound();
 };

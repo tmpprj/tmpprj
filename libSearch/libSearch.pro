@@ -18,9 +18,9 @@ SOURCES += src/filesearcher.cc \
     src/mswordtextextractor.cc \
     src/pdftextextractor.cc \
     src/settings.cc \
-    src/qsearchfacade.cc
+    src/qsearchfacade.cc \
+    src/libsearch_common.cc
 HEADERS += ./include/searchfacade.h \
-    ./include/searchdefines.h \
     ./include/filesearcher.h \
     include/plaintextextractor.h \
     include/txttextextractor.h \
@@ -30,7 +30,8 @@ HEADERS += ./include/searchfacade.h \
     include/pdftextextractor.h \
     include/settings.h \
     include/datahandler.hpp \
-    include/qsearchfacade.h
+    include/qsearchfacade.h \
+    src/libsearch_common.h
 DEPENDPATH += ./include \
     ../libCommon/include \
     ../libChardet/include \

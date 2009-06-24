@@ -16,11 +16,12 @@ CSearchFacade::CSearchFacade()
     m_matcher.SigQueueEmpty().connect( boost::bind( &CSearchFacade::OnSomeQueueEmpty, this ) );
 }
 
-void CSearchFacade::Start( const QString& strPath, const PatternsContainer& patterns, const Masks_t& vMasks )
+void CSearchFacade::Start( const QString& strPath, const QStringList& patterns,
+        const QStringList& listMasks, bool bCaseSensitive )
 {
     CLog() << "CSearchFacade::Start: pattern count - " << patterns.size() << std::endl;
-    m_matcher.SetPatterns( patterns );
-    m_searcher.StartSearch( strPath, vMasks );
+    m_matcher.SetSearchParameters( patterns, bCaseSensitive );
+    m_searcher.StartSearch( strPath, listMasks );
 }
 
 void CSearchFacade::Stop()

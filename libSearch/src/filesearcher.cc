@@ -53,13 +53,13 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
 
 void CFileSearcher::WorkerFunc( const FileSearcher::structParams& Params )
 {
-    Search( Params.strPath, Params.vMasks );
+    Search( Params.strPath, Params.listMasks );
 }
 
 
-void CFileSearcher::StartSearch( const QString& strPath, const Masks_t& vMasks )
+void CFileSearcher::StartSearch( const QString& strPath, const QStringList& listMasks )
 {
-    FileSearcher::structParams Params = { strPath, vMasks };
+    FileSearcher::structParams Params = { strPath, listMasks };
     OnData( Params );
 }
 

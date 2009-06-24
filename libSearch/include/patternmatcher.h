@@ -9,7 +9,6 @@
 #include <mt_queue.hpp>
 #include <QString>
 
-#include "searchdefines.h"
 #include "multipatternsearcher.h"
 #include "datahandler.hpp"
 #include "plaintextextractor.h"
@@ -18,23 +17,23 @@ class CPatternMatcher: public CDataHandler< CPlainTextExtractor::structFileData 
 {
 public:
 
+    CPatternMatcher();
+    
     struct structFindData
     {
         const QString strFileName;
         bool bFound;
     };
 
-    void SetPatterns( const PatternsContainer& patterns );
-
+    void SetSearchParameters( const QStringList& listPatterns, bool bCaseSensitive );
     boost::signal1< void, const structFindData& >& SigFileMatched();
-
     virtual void WorkerFunc( const CPlainTextExtractor::structFileData& Data );
 
 private:
 
+    bool m_bCaseSensitive;
     MultiPatternSearcher m_searcher;
     boost::signal1< void , const structFindData& > m_sigFileMatched;
-
 };
 
 #endif

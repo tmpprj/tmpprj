@@ -5,6 +5,8 @@ namespace SearchGUI
 {
     Params::Params()
     {
+        bCaseSensitive = Settings().value( "searchgui/case-sensitive" ).toBool();
+        masks = Settings().value( "searchgui/settings" ).toStringList();
         extensions = Settings().value( "searchgui/settings" ).toMap();
         searchPaths = Settings().value( "searchgui/paths" ).toStringList();
         searches = Settings().value( "searchgui/searches" ).toStringList();

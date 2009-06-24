@@ -6,7 +6,6 @@
 #include <boost/signal.hpp>
 #include <QString>
 
-#include "searchdefines.h"
 #include "filesearcher.h"
 #include "plaintextextractor.h"
 #include "patternmatcher.h"
@@ -24,7 +23,7 @@ class CSearchFacade : public boost::noncopyable
 
 public:
     CSearchFacade();
-    void Start( const QString& strPath, const PatternsContainer& patterns, const Masks_t& vMasks );
+    void Start( const QString& strPath, const QStringList& patterns, const QStringList& vMasks, bool bCaseSensitive );
     void Stop();
     ~CSearchFacade();
 

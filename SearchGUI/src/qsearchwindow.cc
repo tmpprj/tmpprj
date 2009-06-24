@@ -109,14 +109,15 @@ void QSearchWindow::find()
 
     QString strMasks = masksComboBox->currentText();
     QString strText = textComboBox->currentText();
+    bool bCaseSensitive = ( caseCheckBox->checkState() == Qt::Checked );
     QString strPath = directoryComboBox->currentText();
 
-    PatternsContainer patterns;
-    ParsePatterns( strText, patterns );
+    QStringList listPatterns;
+    ParsePatterns( strText, listPatterns );
    
     QStringList listMasks = strMasks.split( ";", QString::SkipEmptyParts );
 
-    m_search.GetSearcher().Start( strPath, patterns, listMasks );
+    m_search.GetSearcher().Start( strPath, listPatterns, listMasks, bCaseSensitive );
     m_progressMovie.start();
 }
 
@@ -150,10 +151,10 @@ void QSearchWindow::reloadExtensions()
 
 void QSearchWindow::reloadSettings()
 {
+    caseCheckBox->setCheckState( SearchGUI::Conf().bCaseSensitive ? Qt::Checked : Qt::Unchecked );
     LoadStringListToCombo( masksComboBox, SearchGUI::Conf().masks );
     if( masksComboBox->count() == 0 )
         masksComboBox->addItem( "*" );
-    
     
     LoadStringListToCombo( textComboBox, SearchGUI::Conf().searches );
     
@@ -166,6 +167,7 @@ void QSearchWindow::reloadSettings()
 
 void QSearchWindow::saveSettings()
 {
+    SearchGUI::Conf().bCaseSensitive = ( caseCheckBox->checkState() == Qt::Checked );
     SearchGUI::Conf().masks = GetComboStringList( masksComboBox, true );
     SearchGUI::Conf().searches = GetComboStringList( textComboBox, true );
     SearchGUI::Conf().searchPaths = GetComboStringList( directoryComboBox, true );
