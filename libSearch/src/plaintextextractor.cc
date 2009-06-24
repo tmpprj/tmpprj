@@ -2,8 +2,11 @@
 #include "plaintextextractor.h"
 #include "mswordtextextractor.h"
 #include "pdftextextractor.h"
-#include "log.hpp"
+
+#include <log.hpp>
+#include <common.h>
 #include <boost/foreach.hpp>
+
 
 boost::signal1< void, const CPlainTextExtractor::structFileData& >& CPlainTextExtractor::SigDataObtained()
 {
@@ -39,9 +42,9 @@ CTextExtractorFactory::~CTextExtractorFactory()
 
 ITextExtractor* CTextExtractorFactory::GetExtractor( const QString& strFileName )
 {
-    boost::filesystem::path file( strFileName.toStdString() );
+    QString strExt = GetFileExtension( strFileName );
 
-    MapExtensionName_t::iterator pExtName = m_mapExtensionName.find( file.extension() );
+    MapExtensionName_t::iterator pExtName = m_mapExtensionName.find( strExt );
     if( pExtName == m_mapExtensionName.end() )
         return m_pDefaultExtractor;
 
@@ -53,7 +56,7 @@ ITextExtractor* CTextExtractorFactory::GetExtractor( const QString& strFileName 
 }
 
 
-bool CTextExtractorFactory::RegisterName( const std::string& strName, ITextExtractor* pTextExtractor )
+bool CTextExtractorFactory::RegisterName( const QString& strName, ITextExtractor* pTextExtractor )
 {
     MapNameExtractor_t::iterator p = m_mapNameExtractor.find( strName );
 
@@ -64,16 +67,17 @@ bool CTextExtractorFactory::RegisterName( const std::string& strName, ITextExtra
     return true;
 }
 
-bool CTextExtractorFactory::RegisterExtension( const std::string& strExtension, const std::string& strName )
+bool CTextExtractorFactory::RegisterExtension( const QString& strExtension, const QString& strName )
 {
     if( m_mapNameExtractor.count( strName ) == 0 )
         return false;
 
-    MapExtensionName_t::iterator p = m_mapExtensionName.find( strExtension );
+    QString strExtensionLower = strExtension.toLower();
+    MapExtensionName_t::iterator p = m_mapExtensionName.find( strExtensionLower );
     if( p != m_mapExtensionName.end() )
         return false;
 
-    m_mapExtensionName[ strExtension ] = strName;
+    m_mapExtensionName[ strExtensionLower ] = strName;
     return true;
 }
 

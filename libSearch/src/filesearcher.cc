@@ -30,25 +30,6 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
             }
         }
     }
-
-//        GlobWrap globFiles( strPath, vMasks[ i ] );
-//
-//        std::string strFilename;
-//        while( !( strFilename = globFiles.NextFilename() ).empty() )
-//        {
-//            boost::this_thread::interruption_point();
-//            if( strFilename[ strFilename.size() - 1 ] != '/' )
-//                m_sigFileProcessed( QString::fromStdString(strFilename) );
-//        }
-//    }
-//
-//    GlobWrap globFolders( strPath );
-//    std::string strFilename;
-//    while( !( strFilename = globFolders.NextFilename() ).empty() )
-//    {
-//        boost::this_thread::interruption_point();
-//        Search( strFilename, vMasks );
-//    }
 }
 
 void CFileSearcher::WorkerFunc( const FileSearcher::structParams& Params )

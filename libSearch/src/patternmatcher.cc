@@ -10,22 +10,29 @@ CPatternMatcher::CPatternMatcher()
 void CPatternMatcher::WorkerFunc( const CPlainTextExtractor::structFileData& Data )
 {
     CLog() << "Pattern count: " << m_searcher.GetPatternCount() << std::endl;
+
+    bool bFileGood;
     if( m_searcher.GetPatternCount() == 0 )
-    {
-        CLog() << __FUNCTION__ << ": Pattern count is NULL" << std::endl;
-        return;
-    }
-
-    QString strData;
-    if( m_bCaseSensitive )
-        strData = Data.strFileData;
+        bFileGood = true;
     else
-        strData = Data.strFileData.toLower();
+        bFileGood =CheckData( Data.strFileData );
 
-    int nFoundPatterns = m_searcher.FindPatterns( std::string( ( const char* )strData.utf16(), strData.size() * 2 ) );
-    bool bFileGood = ( ( size_t )nFoundPatterns == m_searcher.GetPatternCount() );
     structFindData FindData = { Data.strFileName, bFileGood };
     m_sigFileMatched( FindData );
+}
+
+bool CPatternMatcher::CheckData( const QString& strFileData )
+{
+    QString strDataToCheck;
+    if( m_bCaseSensitive )
+        strDataToCheck = strFileData;
+    else
+        strDataToCheck = strFileData.toLower();
+
+    int nFoundPatterns = m_searcher.FindPatterns( 
+            std::string( ( const char* )strDataToCheck.utf16(), strDataToCheck.size() * 2 ) );
+
+    return ( ( size_t )nFoundPatterns == m_searcher.GetPatternCount() );
 }
 
 void CPatternMatcher::SetSearchParameters( const QStringList& listPatterns, bool bCaseSensitive )

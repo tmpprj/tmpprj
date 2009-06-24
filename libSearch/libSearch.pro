@@ -17,7 +17,6 @@ SOURCES += src/filesearcher.cc \
     src/patternmatcher.cc \
     src/mswordtextextractor.cc \
     src/pdftextextractor.cc \
-    src/settings.cc \
     src/qsearchfacade.cc \
     src/libsearch_common.cc
 HEADERS += ./include/searchfacade.h \
@@ -28,7 +27,6 @@ HEADERS += ./include/searchfacade.h \
     include/patternmatcher.h \
     include/mswordtextextractor.h \
     include/pdftextextractor.h \
-    include/settings.h \
     include/datahandler.hpp \
     include/qsearchfacade.h \
     src/libsearch_common.h

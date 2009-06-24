@@ -68,7 +68,7 @@ void QSearchWindow::connectWidgets()
     connect( this, SIGNAL( finished( int ) ), this, SLOT( closing() ) );
 }
 
-void QSearchWindow::acceptCurrentItems()
+void QSearchWindow::saveCurrentUIItems()
 {
     MoveCurrentToTop( masksComboBox );
     MoveCurrentToTop( textComboBox );
@@ -103,7 +103,7 @@ void QSearchWindow::searchDone()
 void QSearchWindow::find()
 {
     stop();
-    acceptCurrentItems();
+    saveCurrentUIItems();
    
     filesTable->ClearList();
 
@@ -115,7 +115,8 @@ void QSearchWindow::find()
     QStringList listPatterns;
     ParsePatterns( strText, listPatterns );
    
-    QStringList listMasks = strMasks.split( ";", QString::SkipEmptyParts );
+    QStringList listMasks;
+    ParseMasks( strMasks, listMasks );
 
     m_search.GetSearcher().Start( strPath, listPatterns, listMasks, bCaseSensitive );
     m_progressMovie.start();
@@ -144,33 +145,26 @@ void QSearchWindow::reloadExtensions()
 {
     TextExtractorFactory::Instance().ClearExtensions();
 
-    FOREACH( p, SearchGUI::Conf().extensions )
-        TextExtractorFactory::Instance().RegisterExtension( qPrintable( "." + p.key() ), 
-                qPrintable( p.value().toString() ) );
+    FOREACH( p, SearchGUI::Conf().mapExtensions.Value() )
+        TextExtractorFactory::Instance().RegisterExtension( p.key(), p.value().toString() );
 }
 
 void QSearchWindow::reloadSettings()
 {
-    caseCheckBox->setCheckState( SearchGUI::Conf().bCaseSensitive ? Qt::Checked : Qt::Unchecked );
-    LoadStringListToCombo( masksComboBox, SearchGUI::Conf().masks );
-    if( masksComboBox->count() == 0 )
-        masksComboBox->addItem( "*" );
-    
-    LoadStringListToCombo( textComboBox, SearchGUI::Conf().searches );
-    
-    LoadStringListToCombo( directoryComboBox, SearchGUI::Conf().searchPaths );
-    if( directoryComboBox->count() == 0 )
-        directoryComboBox->addItem( QDir::currentPath() );
+    caseCheckBox->setCheckState( SearchGUI::Conf().bCaseSensitive.Value() ? Qt::Checked : Qt::Unchecked );
+    LoadStringListToCombo( masksComboBox, SearchGUI::Conf().listMasks.Value(), "*" );
+    LoadStringListToCombo( textComboBox, SearchGUI::Conf().listSearches.Value() );
+    LoadStringListToCombo( directoryComboBox, SearchGUI::Conf().listSearchPaths.Value(), QDir::currentPath() );
 
     reloadExtensions();
 }
 
 void QSearchWindow::saveSettings()
 {
-    SearchGUI::Conf().bCaseSensitive = ( caseCheckBox->checkState() == Qt::Checked );
-    SearchGUI::Conf().masks = GetComboStringList( masksComboBox, true );
-    SearchGUI::Conf().searches = GetComboStringList( textComboBox, true );
-    SearchGUI::Conf().searchPaths = GetComboStringList( directoryComboBox, true );
+    SearchGUI::Conf().bCaseSensitive.Value() = ( caseCheckBox->checkState() == Qt::Checked );
+    SearchGUI::Conf().listMasks.Value() = GetComboStringList( masksComboBox, true );
+    SearchGUI::Conf().listSearches.Value() = GetComboStringList( textComboBox, true );
+    SearchGUI::Conf().listSearchPaths.Value() = GetComboStringList( directoryComboBox, true );
 }
 
 void QSearchWindow::closing()

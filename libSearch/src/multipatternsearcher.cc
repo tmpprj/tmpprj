@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <sstream>
+#include <log.hpp>
 
 #define mm          8191
 
@@ -87,7 +88,10 @@ void MultiPatternSearcher::LoadPatterns( const PatternsContainer& vPatterns )
 
         
     if( m_vPatternInfo.size() == 0 )
-        throw runtime_error( "There are no valuable patterns" );
+    {
+        CLog() << "There are no valuable patterns" << std::endl;
+        return;
+    }
     
     if( nTotalDataLength > 400 && m_nMinPatternSize > 2 ) 
         LONG = 1;

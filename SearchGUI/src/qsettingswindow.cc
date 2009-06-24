@@ -1,12 +1,14 @@
 #include <QtCore>
 #include <QtGui>
 #include <QObject>
+#include <macro.h>
 
 #include "qsettingswindow.h"
 #include "settings.h"
 #include "plaintextextractor.h"
 #include "log.hpp"
 #include "searchgui_conf.h"
+#include "guicommon.h"
 
 QSettingsWindow::QSettingsWindow( QWidget *parent )
     : QDialog( parent )
@@ -32,26 +34,31 @@ QSettingsWindow::QSettingsWindow( QWidget *parent )
 
 void QSettingsWindow::LoadSettings()
 {
-    typedef QMap< QString, QVariant >::iterator ExtensionsMappedType_t;
-    for( ExtensionsMappedType_t p = SearchGUI::Conf().extensions.begin();
-            p != SearchGUI::Conf().extensions.end(); p++ )
+    FOREACH( p, SearchGUI::Conf().mapExtensions.Value() )
         AddExtension( p.key(), p.value().toString() );
 }
 
 void QSettingsWindow::SaveSettings()
 {
-    SearchGUI::Conf().extensions.clear();
+    SearchGUI::Conf().mapExtensions.Value().clear();
 
     for( int i = 0; i < tableExtensions->rowCount(); i++ )
     {
         QString strExt = tableExtensions->item( i, 0 )->text().trimmed();
+        strExt = FormatExtension( strExt );
+
         if( strExt.isEmpty() )
             continue;
 
         QComboBox* pParserCombo = dynamic_cast< QComboBox* >( tableExtensions->cellWidget( i, 1 ) );
+        if( !pParserCombo )
+        {
+            CLog() << "Error: pParserCombo is NULL" << std::endl;
+            continue;
+        }
         QString strParser = pParserCombo->currentText();
 
-        SearchGUI::Conf().extensions[ strExt ] = strParser; 
+        SearchGUI::Conf().mapExtensions.Value()[ strExt ] = strParser; 
         CUserLog() << qPrintable( strExt ) << ": " << qPrintable( strParser ) << std::endl;
     }
 }
@@ -62,9 +69,8 @@ void QSettingsWindow::InitParserCombo( QComboBox* pParserCombo )
         TextExtractorFactory::Instance().GetMapNameExtractor();
 
     CLog() << "Count: " << mapNameExtractor.size() << std::endl;
-    for( CTextExtractorFactory::MapNameExtractor_t::const_iterator p = mapNameExtractor.begin();
-            p != mapNameExtractor.end(); p++ )
-        pParserCombo->addItem( p->first.c_str() );
+    FOREACH( p, mapNameExtractor )
+        pParserCombo->addItem( p->first );
 }
 
 void QSettingsWindow::AddExtension( const QString& strExt, const QString& strParser )

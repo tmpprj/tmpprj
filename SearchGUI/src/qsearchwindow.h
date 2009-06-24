@@ -39,7 +39,7 @@ private:
     void setupControls();
     void connectSearcher();
     void connectWidgets();
-    void acceptCurrentItems();
+    void saveCurrentUIItems();
 };
 
 #endif

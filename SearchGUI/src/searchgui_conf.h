@@ -2,19 +2,19 @@
 #define _SEARCHGUI_PARAMS_H_
 
 #include <QtCore>
+#include <settings.h>
 
 namespace SearchGUI
 {
     struct Params
     {
-        QMap< QString, QVariant > extensions;
-        bool bCaseSensitive;
-        QStringList masks;
-        QStringList searches;
-        QStringList searchPaths;
+        ConfParam< QMap< QString, QVariant > > mapExtensions;
+        ConfParam< bool > bCaseSensitive;
+        ConfParam< QStringList > listMasks;
+        ConfParam< QStringList > listSearches;
+        ConfParam< QStringList > listSearchPaths;
 
         Params();
-        ~Params();
     };
 
     Params& Conf();

@@ -34,6 +34,8 @@ private:
     bool m_bCaseSensitive;
     MultiPatternSearcher m_searcher;
     boost::signal1< void , const structFindData& > m_sigFileMatched;
+
+    bool CheckData( const QString& strFileData );
 };
 
 #endif

@@ -1,7 +1,6 @@
 #ifndef CPLAINTEXTEXTRACTOR_H
 #define CPLAINTEXTEXTRACTOR_H
 
-#include <string>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <boost/signal.hpp>
@@ -48,14 +47,14 @@ public:
 
     ITextExtractor* GetExtractor( const QString& strFileName );
 
-    bool RegisterName( const std::string& strName, ITextExtractor* pTextExtractor );
-    bool RegisterExtension( const std::string& strExtension, const std::string& strName );
+    bool RegisterName( const QString& strName, ITextExtractor* pTextExtractor );
+    bool RegisterExtension( const QString& strExtension, const QString& strName );
     void ClearExtensions();
 
-    typedef std::map< std::string, std::string > MapExtensionName_t;
+    typedef std::map< QString, QString > MapExtensionName_t;
     const MapExtensionName_t& GetMapExtensionName();
     
-    typedef std::map< std::string, ITextExtractor* > MapNameExtractor_t;
+    typedef std::map< QString, ITextExtractor* > MapNameExtractor_t;
     const MapNameExtractor_t& GetMapNameExtractor();
 
 private:
