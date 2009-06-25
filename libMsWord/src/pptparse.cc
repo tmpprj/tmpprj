@@ -190,21 +190,22 @@ static void process_item (int rectype, long reclen, int flags, FILE* input, int*
 		
 	case TEXT_BYTES_ATOM: 
 	{
-        //fprintf(stdout,"TextBytes, reclen=%ld\n", reclen);
+//         fprintf(stdout,"TextBytes, reclen=%ld\n", reclen);
 		for(i=0; i < reclen; i++) {
 			catdoc_read(buf,1,1,input);
             if( (unsigned char)*buf!=0x0d )
                 vecBuf.push_back( (unsigned char)*buf );
-                //fputs(convert_char((unsigned char)*buf),stdout);
 			else
             {
                 vecBuf.push_back(0);
                 PptWriterImpl( &vecBuf[0] );
                 vecBuf.clear();
-                //fputc('\n',stdout);
             }
 		}
-        //fputc('\n',stdout);
+        vecBuf.push_back(0);
+        PptWriterImpl( &vecBuf[0] );
+        vecBuf.clear();
+
 		(*iOffset) += reclen;
 	}
 	break;
@@ -214,23 +215,24 @@ static void process_item (int rectype, long reclen, int flags, FILE* input, int*
 	{
 		long text_len;
 			
-        //fprintf(stdout,"CString, reclen=%ld\n", reclen);
+//         fprintf(stdout,"CString, reclen=%ld\n", reclen);
 		text_len=reclen/2;
 		for(i=0; i < text_len; i++) {
 			catdoc_read(buf,2,1,input);
             u=(unsigned short)getshort((unsigned char*)buf,0);
 			if(u!=0x0d)
                 vecBuf.push_back(u);
-                //fputs(convert_char(u),stdout);
 			else
             {
                 vecBuf.push_back(0);
                 PptWriterImpl( &vecBuf[0] );
                 vecBuf.clear();
-                //fputc('\n',stdout);
             }
 		}
-        //fputc('\n',stdout);
+        vecBuf.push_back(0);
+        PptWriterImpl( &vecBuf[0] );
+        vecBuf.clear();
+
 		(*iOffset) += reclen;
 	}
 	break;
