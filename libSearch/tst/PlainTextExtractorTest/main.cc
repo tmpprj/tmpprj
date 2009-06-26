@@ -1,9 +1,13 @@
 #include <iostream>
 #include "plaintextextractor.h"
 #include <QDebug>
+#include <unistd.h>
+#include <QTextCodec>
+
 
 void OnData( const CPlainTextExtractor::structFileData& Data )
 {
+    QTextCodec::setCodecForLocale( QTextCodec::codecForName("CP1251") );
     qDebug() << "file: " << Data.strFileName << " data: " << Data.strFileData;
 }
 
@@ -27,8 +31,9 @@ int main(int argc, char *argv[])
     TextExt.SigDataObtained().connect( OnData );
     TextExt.OnData( argv[1] );
 
+    
     std::string str;
-    std::cin >> str;
+    std::getline(std::cin, str);
 
     TextExt.OnStop();
 

@@ -195,7 +195,7 @@ void end_paragraph( int *bufptr )
  */
 int parse_rtf( FILE *f )
 {
-    int para_mode=0, data_skip_mode=0,i;
+    int para_mode=0, data_skip_mode=0, skip_chars = 0;
     RTFGroupData *groups=NULL;
     int group_count=0, group_store=20;
     int bufptr=-1;
@@ -271,10 +271,12 @@ int parse_rtf( FILE *f )
                 break;
             case RTF_CHAR:
                 //fprintf(stderr, "RTF char %d\n", com.numarg);
-                if ( data_skip_mode == 0 )
+                if( data_skip_mode == 0 && skip_chars == 0 )
                 {
                     add_to_buffer( &bufptr,rtf_to_unicode( com.numarg ) );
                 }
+                if( skip_chars > 0 )
+                    --skip_chars;
                 break;
             case RTF_UC:
                 groups[group_count].uc=com.numarg;
@@ -284,24 +286,11 @@ int parse_rtf( FILE *f )
                 break;
             case RTF_UNICODE_CHAR:
                 if ( com.numarg < 0 )
-                    break;
+                    com.numarg = com.numarg + 65536;
                 //fprintf(stderr, "Unicode char %04X\n", com.numarg);
                 if ( data_skip_mode == 0 )
                     add_to_buffer( &bufptr,com.numarg );
-                i=groups[group_count].uc;
-                //fprintf(stderr, "i=%d", i );
-                while (( --i )>0 )
-                    fgetc( f );
-                //PATCH
-                {
-                    char c1 = fgetc( f ), c2 = fgetc( f );
-                    //fprintf(stderr, "c1=%c,c2=%c", c1, c2 );
-                    if ( '\\' == c1 && '\'' == c2 )
-                        fgetc( f ),fgetc( f );
-                    else
-                        ungetc( c2,f ), ungetc( c1,f );
-                }
-                //END of patch
+                skip_chars = groups[group_count].uc;
                 break;
             case RTF_PARA:
                 /*if (para_mode > 0) {*/

@@ -6,5 +6,5 @@ QString GetFileExtension( const QString& strFileName )
     if( nPos == -1 )
         return "";
 
-    return strFileName.mid( nPos );
+    return strFileName.mid( nPos ).toLower();
 }
