@@ -4,6 +4,7 @@
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <mt_queue.hpp>
+#include <log.hpp>
 
 template< typename DataType >
 class CDataHandler: private boost::noncopyable
@@ -52,6 +53,11 @@ public:
         return m_sigQueueEmpty;
     }
 
+    boost::signal2< void, const QString&, const QString& >& SigError()
+    {
+        return m_sigError;
+    }
+
     bool IsQueueEmpty()
     {
         return m_Queue.empty();
@@ -65,18 +71,27 @@ private:
 
     boost::signal0< void > m_sigQueueEmpty;
 
+    boost::signal2< void, const QString&, const QString& > m_sigError;
+
     void ThreadFunc( boost::mutex* pmtxThreadStarted )
     {
-        pmtxThreadStarted->unlock();
-
-        for(;;)
+        try
         {
-            DataType Data = m_Queue.front();
-            boost::this_thread::interruption_point();
-            WorkerFunc( Data );
-            bool bEmpty = m_Queue.pop();
-            if( bEmpty )
-                m_sigQueueEmpty();
+            pmtxThreadStarted->unlock();
+
+            for(;;)
+            {
+                DataType Data = m_Queue.front();
+                boost::this_thread::interruption_point();
+                WorkerFunc( Data );
+                bool bEmpty = m_Queue.pop();
+                if( bEmpty )
+                    m_sigQueueEmpty();
+            }
+        }
+        catch( ... )
+        {
+            CLog() << error << "DataHandler::ThreadFunc: unknown error";
         }
     }
 

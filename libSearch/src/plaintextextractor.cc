@@ -6,6 +6,7 @@
 #include <log.hpp>
 #include <common.h>
 #include <boost/foreach.hpp>
+#include <exceptions.h>
 
 
 boost::signal1< void, const CPlainTextExtractor::structFileData& >& CPlainTextExtractor::SigDataObtained()
@@ -15,11 +16,18 @@ boost::signal1< void, const CPlainTextExtractor::structFileData& >& CPlainTextEx
 
 void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
 {
-    //Process file
-    QString strContent;
-    TextExtractorFactory::Instance().GetExtractor( strFileName )->Extract( strFileName, strContent );
-    structFileData Data = { strFileName, strContent };
-    m_sigDataObtained( Data );
+    try
+    {
+        //Process file
+        QString strContent;
+        TextExtractorFactory::Instance().GetExtractor( strFileName )->Extract( strFileName, strContent );
+        structFileData Data = { strFileName, strContent };
+        m_sigDataObtained( Data );
+    }
+    catch( CUserLevelError& e )
+    {
+        SigError()( strFileName, e.whatQ() );
+    }
 }
 
 CTextExtractorFactory::CTextExtractorFactory()
@@ -37,7 +45,7 @@ CTextExtractorFactory::CTextExtractorFactory()
 CTextExtractorFactory::~CTextExtractorFactory()
 {
     BOOST_FOREACH( MapNameExtractor_t::value_type& p, m_mapNameExtractor )
-            delete p.second;
+        delete p.second;
 }
 
 ITextExtractor* CTextExtractorFactory::GetExtractor( const QString& strFileName )
