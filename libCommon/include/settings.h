@@ -14,7 +14,8 @@ public:
     ConfParam( const QString& strKey )
         : m_strKey( strKey )
     {
-        m_value = Settings().value( strKey ).value< T >();
+        QVariant var = Settings().value( strKey );
+        m_value = var.value< T >();
     }
 
     T& Value()
