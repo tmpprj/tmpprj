@@ -89,9 +89,13 @@ private:
                     m_sigQueueEmpty();
             }
         }
+        catch( std::exception& e )
+        {
+            CLog() << error << "DataHandler::ThreadFunc error: " << e.what() << std::endl;
+        }
         catch( ... )
         {
-            CLog() << error << "DataHandler::ThreadFunc: unknown error";
+            CLog() << error << "DataHandler::ThreadFunc: unknown error" << std::endl;
         }
     }
 

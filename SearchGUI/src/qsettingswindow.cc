@@ -47,7 +47,7 @@ void QSettingsWindow::SaveSettings()
         QString strExt = tableExtensions->item( i, 0 )->text().trimmed();
         strExt = FormatExtension( strExt );
 
-        if( strExt.isEmpty() )
+        if( strExt.isEmpty() || strExt == "." )
             continue;
 
         QComboBox* pParserCombo = dynamic_cast< QComboBox* >( tableExtensions->cellWidget( i, 1 ) );

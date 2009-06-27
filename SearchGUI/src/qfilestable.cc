@@ -5,9 +5,9 @@ QFilesTable::QFilesTable( QWidget *parent )
     : QTableWidget( 0, 1, parent )
 {
     QStringList labels;
-    labels << tr("File Name");
-    setHorizontalHeaderLabels(labels);
-    horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    labels << tr( "File Name" );
+    setHorizontalHeaderLabels( labels );
+    horizontalHeader()->setResizeMode( 0, QHeaderView::Stretch );
     verticalHeader()->hide();
     setShowGrid( true );
 }

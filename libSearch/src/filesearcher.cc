@@ -17,7 +17,6 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
         for (int i = 0; i < listFiles.size(); ++i)
         {
             boost::this_thread::interruption_point();
-            CLog() << "Search: " << qPrintable( listFiles[ i ].fileName() ) << std::endl;
             if( listFiles[ i ].isDir() )
             {
                 if( listFiles[ i ].fileName() != "." && listFiles[ i ].fileName() != ".." )
@@ -25,7 +24,6 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
             }
             else
             {
-                CLog() << "Call found" << std::endl;
                 m_sigFileFound( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ) );
             }
         }

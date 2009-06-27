@@ -15,7 +15,7 @@
 using namespace std;
 
 QSearchWindow::QSearchWindow(QWidget *parent)
-    : QDialog(parent)
+    : QMainWindow(parent)
 {
     setupUi( this );
     setWindowTitle( tr( "Find Files" ) );
@@ -24,6 +24,7 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     setupControls();
     connectSearcher();
     connectWidgets();
+    showDefaultStatus();
 
     reloadSettings();
 }
@@ -68,6 +69,16 @@ void QSearchWindow::connectWidgets()
     connect( this, SIGNAL( finished( int ) ), this, SLOT( closing() ) );
 }
 
+void QSearchWindow::showDefaultStatus()
+{
+    statusBar()->showMessage( "Status: Ready" );
+}
+
+void QSearchWindow::showSearchStatus( const QString& strFilename )
+{
+    statusBar()->showMessage( "Searching: " + strFilename );
+}
+
 void QSearchWindow::saveCurrentUIItems()
 {
     MoveCurrentToTop( masksComboBox );
@@ -91,13 +102,18 @@ void QSearchWindow::browse()
 
 void QSearchWindow::fileMatched( const QString& strFilename, bool bFound )
 {
+    CLog() << debug << __FUNCTION__ << std::endl;
+    showSearchStatus( strFilename );
+
     if( bFound )
-        filesTable->AddFile( strFilename );
+        filesTable->AddFile( QDir::toNativeSeparators( strFilename ) );
 }
 
 void QSearchWindow::searchDone()
 {
+    CLog() << debug << __FUNCTION__ << std::endl;
     m_progressMovie.stop();
+    showDefaultStatus();
 }
 
 void QSearchWindow::find()

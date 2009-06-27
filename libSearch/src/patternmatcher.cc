@@ -9,8 +9,6 @@ CPatternMatcher::CPatternMatcher()
 
 void CPatternMatcher::WorkerFunc( const CPlainTextExtractor::structFileData& Data )
 {
-    CLog() << "Pattern count: " << m_searcher.GetPatternCount() << std::endl;
-
     bool bFileGood;
     if( m_searcher.GetPatternCount() == 0 )
         bFileGood = true;

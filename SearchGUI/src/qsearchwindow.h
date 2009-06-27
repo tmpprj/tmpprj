@@ -2,14 +2,14 @@
 #define _QSEARCHWINDOW_H
 
 #include <qsearchfacade.h>
-#include <QDialog>
+#include <QMainWindow>
 #include <QMovie>
 
 #include "ui_searchwindow.h"
 
 class QMovie;
 
-class QSearchWindow : public QDialog, private Ui::SearchWindowBase
+class QSearchWindow : public QMainWindow, private Ui::SearchWindowBase
 {
     Q_OBJECT
 
@@ -39,6 +39,8 @@ private:
     void setupControls();
     void connectSearcher();
     void connectWidgets();
+    void showDefaultStatus();
+    void showSearchStatus( const QString& strFilename );
     void saveCurrentUIItems();
 };
 
