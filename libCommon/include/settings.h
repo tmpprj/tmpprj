@@ -11,10 +11,10 @@ template < class T > class ConfParam
     T m_value;
 
 public:
-    ConfParam( const QString& strKey )
+    ConfParam( const QString& strKey, const QString& strDefault = "" )
         : m_strKey( strKey )
     {
-        QVariant var = Settings().value( strKey );
+        QVariant var = Settings().value( strKey, strDefault );
         m_value = var.value< T >();
     }
 

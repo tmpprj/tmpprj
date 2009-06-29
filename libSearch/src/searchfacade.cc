@@ -24,7 +24,14 @@ void CSearchFacade::Start( const QString& strPath, const QStringList& patterns,
         const QStringList& listMasks, bool bCaseSensitive )
 {
     CLog() << "CSearchFacade::Start: pattern count - " << patterns.size() << std::endl;
+    
     m_matcher.SetSearchParameters( patterns, bCaseSensitive );
+/*   
+    if( patterns.empty() )
+        m_searcher.SigFileFound().disconnect( boost::bind( &CPlainTextExtractor::OnData, &m_extractor, _1 ) );
+    else
+        m_searcher.SigFileFound().connect( boost::bind( &CPlainTextExtractor::OnData, &m_extractor, _1 ) );
+*/
     m_searcher.StartSearch( strPath, listMasks );
 }
 
