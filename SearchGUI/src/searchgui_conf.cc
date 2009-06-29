@@ -5,10 +5,10 @@ namespace SearchGUI
 {
     Params::Params()
         : mapExtensions( "searchgui/extensions" ),
-          bCaseSensitive( "searchgui/case-sensitive" ),
-          listMasks( "searchgui/masks" ),
+          bCaseSensitive( "searchgui/case-sensitive", false ),
+          listMasks( "searchgui/masks", "*" ),
           listSearches( "searchgui/searches" ),
-          listSearchPaths( "searchgui/paths" )
+          listSearchPaths( "searchgui/paths", QDir::currentPath() )
     {
     }
 

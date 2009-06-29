@@ -110,7 +110,7 @@ void QSearchWindow::fileMatched( const QString& strFilename, bool bFound )
     showSearchStatus( strFilename );
 
     if( bFound )
-        filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND", Qt::green );
+        filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
 }
 
 void QSearchWindow::searchDone()
