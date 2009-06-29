@@ -2,24 +2,33 @@
 #include "qfilestable.h"
 
 QFilesTable::QFilesTable( QWidget *parent )
-    : QTableWidget( 0, 1, parent )
+    : QTableWidget( 0, 2, parent )
 {
     QStringList labels;
-    labels << tr( "File Name" );
+    labels << tr( "File Name" ) << tr( "Status" );
     setHorizontalHeaderLabels( labels );
+
     horizontalHeader()->setResizeMode( 0, QHeaderView::Stretch );
+
     verticalHeader()->hide();
     setShowGrid( true );
 }
 
-void QFilesTable::AddFile( const QString& filename )
+void QFilesTable::AddFile( const QString& filename, const QString& status, const QColor& statusColor )
 {
     QTableWidgetItem *fileNameItem = new QTableWidgetItem( filename );
     fileNameItem->setFlags(Qt::ItemIsEnabled);
 
+    QTableWidgetItem *statusItem = new QTableWidgetItem( status );
+    statusItem->setFlags(Qt::ItemIsEnabled);
+
+    if( statusColor.isValid() )
+        statusItem->setData( Qt::BackgroundColorRole, statusColor );
+    
     int row = rowCount();
     insertRow(row);
     setItem( row, 0, fileNameItem );
+    setItem( row, 1, statusItem );
 }
 
 void QFilesTable::ClearList()

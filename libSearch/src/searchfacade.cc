@@ -14,6 +14,10 @@ CSearchFacade::CSearchFacade()
     m_searcher.SigQueueEmpty().connect( boost::bind( &CSearchFacade::OnSomeQueueEmpty, this ) );
     m_extractor.SigQueueEmpty().connect( boost::bind( &CSearchFacade::OnSomeQueueEmpty, this ) );
     m_matcher.SigQueueEmpty().connect( boost::bind( &CSearchFacade::OnSomeQueueEmpty, this ) );
+
+    m_searcher.SigError().connect( boost::bind( &CSearchFacade::OnError, this, _1, _2 ) );
+    m_extractor.SigError().connect( boost::bind( &CSearchFacade::OnError, this, _1, _2 ) );
+    m_matcher.SigError().connect( boost::bind( &CSearchFacade::OnError, this, _1, _2 ) );
 }
 
 void CSearchFacade::Start( const QString& strPath, const QStringList& patterns,
@@ -40,6 +44,11 @@ void CSearchFacade::OnSomeQueueEmpty()
         m_sigDone();
 }
 
+void CSearchFacade::OnError( const QString& strFilename, const QString& strError )
+{
+    m_sigError( strFilename, strError );
+}
+
 boost::signal1< void, const QString& >& CSearchFacade::SigFileFound()
 {
     return m_searcher.SigFileFound();
@@ -58,5 +67,10 @@ boost::signal1< void, const CPatternMatcher::structFindData& >& CSearchFacade::S
 boost::signal0< void >& CSearchFacade::SigSearchDone()
 {
     return m_sigDone;
+}
+
+boost::signal2< void, const QString&, const QString& >& CSearchFacade::SigError()
+{
+    return m_sigError;
 }
 

@@ -9,7 +9,7 @@ class QFilesTable : public QTableWidget
 
 public:
     QFilesTable( QWidget *parent = 0 );
-    void AddFile( const QString& filename );
+    void AddFile( const QString& filename, const QString& status, const QColor& statusColor = QColor() );
     void ClearList();
 
 private:

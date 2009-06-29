@@ -25,14 +25,13 @@ private Q_SLOTS:
     void find();
     void stop();
     void showSettings();
-    void showJournal();
     void reloadExtensions();
     void reloadSettings();
     void saveSettings();
-    void closing();
 
     void fileMatched( const QString& strFilename, bool bFound ); 
     void searchDone();
+    void searchError( const QString& strFilename, const QString& strError );
 
 private:
     void setupProgressAnimation();
@@ -42,6 +41,7 @@ private:
     void showDefaultStatus();
     void showSearchStatus( const QString& strFilename );
     void saveCurrentUIItems();
+    void closeEvent( QCloseEvent* );
 };
 
 #endif

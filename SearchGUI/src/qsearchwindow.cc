@@ -4,7 +4,6 @@
 #include "qsearchwindow.h"
 #include "qfilestable.h"
 #include "qsettingswindow.h"
-#include "qjournalwindow.h"
 #include "settings.h"
 #include "searchgui_conf.h"
 #include "guicommon.h"
@@ -18,7 +17,6 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setupUi( this );
-    setWindowTitle( tr( "Find Files" ) );
 
     setupProgressAnimation();
     setupControls();
@@ -57,6 +55,8 @@ void QSearchWindow::connectSearcher()
     connect( &m_search, SIGNAL( searchDone() ), this, SLOT( searchDone() ) );
     connect( &m_search, SIGNAL( fileMatched( const QString&, bool ) ), 
             this, SLOT( fileMatched( const QString&, bool ) ) );
+    connect( &m_search, SIGNAL( error( const QString&, const QString& ) ),
+            this, SLOT( searchError( const QString&, const QString& ) ) );
 }
 
 void QSearchWindow::connectWidgets()
@@ -65,8 +65,6 @@ void QSearchWindow::connectWidgets()
     connect( stopButton, SIGNAL( clicked() ), this, SLOT( stop() ) );
     connect( browseButton, SIGNAL( clicked() ), this, SLOT( browse() ) );
     connect( settingsButton, SIGNAL( clicked() ), this, SLOT( showSettings() ) );
-    connect( journalButton, SIGNAL( clicked() ), this, SLOT( showJournal() ) );
-    connect( this, SIGNAL( finished( int ) ), this, SLOT( closing() ) );
 }
 
 void QSearchWindow::showDefaultStatus()
@@ -84,6 +82,12 @@ void QSearchWindow::saveCurrentUIItems()
     MoveCurrentToTop( masksComboBox );
     MoveCurrentToTop( textComboBox );
     MoveCurrentToTop( directoryComboBox );
+}
+
+void QSearchWindow::closeEvent( QCloseEvent* )
+{
+    // disconnect all searcher signals to not receive signal after form closed
+    disconnect( &m_search, 0, 0, 0 );
 }
 
 void QSearchWindow::browse()
@@ -106,7 +110,7 @@ void QSearchWindow::fileMatched( const QString& strFilename, bool bFound )
     showSearchStatus( strFilename );
 
     if( bFound )
-        filesTable->AddFile( QDir::toNativeSeparators( strFilename ) );
+        filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND", Qt::green );
 }
 
 void QSearchWindow::searchDone()
@@ -114,6 +118,11 @@ void QSearchWindow::searchDone()
     CLog() << debug << __FUNCTION__ << std::endl;
     m_progressMovie.stop();
     showDefaultStatus();
+}
+
+void QSearchWindow::searchError( const QString& strFilename, const QString& strError )
+{
+    filesTable->AddFile( QDir::toNativeSeparators( strFilename ), strError, Qt::red );
 }
 
 void QSearchWindow::find()
@@ -151,12 +160,6 @@ void QSearchWindow::showSettings()
     pSettings->show();
 }
 
-void QSearchWindow::showJournal()
-{
-    QJournalWindow* pJournal = new QJournalWindow( this );
-    pJournal->show();
-}
-
 void QSearchWindow::reloadExtensions()
 {
     TextExtractorFactory::Instance().ClearExtensions();
@@ -181,11 +184,5 @@ void QSearchWindow::saveSettings()
     SearchGUI::Conf().listMasks.Value() = GetComboStringList( masksComboBox, true );
     SearchGUI::Conf().listSearches.Value() = GetComboStringList( textComboBox, true );
     SearchGUI::Conf().listSearchPaths.Value() = GetComboStringList( directoryComboBox, true );
-}
-
-void QSearchWindow::closing()
-{
-    // disconnect all searcher signals to not receive signal after form closed
-    disconnect( &m_search, 0, 0, 0 );
 }
 
