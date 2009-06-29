@@ -7,7 +7,7 @@
 
 void OnData( const CPlainTextExtractor::structFileData& Data )
 {
-    QTextCodec::setCodecForLocale( QTextCodec::codecForName("CP1251") );
+    QTextCodec::setCodecForLocale( QTextCodec::codecForName("UTF-8") );
     qDebug() << "file: " << Data.strFileName << " data: " << Data.strFileData;
 }
 
