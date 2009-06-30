@@ -9,7 +9,7 @@
 #include <exceptions.h>
 
 
-boost::signal1< void, const CPlainTextExtractor::structFileData& >& CPlainTextExtractor::SigDataObtained()
+boost::signals2::signal1< void, const CPlainTextExtractor::structFileData& >& CPlainTextExtractor::SigDataObtained()
 {
     return m_sigDataObtained;
 }

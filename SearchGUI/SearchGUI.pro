@@ -45,6 +45,5 @@ LIBS += -L../ \
     -lCommon \
     -lPdf \
     -lboost_thread-mt \
-    -lboost_signals-mt \
     -lboost_system-mt \
     -Wl,-Bdynamic

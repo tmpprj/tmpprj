@@ -2,7 +2,7 @@
 #define _FILE_SEARCHER_H_
 
 #include <boost/thread.hpp>
-#include <boost/signal.hpp>
+#include <boost/signals2.hpp>
 #include <vector>
 #include <string>
 #include <memory>
@@ -23,7 +23,7 @@ namespace FileSearcher
 
 class CFileSearcher: public CDataHandler< FileSearcher::structParams >
 {
-    boost::signal1< void , const QString& > m_sigFileFound;
+    boost::signals2::signal1< void , const QString& > m_sigFileFound;
 
     void Search( const QString& strPath, const QStringList& listMasks );
 
@@ -33,7 +33,7 @@ public:
 
     void StartSearch( const QString& strPath, const QStringList& listMasks );
 
-    boost::signal1< void, const QString& >& SigFileFound();
+    boost::signals2::signal1< void, const QString& >& SigFileFound();
 };
 
 #endif

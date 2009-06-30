@@ -1,6 +1,7 @@
 #include "qsearchfacade.h"
 
 #include <log.hpp>
+#include <QThread>
 
 QSearchFacade::QSearchFacade( QObject* parent )
     : QObject( parent )
@@ -19,28 +20,33 @@ CSearchFacade& QSearchFacade::GetSearcher()
 
 void QSearchFacade::OnFileFound( const QString& strFileName )
 {
+    boost::lock_guard< boost::mutex > lock( m_mtxSig );
     Q_EMIT fileFound( strFileName );
 }
 
 void QSearchFacade::OnDataObtained( const CPlainTextExtractor::structFileData& fileData )
 {
+    boost::lock_guard< boost::mutex > lock( m_mtxSig );
     Q_EMIT dataObtained( fileData.strFileName, fileData.strFileData );
 }
 
 void QSearchFacade::OnFileMatched( const CPatternMatcher::structFindData& findData )
 {
-    CLog() << debug << __FUNCTION__ << std::endl;
+    boost::lock_guard< boost::mutex > lock( m_mtxSig );
+    CLog() << debug << __FUNCTION__ << ": " << QThread::currentThreadId() << std::endl;
     Q_EMIT fileMatched( findData.strFileName, findData.bFound );
 }
 
 void QSearchFacade::OnSearchDone()
 {
-    CLog() << debug << __FUNCTION__ << std::endl;
+    boost::lock_guard< boost::mutex > lock( m_mtxSig );
+    CLog() << debug << __FUNCTION__ << ": " << QThread::currentThreadId() << std::endl;
     Q_EMIT searchDone();
 }
 
 void QSearchFacade::OnError( const QString& strFileName, const QString& strError )
 {
+    boost::lock_guard< boost::mutex > lock( m_mtxSig );
     CLog() << debug << __FUNCTION__ << std::endl;
     Q_EMIT error( strFileName, strError );
 }

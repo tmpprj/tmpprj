@@ -2,7 +2,7 @@
 #define _PATTERNMATCHER_H_
 
 #include <boost/thread.hpp>
-#include <boost/signal.hpp>
+#include <boost/signals2.hpp>
 #include <vector>
 #include <string>
 #include <memory>
@@ -26,14 +26,14 @@ public:
     };
 
     void SetSearchParameters( const QStringList& listPatterns, bool bCaseSensitive );
-    boost::signal1< void, const structFindData& >& SigFileMatched();
+    boost::signals2::signal1< void, const structFindData& >& SigFileMatched();
     virtual void WorkerFunc( const CPlainTextExtractor::structFileData& Data );
 
 private:
 
     bool m_bCaseSensitive;
     MultiPatternSearcher m_searcher;
-    boost::signal1< void , const structFindData& > m_sigFileMatched;
+    boost::signals2::signal1< void , const structFindData& > m_sigFileMatched;
 
     bool CheckData( const QString& strFileData );
 };

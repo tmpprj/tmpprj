@@ -43,7 +43,7 @@ void CFileSearcher::StartSearch( const QString& strPath, const QStringList& list
 }
 
 
-boost::signal1< void, const QString& >& CFileSearcher::SigFileFound()
+boost::signals2::signal1< void, const QString& >& CFileSearcher::SigFileFound()
 {
     return m_sigFileFound;
 }

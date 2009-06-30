@@ -3,7 +3,7 @@
 
 #include <string>
 #include <boost/utility.hpp>
-#include <boost/signal.hpp>
+#include <boost/signals2.hpp>
 #include <QString>
 
 #include "filesearcher.h"
@@ -16,9 +16,9 @@ class CSearchFacade : public boost::noncopyable
     CFileSearcher m_searcher;
     CPlainTextExtractor m_extractor;
     CPatternMatcher m_matcher;
-    boost::signal0< void > m_sigStop;
-    boost::signal0< void > m_sigDone;
-    boost::signal2< void, const QString&, const QString& > m_sigError;
+    boost::signals2::signal0< void > m_sigStop;
+    boost::signals2::signal0< void > m_sigDone;
+    boost::signals2::signal2< void, const QString&, const QString& > m_sigError;
 
     void OnSomeQueueEmpty();
     void OnError( const QString& strFilename, const QString& strError );
@@ -29,11 +29,11 @@ public:
     void Stop();
     ~CSearchFacade();
 
-    boost::signal1< void, const QString& >& SigFileFound();
-    boost::signal1< void, const CPlainTextExtractor::structFileData& >& SigDataObtained();
-    boost::signal1< void, const CPatternMatcher::structFindData& >& SigFileMatched();
-    boost::signal0< void >& SigSearchDone();
-    boost::signal2< void, const QString&, const QString& >& SigError();
+    boost::signals2::signal1< void, const QString& >& SigFileFound();
+    boost::signals2::signal1< void, const CPlainTextExtractor::structFileData& >& SigDataObtained();
+    boost::signals2::signal1< void, const CPatternMatcher::structFindData& >& SigFileMatched();
+    boost::signals2::signal0< void >& SigSearchDone();
+    boost::signals2::signal2< void, const QString&, const QString& >& SigError();
 };
 
 

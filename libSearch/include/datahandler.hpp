@@ -48,12 +48,12 @@ public:
         }
     }
 
-    boost::signal0< void >& SigQueueEmpty()
+    boost::signals2::signal0< void >& SigQueueEmpty()
     {
         return m_sigQueueEmpty;
     }
 
-    boost::signal2< void, const QString&, const QString& >& SigError()
+    boost::signals2::signal2< void, const QString&, const QString& >& SigError()
     {
         return m_sigError;
     }
@@ -69,9 +69,9 @@ private:
 
     boost::shared_ptr< boost::thread > m_pThread;
 
-    boost::signal0< void > m_sigQueueEmpty;
+    boost::signals2::signal0< void > m_sigQueueEmpty;
 
-    boost::signal2< void, const QString&, const QString& > m_sigError;
+    boost::signals2::signal2< void, const QString&, const QString& > m_sigError;
 
     void ThreadFunc( boost::mutex* pmtxThreadStarted )
     {

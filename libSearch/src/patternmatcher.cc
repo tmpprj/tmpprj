@@ -42,7 +42,7 @@ void CPatternMatcher::SetSearchParameters( const QStringList& listPatterns, bool
     m_searcher.LoadPatterns( patterns );
 }
 
-boost::signal1< void, const CPatternMatcher::structFindData& >& CPatternMatcher::SigFileMatched()
+boost::signals2::signal1< void, const CPatternMatcher::structFindData& >& CPatternMatcher::SigFileMatched()
 {
     return m_sigFileMatched;
 }

@@ -3,7 +3,7 @@
 
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
-#include <boost/signal.hpp>
+#include <boost/signals2.hpp>
 #include <boost/filesystem.hpp>
 #include <QString>
 #include <singleton.hpp>
@@ -20,13 +20,13 @@ public:
         QString strFileData;
     };
 
-    boost::signal1< void, const structFileData& >& SigDataObtained();
+    boost::signals2::signal1< void, const structFileData& >& SigDataObtained();
 
 private:
 
     virtual void WorkerFunc( const QString& strFileName );
 
-    boost::signal1< void, const structFileData& > m_sigDataObtained;
+    boost::signals2::signal1< void, const structFileData& > m_sigDataObtained;
 };
 
 class ITextExtractor: public boost::noncopyable

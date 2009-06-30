@@ -45,8 +45,6 @@ public:
     CLog()
     {
         m_mtxLock.lock();
-        
-
     }
 
     virtual ~CLog()

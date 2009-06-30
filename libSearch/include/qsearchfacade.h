@@ -3,12 +3,14 @@
 
 #include "searchfacade.h"
 #include <QObject>
+#include <boost/thread.hpp>
 
 class QSearchFacade : public QObject
 {
     Q_OBJECT
 
     CSearchFacade m_search;
+    boost::mutex m_mtxSig;
 
     void OnFileFound( const QString& strFilename );
     void OnDataObtained( const CPlainTextExtractor::structFileData& );
