@@ -23,7 +23,7 @@ CSearchFacade::CSearchFacade()
 void CSearchFacade::Start( const QString& strPath, const QStringList& patterns,
         const QStringList& listMasks, bool bCaseSensitive )
 {
-    CLog() << "CSearchFacade::Start: pattern count - " << patterns.size() << std::endl;
+    CLog(debug) << "CSearchFacade::Start: pattern count - " << patterns.size();
     
     m_matcher.SetSearchParameters( patterns, bCaseSensitive );
 /*   

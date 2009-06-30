@@ -26,16 +26,18 @@ class CLog
     boost::mutex m_mtxLock;
 
 public:
-    CLog()
+    CLog( LogLevelManip_t m )
     {
         m_mtxLock.lock();
-        
-        GetFile() << QTime::currentTime().toString( "HH:mm:ss:zzz" ).toStdString() << " ";
+
+        GetFile() << QTime::currentTime().toString( "HH:mm:ss:zzz" ).toStdString() << " ["<< m( *this ) << "]: ";
     }
 
     virtual ~CLog()
     {
         m_mtxLock.unlock();
+
+        GetFile() << std::endl;
     }
 
     template< class T > CLog& operator<<( const T& t )
@@ -48,15 +50,6 @@ public:
     CLog& operator<<( Manip_t m )
     {
         m( GetFile() );
-        return *this;
-    }
-    
-    CLog& operator<<( LogLevelManip_t m )
-    {
-        char chLogLevel = m( *this );
-    
-        GetFile() << chLogLevel << ": ";
-
         return *this;
     }
 };

@@ -68,7 +68,7 @@ void do_table( FILE *input )
                     itemsread=catdoc_read( rec,4,1,input );
                     //build_year=getshort(( unsigned char* )rec+2,0 );
                     //build_rel=getshort(( unsigned char* )rec,0 );
-                    CLog() << debug << "ver=" << std::hex << getshort( (unsigned char*)rec,0 );
+                    CLog(debug) << "ver=" << std::hex << getshort( (unsigned char*)rec,0 );
                     unsigned short usVer = getshort( (unsigned char*)rec,0 );
                     if( 0x600 == usVer )
                     //CLog() << debug << "y = " << hex << build_year << " r = " << build_rel;
@@ -109,7 +109,7 @@ void do_table( FILE *input )
             }
             else
             {
-                CLog() << debug << ": Invalid BOF record";
+                CLog(debug) << ": Invalid BOF record";
                 return;
             }
         }
@@ -121,7 +121,7 @@ void do_table( FILE *input )
 
     if ( catdoc_eof( input ) )
     {
-        CLog() << debug << ": No BOF record found";
+        CLog(debug) << ": No BOF record found";
         throw std::runtime_error( "ExtractXls: incorrect file format" );
     }
     while( itemsread )
@@ -441,10 +441,10 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
         unsigned char *src=( unsigned char * )rec;
         if ( !saved_reference )
         {
-            CLog() << debug << "String record without preceeding string formula";
+            CLog(debug) << "String record without preceeding string formula";
             break;
         }
-        CLog() << debug << "String";
+        CLog(debug) << "String";
         *saved_reference=( unsigned char* )copy_unicode_string( &src );
         break;
     }
@@ -452,7 +452,7 @@ void process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
     {
         if ( rowptr )
         {
-            CLog() << debug << "BOF when current sheet is not flushed";
+            CLog(debug) << "BOF when current sheet is not flushed";
             free_sheet();
         }
         break;
@@ -518,12 +518,12 @@ char *copy_unicode_string( unsigned char **src, const char* strCharsetName )
     int count=0;
     int flags = 0;
     int start_offset=0;
-    int to_skip=0;								/* œô¨¹œô¨Ãœô¨Àœô¨¿œô¨¼œô¨Èœô¨Êœô¨Åœô¨µœô¨Äœô¨Ãœô¨Á œô¨´œô¨¼œô¨Á œô¨Àœô¨¿œô¨´œô¨Ãœô¨Îœô¨µœô¨Äœô¨± œô¨´œô¨¼œô¨¹œô¨¾œô¨É œô¨´œô¨±œô¨¾œô¨¾œô¨Éœô¨¸
-                                                                 * œô¨Êœô¨± œô¨»œô¨¿œô¨¾œô¨³œô¨¿œô¨½ œô¨Ãœô¨Äœô¨Âœô¨¿œô¨»œô¨¹ */
-    int offset = 1;								/* œô¨´œô¨¼œô¨Á œô¨Åœô¨Îœô¨µœô¨Äœô¨± œô¨Àœô¨µœô¨Âœô¨µœô¨½œô¨µœô¨¾œô¨¾œô¨¿œô¨º œô¨´œô¨¼œô¨¹œô¨¾œô¨É œô¨Àœô¨µœô¨Âœô¨Çœô¨¿œô¨·œô¨¿ œô¨Àœô¨¿œô¨¼œô¨Á  */
+    int to_skip=0;								/* œô¨úœô¨äœô¨¡œôõÖœô¨úœô¨äœô¨¡œô¨³œô¨úœô¨äœô¨¡œô¨°œô¨úœô¨äœô¨¡œô¨÷œô¨úœô¨äœô¨¡œô¨øœô¨úœô¨äœô¨¡œô¨¸œô¨úœô¨äœô¨¡œô¨ºœô¨úœô¨äœô¨¡œô¨µœô¨úœô¨äœô¨¡µœô¨úœô¨äœô¨¡œô¨´œô¨úœô¨äœô¨¡œô¨³œô¨úœô¨äœô¨¡œô¨± œô¨úœô¨äœô¨¡œô©Ñœô¨úœô¨äœô¨¡œô¨øœô¨úœô¨äœô¨¡œô¨± œô¨úœô¨äœô¨¡œô¨°œô¨úœô¨äœô¨¡œô¨÷œô¨úœô¨äœô¨¡œô©Ñœô¨úœô¨äœô¨¡œô¨³œô¨úœô¨äœô¨¡œô¨¾œô¨úœô¨äœô¨¡µœô¨úœô¨äœô¨¡œô¨´œô¨úœô¨äœô¨¡± œô¨úœô¨äœô¨¡œô©Ñœô¨úœô¨äœô¨¡œô¨øœô¨úœô¨äœô¨¡œôõÖœô¨úœô¨äœô¨¡œô¨õœô¨úœô¨äœô¨¡œô¨¹ œô¨úœô¨äœô¨¡œô©Ñœô¨úœô¨äœô¨¡±œô¨úœô¨äœô¨¡œô¨õœô¨úœô¨äœô¨¡œô¨õœô¨úœô¨äœô¨¡œô¨¹œô¨úœô¨äœô¨¡œô¨ñ
+                                                                 * œô¨úœô¨äœô¨¡œô¨ºœô¨úœô¨äœô¨¡± œô¨úœô¨äœô¨¡»œô¨úœô¨äœô¨¡œô¨÷œô¨úœô¨äœô¨¡œô¨õœô¨úœô¨äœô¨¡œô¨öœô¨úœô¨äœô¨¡œô¨÷œô¨úœô¨äœô¨¡œô¨¥ œô¨úœô¨äœô¨¡œô¨³œô¨úœô¨äœô¨¡œô¨´œô¨úœô¨äœô¨¡œô¨²œô¨úœô¨äœô¨¡œô¨÷œô¨úœô¨äœô¨¡»œô¨úœô¨äœô¨¡œôõÖ */
+    int offset = 1;								/* œô¨úœô¨äœô¨¡œô©Ñœô¨úœô¨äœô¨¡œô¨øœô¨úœô¨äœô¨¡œô¨± œô¨úœô¨äœô¨¡œô¨µœô¨úœô¨äœô¨¡œô¨¾œô¨úœô¨äœô¨¡µœô¨úœô¨äœô¨¡œô¨´œô¨úœô¨äœô¨¡± œô¨úœô¨äœô¨¡œô¨°œô¨úœô¨äœô¨¡µœô¨úœô¨äœô¨¡œô¨²œô¨úœô¨äœô¨¡µœô¨úœô¨äœô¨¡œô¨¥œô¨úœô¨äœô¨¡µœô¨úœô¨äœô¨¡œô¨õœô¨úœô¨äœô¨¡œô¨õœô¨úœô¨äœô¨¡œô¨÷œô¨úœô¨äœô¨¡œô¨ô œô¨úœô¨äœô¨¡œô©Ñœô¨úœô¨äœô¨¡œô¨øœô¨úœô¨äœô¨¡œôõÖœô¨úœô¨äœô¨¡œô¨õœô¨úœô¨äœô¨¡œô¨¹ œô¨úœô¨äœô¨¡œô¨°œô¨úœô¨äœô¨¡µœô¨úœô¨äœô¨¡œô¨²œô¨úœô¨äœô¨¡œô¨·œô¨úœô¨äœô¨¡œô¨÷œô¨úœô¨äœô¨¡·œô¨úœô¨äœô¨¡œô¨÷ œô¨úœô¨äœô¨¡œô¨°œô¨úœô¨äœô¨¡œô¨÷œô¨úœô¨äœô¨¡œô¨øœô¨úœô¨äœô¨¡œô¨±  */
     int charsize;
     /* 	char *realstart=*src; */
-    char *dest;										/* œô¨»œô¨Åœô¨´œô¨± œô¨²œô¨Åœô¨´œô¨µœô¨½ œô¨»œô¨¿œô¨Àœô¨¹œô¨Âœô¨¿œô¨Çœô¨±œô¨Äœô¨È œô¨Ãœô¨Äœô¨Âœô¨¿œô¨»œô¨Å */
+    char *dest;										/* œô¨úœô¨äœô¨¡»œô¨úœô¨äœô¨¡œô¨µœô¨úœô¨äœô¨¡œô©Ñœô¨úœô¨äœô¨¡± œô¨úœô¨äœô¨¡œô¨¦œô¨úœô¨äœô¨¡œô¨µœô¨úœô¨äœô¨¡œô©Ñœô¨úœô¨äœô¨¡µœô¨úœô¨äœô¨¡œô¨¥ œô¨úœô¨äœô¨¡»œô¨úœô¨äœô¨¡œô¨÷œô¨úœô¨äœô¨¡œô¨°œô¨úœô¨äœô¨¡œôõÖœô¨úœô¨äœô¨¡œô¨²œô¨úœô¨äœô¨¡œô¨÷œô¨úœô¨äœô¨¡œô¨·œô¨úœô¨äœô¨¡±œô¨úœô¨äœô¨¡œô¨´œô¨úœô¨äœô¨¡œô¨¸ œô¨úœô¨äœô¨¡œô¨³œô¨úœô¨äœô¨¡œô¨´œô¨úœô¨äœô¨¡œô¨²œô¨úœô¨äœô¨¡œô¨÷œô¨úœô¨äœô¨¡»œô¨úœô¨äœô¨¡œô¨µ */
     unsigned char *s = NULL;
     char *d = NULL,*c = NULL;
 
@@ -582,7 +582,7 @@ char *copy_unicode_string( unsigned char **src, const char* strCharsetName )
 
     /* 	fprintf(stderr,"count=%d skip=%d start_offset=%d\n", */
     /* 					count, to_skip, start_offset); */
-    /* œô¨± œô¨Êœô¨´œô¨µœô¨Ãœô¨È œô¨½œô¨É œô¨»œô¨¿œô¨Àœô¨¹œô¨Âœô¨Åœô¨µœô¨½ œô¨Ãœô¨Äœô¨Âœô¨¿œô¨»œô¨Å	*/
+    /* œô¨úœô¨äœô¨¡± œô¨úœô¨äœô¨¡œô¨ºœô¨úœô¨äœô¨¡œô©Ñœô¨úœô¨äœô¨¡µœô¨úœô¨äœô¨¡œô¨³œô¨úœô¨äœô¨¡œô¨¸ œô¨úœô¨äœô¨¡œô¨¥œô¨úœô¨äœô¨¡œô¨¹ œô¨úœô¨äœô¨¡»œô¨úœô¨äœô¨¡œô¨÷œô¨úœô¨äœô¨¡œô¨°œô¨úœô¨äœô¨¡œôõÖœô¨úœô¨äœô¨¡œô¨²œô¨úœô¨äœô¨¡œô¨µœô¨úœô¨äœô¨¡µœô¨úœô¨äœô¨¡œô¨¥ œô¨úœô¨äœô¨¡œô¨³œô¨úœô¨äœô¨¡œô¨´œô¨úœô¨äœô¨¡œô¨²œô¨úœô¨äœô¨¡œô¨÷œô¨úœô¨äœô¨¡»œô¨úœô¨äœô¨¡œô¨µ	*/
     if (( dest=( char* )malloc( count+1 ) ) == NULL )
         throw std::runtime_error( "MsWord::ExtractXls: not enough memory" );
     *src+=start_offset;
@@ -652,7 +652,7 @@ char *copy_unicode_string( unsigned char **src, const char* strCharsetName )
         }
     }
 
-    CLog() << debug << "copy_unicode_string: charset name " << strCharsetName;
+    CLog(debug) << "copy_unicode_string: charset name " << strCharsetName;
 
     vecUString.push_back(0);
     if ( !XlsWriterImpl.empty() )
@@ -800,14 +800,14 @@ char *isDateFormat( int format_code )
     int dateindex;
     if ( format_code>=( int )formatTableIndex )
     {
-        CLog() << debug << "Format code " << format_code << " is used before definition";
+        CLog(debug) << "Format code " << format_code << " is used before definition";
         return NULL;
     }
 
     index = formatTable[format_code];
     if ( IsFormatIdxUsed( index ) )
     {
-        CLog() << debug << "Format " << index << " is redefined";
+        CLog(debug) << "Format " << index << " is redefined";
         /* this format is something user-defined --- not a standard built-in date*/
         return NULL;
     }
@@ -944,7 +944,7 @@ void parse_sst( char *sstbuf,int bufsize )
     for ( i=0,parsedString=sst,curString=( unsigned char* )sstbuf+8;
             i<sstsize && curString<barrier; i++,parsedString++ )
     {
-        CLog() << debug << "Parse sst";
+        CLog(debug) << "Parse sst";
         /* 		fprintf(stderr,"copying %d string\n",i); */
         *parsedString = ( unsigned char* )copy_unicode_string( &curString );
     }
