@@ -5,9 +5,7 @@
 #include <boost/thread/locks.hpp>
 #include <iostream>
 #include <fstream>
-#ifdef WIN32
-#include <windows.h>
-#endif
+#include <QTime>
 
 typedef std::ostream&( *Manip_t )( std::ostream& );
 
@@ -27,29 +25,19 @@ class CLog
     
     boost::mutex m_mtxLock;
 
-#ifdef WIN32
-    int gettimeofday (struct timeval *tv, void* tz) 
-        { 
-            union { 
-                long long ns100; /*time since 1 Jan 1601 in 100ns units */ 
-                FILETIME ft; 
-            } now; 
-            GetSystemTimeAsFileTime (&now.ft); 
-            tv->tv_usec = (long) ((now.ns100 / 10LL) % 1000000LL); 
-            tv->tv_sec = (long) ((now.ns100 - 116444736000000000LL) / 10000000LL); 
-            return (0); 
-        } 
-#endif
-
 public:
-    CLog()
+    CLog( LogLevelManip_t m )
     {
         m_mtxLock.lock();
+
+        GetFile() << QTime::currentTime().toString( "HH:mm:ss:zzz" ).toStdString() << " ["<< m( *this ) << "]: ";
     }
 
     virtual ~CLog()
     {
         m_mtxLock.unlock();
+
+        GetFile() << std::endl;
     }
 
     template< class T > CLog& operator<<( const T& t )
@@ -62,25 +50,6 @@ public:
     CLog& operator<<( Manip_t m )
     {
         m( GetFile() );
-        return *this;
-    }
-    
-    CLog& operator<<( LogLevelManip_t m )
-    {
-        char chLogLevel = m( *this );
-	   
-        timeval tv;
-        gettimeofday( &tv, NULL );
-        tm* lpLocalTime = localtime( (time_t*)&tv.tv_sec );
-    
-        char buf[ 100 ];
-    	sprintf( buf, "%02d.%02d.%d %02d:%02d:%02d.%03d %c: ",
-                lpLocalTime->tm_mday, lpLocalTime->tm_mon + 1, lpLocalTime->tm_year + 1900,
-                lpLocalTime->tm_hour, lpLocalTime->tm_min, lpLocalTime->tm_sec, (int)tv.tv_usec/1000,
-                chLogLevel );
-
-        GetFile() << buf;
-
         return *this;
     }
 };

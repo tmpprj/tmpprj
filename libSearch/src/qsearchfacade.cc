@@ -32,21 +32,18 @@ void QSearchFacade::OnDataObtained( const CPlainTextExtractor::structFileData& f
 
 void QSearchFacade::OnFileMatched( const CPatternMatcher::structFindData& findData )
 {
-    boost::lock_guard< boost::mutex > lock( m_mtxSig );
-    CLog() << debug << __FUNCTION__ << ": " << QThread::currentThreadId() << std::endl;
+    CLog(debug) << __FUNCTION__ << std::endl;
     Q_EMIT fileMatched( findData.strFileName, findData.bFound );
 }
 
 void QSearchFacade::OnSearchDone()
 {
-    boost::lock_guard< boost::mutex > lock( m_mtxSig );
-    CLog() << debug << __FUNCTION__ << ": " << QThread::currentThreadId() << std::endl;
+    CLog(debug) << __FUNCTION__ << std::endl;
     Q_EMIT searchDone();
 }
 
 void QSearchFacade::OnError( const QString& strFileName, const QString& strError )
 {
-    boost::lock_guard< boost::mutex > lock( m_mtxSig );
-    CLog() << debug << __FUNCTION__ << std::endl;
+    CLog(debug) << __FUNCTION__ << std::endl;
     Q_EMIT error( strFileName, strError );
 }

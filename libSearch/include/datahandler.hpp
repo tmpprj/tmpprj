@@ -89,13 +89,17 @@ private:
                     m_sigQueueEmpty();
             }
         }
+        catch( boost::thread_interrupted& )
+        {
+            CLog(debug) << "DataHandler::ThreadFunc: thread closed";
+        }
         catch( std::exception& e )
         {
-            CLog() << error << "DataHandler::ThreadFunc error: " << e.what() << std::endl;
+            CLog(error) << "DataHandler::ThreadFunc error: " << e.what();
         }
         catch( ... )
         {
-            CLog() << error << "DataHandler::ThreadFunc: unknown error" << std::endl;
+            CLog(error) << "DataHandler::ThreadFunc: unknown error";
         }
     }
 

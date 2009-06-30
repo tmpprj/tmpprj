@@ -28,8 +28,8 @@ void CTxtTextExtractor::Extract( const QString& strFileName, QString& strText )
     std::string strCharset = CharDet.GetCharset();
 
     QTextCodec* pTextCodec = strCharset.empty() ? QTextCodec::codecForLocale() : QTextCodec::codecForName( strCharset.c_str() );
-     if( NULL == pTextCodec )
-         CLog() << debug << "Cant get codec" << std::endl;
+    if( NULL == pTextCodec )
+         CLog(debug) << "Cant get codec" << std::endl;
     else
     {
         vecBuf.resize( 1024000 );
