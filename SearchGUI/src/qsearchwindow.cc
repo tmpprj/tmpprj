@@ -54,6 +54,8 @@ void QSearchWindow::setupControls()
 
 void QSearchWindow::connectSearcher()
 {
+    connect( &m_search, SIGNAL( fileProcessing( const QString& ) ), 
+            this, SLOT( fileProcessing( const QString& ) ), Qt::QueuedConnection );
     connect( &m_search, SIGNAL( fileMatched( const QString&, bool ) ), 
             this, SLOT( fileMatched( const QString&, bool ) ), Qt::QueuedConnection );
     connect( &m_search, SIGNAL( searchDone() ), this, SLOT( searchDone() ), Qt::QueuedConnection );
@@ -115,10 +117,15 @@ void QSearchWindow::browse()
     }
 }
 
+void QSearchWindow::fileProcessing( const QString& strFilename )
+{
+    CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename ) << std::endl;
+    m_strCurrentFile = strFilename;
+}
+
 void QSearchWindow::fileMatched( const QString& strFilename, bool bFound )
 {
-    CLog(debug) << __FUNCTION__ << ": " << QThread::currentThreadId() << std::endl;
-    m_strCurrentFile = strFilename;
+    CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename ) << " " << bFound << std::endl;
 
     if( bFound )
         filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );

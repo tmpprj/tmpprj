@@ -6,10 +6,11 @@
 QSearchFacade::QSearchFacade( QObject* parent )
     : QObject( parent )
 {
+    m_search.SigFileFound().connect( boost::bind( &QSearchFacade::OnFileFound, this, _1 ) );
+    m_search.SigFileProcessing().connect( boost::bind( &QSearchFacade::OnFileProcessing, this, _1 ) );
+    m_search.SigDataObtained().connect( boost::bind( &QSearchFacade::OnDataObtained, this, _1 ) );
     m_search.SigFileMatched().connect( boost::bind( &QSearchFacade::OnFileMatched, this, _1 ) );
     m_search.SigSearchDone().connect( boost::bind( &QSearchFacade::OnSearchDone, this ) );
-    m_search.SigDataObtained().connect( boost::bind( &QSearchFacade::OnDataObtained, this, _1 ) );
-    m_search.SigFileFound().connect( boost::bind( &QSearchFacade::OnFileFound, this, _1 ) );
     m_search.SigError().connect( boost::bind( &QSearchFacade::OnError, this, _1, _2 ) );
 }
 
@@ -20,13 +21,16 @@ CSearchFacade& QSearchFacade::GetSearcher()
 
 void QSearchFacade::OnFileFound( const QString& strFileName )
 {
-    boost::lock_guard< boost::mutex > lock( m_mtxSig );
     Q_EMIT fileFound( strFileName );
+}
+
+void QSearchFacade::OnFileProcessing( const QString& strFilename )
+{
+    Q_EMIT fileProcessing( strFilename );
 }
 
 void QSearchFacade::OnDataObtained( const CPlainTextExtractor::structFileData& fileData )
 {
-    boost::lock_guard< boost::mutex > lock( m_mtxSig );
     Q_EMIT dataObtained( fileData.strFileName, fileData.strFileData );
 }
 

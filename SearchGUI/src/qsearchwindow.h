@@ -31,6 +31,7 @@ private Q_SLOTS:
     void saveSettings();
     void updateTimer();
 
+    void fileProcessing( const QString& strFilename );
     void fileMatched( const QString& strFilename, bool bFound ); 
     void searchDone();
     void searchError( const QString& strFilename, const QString& strError );

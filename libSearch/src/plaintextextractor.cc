@@ -15,6 +15,11 @@ boost::signals2::signal1< void, const CPlainTextExtractor::structFileData& >& CP
     return m_sigDataObtained;
 }
 
+boost::signals2::signal1< void, const QString& >& CPlainTextExtractor::SigFileProcessing()
+{
+    return m_sigFileProcessing;
+}
+
 void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
 {
     CLog( debug ) << "EXTRACTOR THREAD: " << QThread::currentThreadId() << std::endl;
@@ -22,7 +27,10 @@ void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
     {
         //Process file
         QString strContent;
+        m_sigFileProcessing( strFileName );
+
         TextExtractorFactory::Instance().GetExtractor( strFileName )->Extract( strFileName, strContent );
+        
         structFileData Data = { strFileName, strContent };
         m_sigDataObtained( Data );
     }
