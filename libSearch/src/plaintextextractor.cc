@@ -22,7 +22,6 @@ boost::signals2::signal1< void, const QString& >& CPlainTextExtractor::SigFilePr
 
 void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
 {
-    CLog( debug ) << "EXTRACTOR THREAD: " << QThread::currentThreadId() << std::endl;
     try
     {
         //Process file

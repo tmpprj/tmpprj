@@ -34,7 +34,6 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
 
 void CFileSearcher::WorkerFunc( const FileSearcher::structParams& Params )
 {
-    CLog( debug ) << "SEARCHER THREAD: " << QThread::currentThreadId() << std::endl;
     Search( Params.strPath, Params.listMasks, Params.bRecursive );
 }
 
