@@ -6,6 +6,7 @@ namespace SearchGUI
     Params::Params()
         : mapExtensions( "searchgui/extensions" ),
           bCaseSensitive( "searchgui/case-sensitive", false ),
+          bRecursive( "searchgui/recursive", true ),
           listMasks( "searchgui/masks", "*" ),
           listSearches( "searchgui/searches" ),
           listSearchPaths( "searchgui/paths", QDir::currentPath() )

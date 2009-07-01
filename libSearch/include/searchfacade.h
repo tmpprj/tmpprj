@@ -11,6 +11,16 @@
 #include "patternmatcher.h"
 #include "multipatternsearcher.h"
 
+struct SearchOptions
+{
+    QString strPath;
+    QStringList listPatterns;
+    QStringList listMasks;
+    bool bCaseSensitive;
+    bool bRecursive;
+};
+
+
 class CSearchFacade : public boost::noncopyable
 {
     CFileSearcher m_searcher;
@@ -25,7 +35,7 @@ class CSearchFacade : public boost::noncopyable
 
 public:
     CSearchFacade();
-    void Start( const QString& strPath, const QStringList& patterns, const QStringList& vMasks, bool bCaseSensitive );
+    void Start( const SearchOptions& options );
     void Stop();
     ~CSearchFacade();
 

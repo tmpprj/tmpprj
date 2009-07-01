@@ -135,6 +135,7 @@ void QSearchWindow::find()
     QString strMasks = masksComboBox->currentText();
     QString strText = textComboBox->currentText();
     bool bCaseSensitive = ( caseCheckBox->checkState() == Qt::Checked );
+    bool bRecursive = ( recursiveCheckBox->checkState() == Qt::Checked );
     QString strPath = directoryComboBox->currentText();
 
     QStringList listPatterns;
@@ -143,7 +144,10 @@ void QSearchWindow::find()
     QStringList listMasks;
     ParseMasks( strMasks, listMasks );
 
-    m_search.GetSearcher().Start( strPath, listPatterns, listMasks, bCaseSensitive );
+    SearchOptions options = { strPath, listPatterns, listMasks, bCaseSensitive, bRecursive };
+    options.strPath = strPath;
+
+    m_search.GetSearcher().Start( options );
     m_progressMovie.start();
 }
 
@@ -171,6 +175,7 @@ void QSearchWindow::reloadExtensions()
 void QSearchWindow::reloadSettings()
 {
     caseCheckBox->setCheckState( SearchGUI::Conf().bCaseSensitive.Value() ? Qt::Checked : Qt::Unchecked );
+    recursiveCheckBox->setCheckState( SearchGUI::Conf().bRecursive.Value() ? Qt::Checked : Qt::Unchecked );
     LoadStringListToCombo( masksComboBox, SearchGUI::Conf().listMasks.Value(), "*" );
     LoadStringListToCombo( textComboBox, SearchGUI::Conf().listSearches.Value() );
     LoadStringListToCombo( directoryComboBox, SearchGUI::Conf().listSearchPaths.Value(), QDir::currentPath() );
@@ -181,6 +186,7 @@ void QSearchWindow::reloadSettings()
 void QSearchWindow::saveSettings()
 {
     SearchGUI::Conf().bCaseSensitive.Value() = ( caseCheckBox->checkState() == Qt::Checked );
+    SearchGUI::Conf().bRecursive.Value() = ( recursiveCheckBox->checkState() == Qt::Checked );
     SearchGUI::Conf().listMasks.Value() = GetComboStringList( masksComboBox, true );
     SearchGUI::Conf().listSearches.Value() = GetComboStringList( textComboBox, true );
     SearchGUI::Conf().listSearchPaths.Value() = GetComboStringList( directoryComboBox, true );

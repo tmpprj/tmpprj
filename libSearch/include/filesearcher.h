@@ -18,6 +18,7 @@ namespace FileSearcher
     {
         QString strPath;
         QStringList listMasks;
+        bool bRecursive;
     };
 }
 
@@ -25,13 +26,13 @@ class CFileSearcher: public CDataHandler< FileSearcher::structParams >
 {
     boost::signals2::signal1< void , const QString& > m_sigFileFound;
 
-    void Search( const QString& strPath, const QStringList& listMasks );
+    void Search( const QString& strPath, const QStringList& listMasks, bool bRecursive );
 
     virtual void WorkerFunc( const FileSearcher::structParams& Params );
 
 public:
 
-    void StartSearch( const QString& strPath, const QStringList& listMasks );
+    void StartSearch( const QString& strPath, const QStringList& listMasks, bool bRecursive );
 
     boost::signals2::signal1< void, const QString& >& SigFileFound();
 };

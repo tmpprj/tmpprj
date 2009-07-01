@@ -131,11 +131,35 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="caseCheckBox" >
-          <property name="text" >
-           <string>Case Sensitive</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" >
+          <item>
+           <widget class="QCheckBox" name="caseCheckBox" >
+            <property name="text" >
+             <string>Case Sensitive</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="recursiveCheckBox" >
+            <property name="text" >
+             <string>Recursive</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </item>
         <item>
          <layout class="QHBoxLayout" >

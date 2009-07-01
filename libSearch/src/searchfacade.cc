@@ -20,13 +20,12 @@ CSearchFacade::CSearchFacade()
     m_matcher.SigError().connect( boost::bind( &CSearchFacade::OnError, this, _1, _2 ) );
 }
 
-void CSearchFacade::Start( const QString& strPath, const QStringList& patterns,
-        const QStringList& listMasks, bool bCaseSensitive )
+void CSearchFacade::Start( const SearchOptions& options )
 {
-    CLog(debug) << "CSearchFacade::Start: pattern count - " << patterns.size();
+    CLog(debug) << "CSearchFacade::Start: pattern count - " << options.listPatterns.size();
     
-    m_matcher.SetSearchParameters( patterns, bCaseSensitive );
-    m_searcher.StartSearch( strPath, listMasks );
+    m_matcher.SetSearchParameters( options.listPatterns, options.bCaseSensitive );
+    m_searcher.StartSearch( options.strPath, options.listMasks, options.bRecursive );
 }
 
 void CSearchFacade::Stop()

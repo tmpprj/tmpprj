@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks )
+void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks, bool bRecursive )
 {
     {
         QDir dirFiles( strPath, "", QDir::Unsorted );
@@ -19,8 +19,9 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
             boost::this_thread::interruption_point();
             if( listFiles[ i ].isDir() )
             {
-                if( listFiles[ i ].fileName() != "." && listFiles[ i ].fileName() != ".." )
-                    Search( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ), listMasks );
+                if( bRecursive )
+                    if( listFiles[ i ].fileName() != "." && listFiles[ i ].fileName() != ".." )
+                        Search( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ), listMasks, bRecursive );
             }
             else
             {
@@ -32,13 +33,13 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
 
 void CFileSearcher::WorkerFunc( const FileSearcher::structParams& Params )
 {
-    Search( Params.strPath, Params.listMasks );
+    Search( Params.strPath, Params.listMasks, Params.bRecursive );
 }
 
 
-void CFileSearcher::StartSearch( const QString& strPath, const QStringList& listMasks )
+void CFileSearcher::StartSearch( const QString& strPath, const QStringList& listMasks, bool bRecursive )
 {
-    FileSearcher::structParams Params = { strPath, listMasks };
+    FileSearcher::structParams Params = { strPath, listMasks, bRecursive };
     OnData( Params );
 }
 
