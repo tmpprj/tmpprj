@@ -23,6 +23,7 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     connectSearcher();
     connectWidgets();
     showDefaultStatus();
+    startStatusUpdateTimer();
 
     reloadSettings();
     CLog(debug) << "GUI THREAD: " << QThread::currentThreadId() << std::endl;
@@ -68,6 +69,15 @@ void QSearchWindow::connectWidgets()
     connect( settingsButton, SIGNAL( clicked() ), this, SLOT( showSettings() ) );
 }
 
+void QSearchWindow::startStatusUpdateTimer()
+{
+    QTimer* timer = new QTimer( this );
+    connect( timer, SIGNAL( timeout() ), this, SLOT( updateTimer() ) );
+
+    timer->setInterval( 100 );
+    timer->start();
+}
+
 void QSearchWindow::showDefaultStatus()
 {
     statusBar()->showMessage( "Status: Ready" );
@@ -108,7 +118,7 @@ void QSearchWindow::browse()
 void QSearchWindow::fileMatched( const QString& strFilename, bool bFound )
 {
     CLog(debug) << __FUNCTION__ << ": " << QThread::currentThreadId() << std::endl;
-    showSearchStatus( strFilename );
+    m_strCurrentFile = strFilename;
 
     if( bFound )
         filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
@@ -118,7 +128,7 @@ void QSearchWindow::searchDone()
 {
     CLog(debug) << __FUNCTION__ << ": " << QThread::currentThreadId() << std::endl;
     m_progressMovie.stop();
-    showDefaultStatus();
+    m_strCurrentFile.clear();
 }
 
 void QSearchWindow::searchError( const QString& strFilename, const QString& strError )
@@ -193,3 +203,10 @@ void QSearchWindow::saveSettings()
     SearchGUI::Conf().listSearchPaths.Value() = GetComboStringList( directoryComboBox, true );
 }
 
+void QSearchWindow::updateTimer()
+{
+    if( m_strCurrentFile.isEmpty() )
+        showDefaultStatus();
+    else
+        showSearchStatus( m_strCurrentFile ); 
+}

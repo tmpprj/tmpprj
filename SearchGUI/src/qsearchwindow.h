@@ -15,6 +15,7 @@ class QSearchWindow : public QMainWindow, private Ui::SearchWindowBase
 
     QSearchFacade m_search;
     QMovie m_progressMovie;
+    QString m_strCurrentFile;
 
 public:
     QSearchWindow(QWidget *parent = 0);
@@ -28,6 +29,7 @@ private Q_SLOTS:
     void reloadExtensions();
     void reloadSettings();
     void saveSettings();
+    void updateTimer();
 
     void fileMatched( const QString& strFilename, bool bFound ); 
     void searchDone();
@@ -38,6 +40,7 @@ private:
     void setupControls();
     void connectSearcher();
     void connectWidgets();
+    void startStatusUpdateTimer();
     void showDefaultStatus();
     void showSearchStatus( const QString& strFilename );
     void saveCurrentUIItems();
