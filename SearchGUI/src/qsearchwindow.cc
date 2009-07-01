@@ -23,6 +23,7 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     connectSearcher();
     connectWidgets();
     showDefaultStatus();
+    startStatusUpdateTimer();
 
     reloadSettings();
     CLog(debug) << "GUI THREAD: " << QThread::currentThreadId() << std::endl;
@@ -53,6 +54,8 @@ void QSearchWindow::setupControls()
 
 void QSearchWindow::connectSearcher()
 {
+    connect( &m_search, SIGNAL( fileProcessing( const QString& ) ), 
+            this, SLOT( fileProcessing( const QString& ) ), Qt::QueuedConnection );
     connect( &m_search, SIGNAL( fileMatched( const QString&, bool ) ), 
             this, SLOT( fileMatched( const QString&, bool ) ), Qt::QueuedConnection );
     connect( &m_search, SIGNAL( searchDone() ), this, SLOT( searchDone() ), Qt::QueuedConnection );
@@ -66,6 +69,15 @@ void QSearchWindow::connectWidgets()
     connect( stopButton, SIGNAL( clicked() ), this, SLOT( stop() ) );
     connect( browseButton, SIGNAL( clicked() ), this, SLOT( browse() ) );
     connect( settingsButton, SIGNAL( clicked() ), this, SLOT( showSettings() ) );
+}
+
+void QSearchWindow::startStatusUpdateTimer()
+{
+    QTimer* timer = new QTimer( this );
+    connect( timer, SIGNAL( timeout() ), this, SLOT( updateTimer() ) );
+
+    timer->setInterval( 100 );
+    timer->start();
 }
 
 void QSearchWindow::showDefaultStatus()
@@ -105,10 +117,15 @@ void QSearchWindow::browse()
     }
 }
 
+void QSearchWindow::fileProcessing( const QString& strFilename )
+{
+    CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename ) << std::endl;
+    m_strCurrentFile = strFilename;
+}
+
 void QSearchWindow::fileMatched( const QString& strFilename, bool bFound )
 {
-    CLog(debug) << __FUNCTION__;
-    showSearchStatus( strFilename );
+    CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename ) << " " << bFound << std::endl;
 
     if( bFound )
         filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
@@ -118,7 +135,7 @@ void QSearchWindow::searchDone()
 {
     CLog(debug) << __FUNCTION__;
     m_progressMovie.stop();
-    showDefaultStatus();
+    m_strCurrentFile.clear();
 }
 
 void QSearchWindow::searchError( const QString& strFilename, const QString& strError )
@@ -193,3 +210,10 @@ void QSearchWindow::saveSettings()
     SearchGUI::Conf().listSearchPaths.Value() = GetComboStringList( directoryComboBox, true );
 }
 
+void QSearchWindow::updateTimer()
+{
+    if( m_strCurrentFile.isEmpty() )
+        showDefaultStatus();
+    else
+        showSearchStatus( m_strCurrentFile ); 
+}

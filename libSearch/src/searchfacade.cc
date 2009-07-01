@@ -54,6 +54,11 @@ boost::signals2::signal1< void, const QString& >& CSearchFacade::SigFileFound()
     return m_searcher.SigFileFound();
 }
 
+boost::signals2::signal1< void, const QString& >& CSearchFacade::SigFileProcessing()
+{
+    return m_extractor.SigFileProcessing();
+}
+
 boost::signals2::signal1< void, const CPlainTextExtractor::structFileData& >& CSearchFacade::SigDataObtained()
 {
     return m_extractor.SigDataObtained();

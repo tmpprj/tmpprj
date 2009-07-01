@@ -13,6 +13,7 @@ class QSearchFacade : public QObject
     boost::mutex m_mtxSig;
 
     void OnFileFound( const QString& strFilename );
+    void OnFileProcessing( const QString& strFilename );
     void OnDataObtained( const CPlainTextExtractor::structFileData& );
     void OnFileMatched( const CPatternMatcher::structFindData& );
     void OnSearchDone();
@@ -23,6 +24,7 @@ public:
 
 Q_SIGNALS:
     void fileFound( const QString& strFileName );
+    void fileProcessing( const QString& strFileName );
     void dataObtained( const QString& strFileName, const QString& strFileData );
     void fileMatched( const QString& strFileName, bool bFound ); 
     void searchDone();

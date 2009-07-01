@@ -11,7 +11,6 @@ CPatternMatcher::CPatternMatcher()
 
 void CPatternMatcher::WorkerFunc( const CPlainTextExtractor::structFileData& Data )
 {
-    CLog( debug ) << "PATTERN THREAD: " << QThread::currentThreadId() << std::endl;
     bool bFileGood;
     if( m_searcher.GetPatternCount() == 0 )
         bFileGood = true;

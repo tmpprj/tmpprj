@@ -15,9 +15,13 @@ boost::signals2::signal1< void, const CPlainTextExtractor::structFileData& >& CP
     return m_sigDataObtained;
 }
 
+boost::signals2::signal1< void, const QString& >& CPlainTextExtractor::SigFileProcessing()
+{
+    return m_sigFileProcessing;
+}
+
 void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
 {
-    CLog( debug ) << "EXTRACTOR THREAD: " << QThread::currentThreadId() << std::endl;
     try
     {
         QTime timer;
@@ -25,12 +29,13 @@ void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
         
         //Process file
         QString strContent;
-        
+        m_sigFileProcessing( strFileName );
+
         ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
         
         CLog(debug) << "CPlainTextExtractor::WorkerFunc: processing " << strFileName << " with " << pExtractor->GetName();
         pExtractor->Extract( strFileName, strContent );
-
+        
         structFileData Data = { strFileName, strContent };
         m_sigDataObtained( Data );
         

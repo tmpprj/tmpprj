@@ -21,12 +21,14 @@ public:
     };
 
     boost::signals2::signal1< void, const structFileData& >& SigDataObtained();
+    boost::signals2::signal1< void, const QString& >& SigFileProcessing();
 
 private:
 
     virtual void WorkerFunc( const QString& strFileName );
 
     boost::signals2::signal1< void, const structFileData& > m_sigDataObtained;
+    boost::signals2::signal1< void, const QString& > m_sigFileProcessing;
 };
 
 class ITextExtractor: public boost::noncopyable
