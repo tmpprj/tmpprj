@@ -14,19 +14,19 @@
 #ifdef DEBUG_MEM
 
 void *operator new(size_t size) {
-  return gmalloc((int)size);
+    return gmalloc((int)size);
 }
 
 void *operator new[](size_t size) {
-  return gmalloc((int)size);
+    return gmalloc((int)size);
 }
 
 void operator delete(void *p) {
-  gfree(p);
+    gfree(p);
 }
 
 void operator delete[](void *p) {
-  gfree(p);
+    gfree(p);
 }
 
 #endif

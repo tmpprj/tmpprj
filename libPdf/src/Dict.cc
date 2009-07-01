@@ -24,72 +24,72 @@
 //------------------------------------------------------------------------
 
 Dict::Dict(XRef *xrefA) {
-  xref = xrefA;
-  entries = NULL;
-  size = length = 0;
-  ref = 1;
+    xref = xrefA;
+    entries = NULL;
+    size = length = 0;
+    ref = 1;
 }
 
 Dict::~Dict() {
-  int i;
+    int i;
 
-  for (i = 0; i < length; ++i) {
-    gfree(entries[i].key);
-    entries[i].val.free();
-  }
-  gfree(entries);
+    for (i = 0; i < length; ++i) {
+        gfree(entries[i].key);
+        entries[i].val.free();
+    }
+    gfree(entries);
 }
 
 void Dict::add(char *key, Object *val) {
-  if (length == size) {
-    if (length == 0) {
-      size = 8;
-    } else {
-      size *= 2;
+    if (length == size) {
+        if (length == 0) {
+            size = 8;
+        } else {
+            size *= 2;
+        }
+        entries = (DictEntry *)greallocn(entries, size, sizeof(DictEntry));
     }
-    entries = (DictEntry *)greallocn(entries, size, sizeof(DictEntry));
-  }
-  entries[length].key = key;
-  entries[length].val = *val;
-  ++length;
+    entries[length].key = key;
+    entries[length].val = *val;
+    ++length;
 }
 
 inline DictEntry *Dict::find(char *key) {
-  int i;
+    int i;
 
-  for (i = 0; i < length; ++i) {
-    if (!strcmp(key, entries[i].key))
-      return &entries[i];
-  }
-  return NULL;
+    for (i = 0; i < length; ++i) {
+        if (!strcmp(key, entries[i].key))
+            return &entries[i];
+    }
+    return NULL;
 }
 
 GBool Dict::is(char *type) {
-  DictEntry *e;
+    DictEntry *e;
 
-  return (e = find("Type")) && e->val.isName(type);
+    return (e = find("Type")) && e->val.isName(type);
 }
 
 Object *Dict::lookup(char *key, Object *obj) {
-  DictEntry *e;
+    DictEntry *e;
 
-  return (e = find(key)) ? e->val.fetch(xref, obj) : obj->initNull();
+    return (e = find(key)) ? e->val.fetch(xref, obj) : obj->initNull();
 }
 
 Object *Dict::lookupNF(char *key, Object *obj) {
-  DictEntry *e;
+    DictEntry *e;
 
-  return (e = find(key)) ? e->val.copy(obj) : obj->initNull();
+    return (e = find(key)) ? e->val.copy(obj) : obj->initNull();
 }
 
 char *Dict::getKey(int i) {
-  return entries[i].key;
+    return entries[i].key;
 }
 
 Object *Dict::getVal(int i, Object *obj) {
-  return entries[i].val.fetch(xref, obj);
+    return entries[i].val.fetch(xref, obj);
 }
 
 Object *Dict::getValNF(int i, Object *obj) {
-  return entries[i].val.copy(obj);
+    return entries[i].val.copy(obj);
 }

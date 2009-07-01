@@ -16,8 +16,8 @@
 
 class GMemException {
 public:
-  GMemException() {}
-  ~GMemException() {}
+    GMemException() {}
+    ~GMemException() {}
 };
 
 #define GMEM_EXCEP throw(GMemException)
@@ -32,45 +32,45 @@ public:
 extern "C" {
 #endif
 
-/*
- * Same as malloc, but prints error message and exits if malloc()
- * returns NULL.
- */
-extern void *gmalloc(int size) GMEM_EXCEP;
+    /*
+     * Same as malloc, but prints error message and exits if malloc()
+     * returns NULL.
+     */
+    extern void *gmalloc(int size) GMEM_EXCEP;
 
-/*
- * Same as realloc, but prints error message and exits if realloc()
- * returns NULL.  If <p> is NULL, calls malloc instead of realloc().
- */
-extern void *grealloc(void *p, int size) GMEM_EXCEP;
+    /*
+     * Same as realloc, but prints error message and exits if realloc()
+     * returns NULL.  If <p> is NULL, calls malloc instead of realloc().
+     */
+    extern void *grealloc(void *p, int size) GMEM_EXCEP;
 
-/*
- * These are similar to gmalloc and grealloc, but take an object count
- * and size.  The result is similar to allocating nObjs * objSize
- * bytes, but there is an additional error check that the total size
- * doesn't overflow an int.
- */
-extern void *gmallocn(int nObjs, int objSize) GMEM_EXCEP;
-extern void *greallocn(void *p, int nObjs, int objSize) GMEM_EXCEP;
+    /*
+     * These are similar to gmalloc and grealloc, but take an object count
+     * and size.  The result is similar to allocating nObjs * objSize
+     * bytes, but there is an additional error check that the total size
+     * doesn't overflow an int.
+     */
+    extern void *gmallocn(int nObjs, int objSize) GMEM_EXCEP;
+    extern void *greallocn(void *p, int nObjs, int objSize) GMEM_EXCEP;
 
-/*
- * Same as free, but checks for and ignores NULL pointers.
- */
-extern void gfree(void *p);
+    /*
+     * Same as free, but checks for and ignores NULL pointers.
+     */
+    extern void gfree(void *p);
 
 #ifdef DEBUG_MEM
-/*
- * Report on unfreed memory.
- */
-extern void gMemReport(FILE *f);
+    /*
+     * Report on unfreed memory.
+     */
+    extern void gMemReport(FILE *f);
 #else
 #define gMemReport(f)
 #endif
 
-/*
- * Allocate memory and copy a string into it.
- */
-extern char *copyString(char *s);
+    /*
+     * Allocate memory and copy a string into it.
+     */
+    extern char *copyString(char *s);
 
 #ifdef __cplusplus
 }

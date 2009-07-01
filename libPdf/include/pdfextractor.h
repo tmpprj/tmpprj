@@ -5,6 +5,6 @@
 
 namespace Pdf
 {
-    void Extract( boost::function<void (unsigned int*, size_t)> Writer, const QString& strFileName );
+void Extract( boost::function<void (unsigned int*, size_t)> Writer, const QString& strFileName );
 }
 #endif // PDFEXTRACTOR_H

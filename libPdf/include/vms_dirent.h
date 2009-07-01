@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-/* Make sure we don't get the V7 RTL dirent functions. These are broken. */
+    /* Make sure we don't get the V7 RTL dirent functions. These are broken. */
 
 #ifndef __CRTL_VER
 #   define __CRTL_VER __VMS_VER
@@ -37,28 +37,28 @@ extern "C" {
 #endif
 #endif	/* !_POSIX_SOURCE */
 
-/*
- * Definitions for library routines operating on directories.
- */
-typedef	struct __dirdesc {
-	unsigned long dd_fd;	/* file descriptor */
-	long	dd_loc;		/* buf offset of entry from last readddir() */
-	long	dd_size;	/* amount of valid data in buffer */
-	long	dd_bsize;	/* amount of entries read at a time */
-	long	dd_off;		/* Current offset in dir (for telldir) */
-	char	*dd_buf;	/* directory data buffer */
-} DIR;
+    /*
+     * Definitions for library routines operating on directories.
+     */
+    typedef	struct __dirdesc {
+        unsigned long dd_fd;	/* file descriptor */
+        long	dd_loc;		/* buf offset of entry from last readddir() */
+        long	dd_size;	/* amount of valid data in buffer */
+        long	dd_bsize;	/* amount of entries read at a time */
+        long	dd_off;		/* Current offset in dir (for telldir) */
+        char	*dd_buf;	/* directory data buffer */
+    } DIR;
 
 #include "vms_sys_dirent.h"
 
-extern	DIR *opendir(char *dirname);
-extern	struct dirent *readdir(DIR *dirp);
-extern	void closedir(DIR *dirp);
+    extern	DIR *opendir(char *dirname);
+    extern	struct dirent *readdir(DIR *dirp);
+    extern	void closedir(DIR *dirp);
 #ifndef	_POSIX_SOURCE
-extern	void seekdir(DIR *dirp, int loc);
-extern	long telldir(DIR *dirp);
+    extern	void seekdir(DIR *dirp, int loc);
+    extern	long telldir(DIR *dirp);
 #endif	/* POSIX_SOURCE */
-extern	void rewinddir(DIR *dirp);
+    extern	void rewinddir(DIR *dirp);
 
 #ifdef __cplusplus
 }

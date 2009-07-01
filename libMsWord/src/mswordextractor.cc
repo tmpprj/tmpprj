@@ -26,7 +26,7 @@ namespace MsWord
             throw std::runtime_error( "MsWord::Extract: src charset not found" );
 
         set_std_func();
-        f=fopen( strFileName.toStdString().c_str(),"rb" );
+        f=fopen( strFileName.toUtf8().constData(),"rb" );
         if ( !f )
             throw std::runtime_error( "MsWord::Extract: file not found" );
 
@@ -44,7 +44,7 @@ namespace MsWord
             throw std::runtime_error( "MsWord::ExtractXls: src charset not found" );
 
         set_std_func();
-        f=fopen( strFileName.toStdString().c_str(),"rb" );
+        f=fopen( strFileName.toUtf8().constData(),"rb" );
         if ( !f )
             throw std::runtime_error( "MsWord::ExtractXls: src charset not found" );
 
@@ -79,7 +79,7 @@ namespace MsWord
 
     void ExtractPpt( boost::function<void ( unsigned short* )> PptWriter, const QString& strFileName )
     {
-        FILE *f = fopen( strFileName.toStdString().c_str(),"rb"), *new_file, *ole_file;
+        FILE *f = fopen( strFileName.toUtf8().constData(),"rb"), *new_file, *ole_file;
 
         if(!f)
             throw std::runtime_error( "MsWord::ExtractPpt: src charset not found" );

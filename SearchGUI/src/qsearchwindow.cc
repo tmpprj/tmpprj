@@ -25,6 +25,7 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     showDefaultStatus();
 
     reloadSettings();
+    CLog(debug) << "GUI THREAD: " << QThread::currentThreadId() << std::endl;
 }
 
 QSearchWindow::~QSearchWindow()
@@ -53,10 +54,10 @@ void QSearchWindow::setupControls()
 void QSearchWindow::connectSearcher()
 {
     connect( &m_search, SIGNAL( fileMatched( const QString&, bool ) ), 
-            this, SLOT( fileMatched( const QString&, bool ) ) );
-    connect( &m_search, SIGNAL( searchDone() ), this, SLOT( searchDone() ) );
+            this, SLOT( fileMatched( const QString&, bool ) ), Qt::QueuedConnection );
+    connect( &m_search, SIGNAL( searchDone() ), this, SLOT( searchDone() ), Qt::QueuedConnection );
     connect( &m_search, SIGNAL( error( const QString&, const QString& ) ),
-            this, SLOT( searchError( const QString&, const QString& ) ) );
+            this, SLOT( searchError( const QString&, const QString& ) ), Qt::QueuedConnection );
 }
 
 void QSearchWindow::connectWidgets()

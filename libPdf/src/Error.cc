@@ -17,22 +17,22 @@
 #include <stdarg.h>
 #include "GlobalParams.h"
 #include "Error.h"
+#include "log.hpp"
 
 void CDECL error(int pos, char *msg, ...) {
-  va_list args;
+    va_list args;
 
-  // NB: this can be called before the globalParams object is created
-  if (globalParams.get() && globalParams->getErrQuiet()) {
-    return;
-  }
-  if (pos >= 0) {
-    fprintf(stderr, "Error (%d): ", pos);
-  } else {
-    fprintf(stderr, "Error: ");
-  }
-  va_start(args, msg);
-  vfprintf(stderr, msg, args);
-  va_end(args);
-  fprintf(stderr, "\n");
-  fflush(stderr);
+    // NB: this can be called before the globalParams object is created
+    if (globalParams.get() && globalParams->getErrQuiet()) {
+        return;
+    }
+    CLog(debug) << "libPdf::error: ";
+    if (pos >= 0)
+        CLog(debug) << "(" << pos << "):";
+
+    char buf[1024];
+    va_start(args, msg);
+    vsnprintf(buf, sizeof(buf), msg, args);
+    va_end(args);
+    CLog(debug) << buf;
 }

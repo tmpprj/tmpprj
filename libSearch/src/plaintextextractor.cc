@@ -8,6 +8,7 @@
 #include <boost/foreach.hpp>
 #include <exceptions.h>
 
+#include <QThread>
 
 boost::signals2::signal1< void, const CPlainTextExtractor::structFileData& >& CPlainTextExtractor::SigDataObtained()
 {
@@ -16,6 +17,7 @@ boost::signals2::signal1< void, const CPlainTextExtractor::structFileData& >& CP
 
 void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
 {
+    CLog( debug ) << "EXTRACTOR THREAD: " << QThread::currentThreadId() << std::endl;
     try
     {
         QTime timer;

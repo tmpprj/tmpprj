@@ -28,15 +28,17 @@ class LinkAction;
 class Outline {
 public:
 
-  Outline(Object *outlineObj, XRef *xref);
-  ~Outline();
+    Outline(Object *outlineObj, XRef *xref);
+    ~Outline();
 
-  GList *getItems() { return items; }
+    GList *getItems() {
+        return items;
+    }
 
 private:
 
-  GList *items;			// NULL if document has no outline
-				//   [OutlineItem]
+    GList *items;			// NULL if document has no outline
+    //   [OutlineItem]
 };
 
 //------------------------------------------------------------------------
@@ -44,33 +46,45 @@ private:
 class OutlineItem {
 public:
 
-  OutlineItem(Dict *dict, XRef *xrefA);
-  ~OutlineItem();
+    OutlineItem(Dict *dict, XRef *xrefA);
+    ~OutlineItem();
 
-  static GList *readItemList(Object *firstItemRef, Object *lastItemRef,
-			     XRef *xrefA);
+    static GList *readItemList(Object *firstItemRef, Object *lastItemRef,
+                               XRef *xrefA);
 
-  void open();
-  void close();
+    void open();
+    void close();
 
-  Unicode *getTitle() { return title; }
-  int getTitleLength() { return titleLen; }
-  LinkAction *getAction() { return action; }
-  GBool isOpen() { return startsOpen; }
-  GBool hasKids() { return firstRef.isRef(); }
-  GList *getKids() { return kids; }
+    Unicode *getTitle() {
+        return title;
+    }
+    int getTitleLength() {
+        return titleLen;
+    }
+    LinkAction *getAction() {
+        return action;
+    }
+    GBool isOpen() {
+        return startsOpen;
+    }
+    GBool hasKids() {
+        return firstRef.isRef();
+    }
+    GList *getKids() {
+        return kids;
+    }
 
 private:
 
-  XRef *xref;
-  Unicode *title;
-  int titleLen;
-  LinkAction *action;
-  Object firstRef;
-  Object lastRef;
-  Object nextRef;
-  GBool startsOpen;
-  GList *kids;			// NULL unless this item is open [OutlineItem]
+    XRef *xref;
+    Unicode *title;
+    int titleLen;
+    LinkAction *action;
+    Object firstRef;
+    Object lastRef;
+    Object nextRef;
+    GBool startsOpen;
+    GList *kids;			// NULL unless this item is open [OutlineItem]
 };
 
 #endif

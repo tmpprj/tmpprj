@@ -23,19 +23,24 @@ class CLog
         return file;
     }
     
-    boost::mutex m_mtxLock;
+    boost::mutex& GetLock()
+    {
+        static boost::mutex mtxLock;
+        return mtxLock;
+    }
 
 public:
+
     CLog( LogLevelManip_t m )
     {
-        m_mtxLock.lock();
+        GetLock().lock();
 
         GetFile() << QTime::currentTime().toString( "HH:mm:ss:zzz" ).toStdString() << " ["<< m( *this ) << "]: ";
     }
 
     virtual ~CLog()
     {
-        m_mtxLock.unlock();
+        GetLock().unlock();
 
         GetFile() << std::endl;
     }

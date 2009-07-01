@@ -99,38 +99,42 @@ extern char *getLine(char *buf, int size, FILE *f);
 class GDirEntry {
 public:
 
-  GDirEntry(char *dirPath, char *nameA, GBool doStat);
-  ~GDirEntry();
-  GString *getName() { return name; }
-  GBool isDir() { return dir; }
+    GDirEntry(char *dirPath, char *nameA, GBool doStat);
+    ~GDirEntry();
+    GString *getName() {
+        return name;
+    }
+    GBool isDir() {
+        return dir;
+    }
 
 private:
 
-  GString *name;		// dir/file name
-  GBool dir;			// is it a directory?
+    GString *name;		// dir/file name
+    GBool dir;			// is it a directory?
 };
 
 class GDir {
 public:
 
-  GDir(char *name, GBool doStatA = gTrue);
-  ~GDir();
-  GDirEntry *getNextEntry();
-  void rewind();
+    GDir(char *name, GBool doStatA = gTrue);
+    ~GDir();
+    GDirEntry *getNextEntry();
+    void rewind();
 
 private:
 
-  GString *path;		// directory path
-  GBool doStat;			// call stat() for each entry?
+    GString *path;		// directory path
+    GBool doStat;			// call stat() for each entry?
 #if defined(WIN32)
-  WIN32_FIND_DATAA ffd;
-  HANDLE hnd;
+    WIN32_FIND_DATAA ffd;
+    HANDLE hnd;
 #elif defined(ACORN)
 #elif defined(MACOS)
 #else
-  DIR *dir;			// the DIR structure from opendir()
+    DIR *dir;			// the DIR structure from opendir()
 #ifdef VMS
-  GBool needParent;		// need to return an entry for [-]
+    GBool needParent;		// need to return an entry for [-]
 #endif
 #endif
 };

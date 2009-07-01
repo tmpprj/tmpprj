@@ -31,20 +31,20 @@ struct GfxFontCIDWidths;
 //------------------------------------------------------------------------
 
 enum GfxFontType {
-  //----- Gfx8BitFont
-  fontUnknownType,
-  fontType1,
-  fontType1C,
-  fontType1COT,
-  fontType3,
-  fontTrueType,
-  fontTrueTypeOT,
-  //----- GfxCIDFont
-  fontCIDType0,
-  fontCIDType0C,
-  fontCIDType0COT,
-  fontCIDType2,
-  fontCIDType2OT
+    //----- Gfx8BitFont
+    fontUnknownType,
+    fontType1,
+    fontType1C,
+    fontType1COT,
+    fontType3,
+    fontTrueType,
+    fontTrueTypeOT,
+    //----- GfxCIDFont
+    fontCIDType0,
+    fontCIDType0C,
+    fontCIDType0COT,
+    fontCIDType2,
+    fontCIDType2OT
 };
 
 //------------------------------------------------------------------------
@@ -52,27 +52,27 @@ enum GfxFontType {
 //------------------------------------------------------------------------
 
 struct GfxFontCIDWidthExcep {
-  CID first;			// this record applies to
-  CID last;			//   CIDs <first>..<last>
-  double width;			// char width
+    CID first;			// this record applies to
+    CID last;			//   CIDs <first>..<last>
+    double width;			// char width
 };
 
 struct GfxFontCIDWidthExcepV {
-  CID first;			// this record applies to
-  CID last;			//   CIDs <first>..<last>
-  double height;		// char height
-  double vx, vy;		// origin position
+    CID first;			// this record applies to
+    CID last;			//   CIDs <first>..<last>
+    double height;		// char height
+    double vx, vy;		// origin position
 };
 
 struct GfxFontCIDWidths {
-  double defWidth;		// default char width
-  double defHeight;		// default char height
-  double defVY;			// default origin position
-  GfxFontCIDWidthExcep *exceps;	// exceptions
-  int nExceps;			// number of valid entries in exceps
-  GfxFontCIDWidthExcepV *	// exceptions for vertical font
+    double defWidth;		// default char width
+    double defHeight;		// default char height
+    double defVY;			// default origin position
+    GfxFontCIDWidthExcep *exceps;	// exceptions
+    int nExceps;			// number of valid entries in exceps
+    GfxFontCIDWidthExcepV *	// exceptions for vertical font
     excepsV;
-  int nExcepsV;			// number of valid entries in excepsV
+    int nExcepsV;			// number of valid entries in excepsV
 };
 
 //------------------------------------------------------------------------
@@ -88,105 +88,150 @@ struct GfxFontCIDWidths {
 class GfxFont {
 public:
 
-  // Build a GfxFont object.
-  static GfxFont *makeFont(XRef *xref, char *tagA, Ref idA, Dict *fontDict);
+    // Build a GfxFont object.
+    static GfxFont *makeFont(XRef *xref, char *tagA, Ref idA, Dict *fontDict);
 
-  GfxFont(char *tagA, Ref idA, GString *nameA);
+    GfxFont(char *tagA, Ref idA, GString *nameA);
 
-  virtual ~GfxFont();
+    virtual ~GfxFont();
 
-  GBool isOk() { return ok; }
+    GBool isOk() {
+        return ok;
+    }
 
-  // Get font tag.
-  GString *getTag() { return tag; }
+    // Get font tag.
+    GString *getTag() {
+        return tag;
+    }
 
-  // Get font dictionary ID.
-  Ref *getID() { return &id; }
+    // Get font dictionary ID.
+    Ref *getID() {
+        return &id;
+    }
 
-  // Does this font match the tag?
-  GBool matches(char *tagA) { return !tag->cmp(tagA); }
+    // Does this font match the tag?
+    GBool matches(char *tagA) {
+        return !tag->cmp(tagA);
+    }
 
-  // Get base font name.
-  GString *getName() { return name; }
+    // Get base font name.
+    GString *getName() {
+        return name;
+    }
 
-  // Get the original font name (ignornig any munging that might have
-  // been done to map to a canonical Base-14 font name).
-  GString *getOrigName() { return origName; }
+    // Get the original font name (ignornig any munging that might have
+    // been done to map to a canonical Base-14 font name).
+    GString *getOrigName() {
+        return origName;
+    }
 
-  // Get font type.
-  GfxFontType getType() { return type; }
-  virtual GBool isCIDFont() { return gFalse; }
+    // Get font type.
+    GfxFontType getType() {
+        return type;
+    }
+    virtual GBool isCIDFont() {
+        return gFalse;
+    }
 
-  // Get embedded font ID, i.e., a ref for the font file stream.
-  // Returns false if there is no embedded font.
-  GBool getEmbeddedFontID(Ref *embID)
-    { *embID = embFontID; return embFontID.num >= 0; }
+    // Get embedded font ID, i.e., a ref for the font file stream.
+    // Returns false if there is no embedded font.
+    GBool getEmbeddedFontID(Ref *embID)
+    {
+        *embID = embFontID;
+        return embFontID.num >= 0;
+    }
 
-  // Get the PostScript font name for the embedded font.  Returns
-  // NULL if there is no embedded font.
-  GString *getEmbeddedFontName() { return embFontName; }
+    // Get the PostScript font name for the embedded font.  Returns
+    // NULL if there is no embedded font.
+    GString *getEmbeddedFontName() {
+        return embFontName;
+    }
 
-  // Get the name of the external font file.  Returns NULL if there
-  // is no external font file.
-  GString *getExtFontFile() { return extFontFile; }
+    // Get the name of the external font file.  Returns NULL if there
+    // is no external font file.
+    GString *getExtFontFile() {
+        return extFontFile;
+    }
 
-  // Get font descriptor flags.
-  int getFlags() { return flags; }
-  GBool isFixedWidth() { return flags & fontFixedWidth; }
-  GBool isSerif() { return flags & fontSerif; }
-  GBool isSymbolic() { return flags & fontSymbolic; }
-  GBool isItalic() { return flags & fontItalic; }
-  GBool isBold() { return flags & fontBold; }
+    // Get font descriptor flags.
+    int getFlags() {
+        return flags;
+    }
+    GBool isFixedWidth() {
+        return flags & fontFixedWidth;
+    }
+    GBool isSerif() {
+        return flags & fontSerif;
+    }
+    GBool isSymbolic() {
+        return flags & fontSymbolic;
+    }
+    GBool isItalic() {
+        return flags & fontItalic;
+    }
+    GBool isBold() {
+        return flags & fontBold;
+    }
 
-  // Return the font matrix.
-  double *getFontMatrix() { return fontMat; }
+    // Return the font matrix.
+    double *getFontMatrix() {
+        return fontMat;
+    }
 
-  // Return the font bounding box.
-  double *getFontBBox() { return fontBBox; }
+    // Return the font bounding box.
+    double *getFontBBox() {
+        return fontBBox;
+    }
 
-  // Return the ascent and descent values.
-  double getAscent() { return ascent; }
-  double getDescent() { return descent; }
+    // Return the ascent and descent values.
+    double getAscent() {
+        return ascent;
+    }
+    double getDescent() {
+        return descent;
+    }
 
-  // Return the writing mode (0=horizontal, 1=vertical).
-  virtual int getWMode() { return 0; }
+    // Return the writing mode (0=horizontal, 1=vertical).
+    virtual int getWMode() {
+        return 0;
+    }
 
-  // Read an external or embedded font file into a buffer.
-  char *readExtFontFile(int *len);
-  char *readEmbFontFile(XRef *xref, int *len);
+    // Read an external or embedded font file into a buffer.
+    char *readExtFontFile(int *len);
+    char *readEmbFontFile(XRef *xref, int *len);
 
-  // Get the next char from a string <s> of <len> bytes, returning the
-  // char <code>, its Unicode mapping <u>, its displacement vector
-  // (<dx>, <dy>), and its origin offset vector (<ox>, <oy>).  <uSize>
-  // is the number of entries available in <u>, and <uLen> is set to
-  // the number actually used.  Returns the number of bytes used by
-  // the char code.
-  virtual int getNextChar(char *s, int len, CharCode *code,
-			  Unicode *u, int uSize, int *uLen,
-			  double *dx, double *dy, double *ox, double *oy) = 0;
+    // Get the next char from a string <s> of <len> bytes, returning the
+    // char <code>, its Unicode mapping <u>, its displacement vector
+    // (<dx>, <dy>), and its origin offset vector (<ox>, <oy>).  <uSize>
+    // is the number of entries available in <u>, and <uLen> is set to
+    // the number actually used.  Returns the number of bytes used by
+    // the char code.
+    virtual int getNextChar(char *s, int len, CharCode *code,
+                            Unicode *u, int uSize, int *uLen,
+                            double *dx, double *dy, double *ox, double *oy) = 0;
 
 protected:
 
-  void readFontDescriptor(XRef *xref, Dict *fontDict);
-  CharCodeToUnicode *readToUnicodeCMap(Dict *fontDict, int nBits,
-				       CharCodeToUnicode *ctu);
-  void findExtFontFile();
+    void readFontDescriptor(XRef *xref, Dict *fontDict);
+    CharCodeToUnicode *readToUnicodeCMap(Dict *fontDict, int nBits,
+                                         CharCodeToUnicode *ctu);
+    void findExtFontFile();
 
-  GString *tag;			// PDF font tag
-  Ref id;			// reference (used as unique ID)
-  GString *name;		// font name
-  GString *origName;		// original font name
-  GfxFontType type;		// type of font
-  int flags;			// font descriptor flags
-  GString *embFontName;		// name of embedded font
-  Ref embFontID;		// ref to embedded font file stream
-  GString *extFontFile;		// external font file name
-  double fontMat[6];		// font matrix (Type 3 only)
-  double fontBBox[4];		// font bounding box (Type 3 only)
-  double missingWidth;		// "default" width
-  double ascent;		// max height above baseline
-  double descent;		// max depth below baseline
-  GBool ok;
+    GString *tag;			// PDF font tag
+    Ref id;			// reference (used as unique ID)
+    GString *name;		// font name
+    GString *origName;		// original font name
+    GfxFontType type;		// type of font
+    int flags;			// font descriptor flags
+    GString *embFontName;		// name of embedded font
+    Ref embFontID;		// ref to embedded font file stream
+    GString *extFontFile;		// external font file name
+    double fontMat[6];		// font matrix (Type 3 only)
+    double fontBBox[4];		// font bounding box (Type 3 only)
+    double missingWidth;		// "default" width
+    double ascent;		// max height above baseline
+    double descent;		// max depth below baseline
+    GBool ok;
 };
 
 //------------------------------------------------------------------------
@@ -196,57 +241,67 @@ protected:
 class Gfx8BitFont: public GfxFont {
 public:
 
-  Gfx8BitFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
-	      GfxFontType typeA, Dict *fontDict);
+    Gfx8BitFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
+                GfxFontType typeA, Dict *fontDict);
 
-  virtual ~Gfx8BitFont();
+    virtual ~Gfx8BitFont();
 
-  virtual int getNextChar(char *s, int len, CharCode *code,
-			  Unicode *u, int uSize, int *uLen,
-			  double *dx, double *dy, double *ox, double *oy);
+    virtual int getNextChar(char *s, int len, CharCode *code,
+                            Unicode *u, int uSize, int *uLen,
+                            double *dx, double *dy, double *ox, double *oy);
 
-  // Return the encoding.
-  char **getEncoding() { return enc; }
+    // Return the encoding.
+    char **getEncoding() {
+        return enc;
+    }
 
-  // Return the Unicode map.
-  CharCodeToUnicode *getToUnicode();
+    // Return the Unicode map.
+    CharCodeToUnicode *getToUnicode();
 
-  // Return the character name associated with <code>.
-  char *getCharName(int code) { return enc[code]; }
+    // Return the character name associated with <code>.
+    char *getCharName(int code) {
+        return enc[code];
+    }
 
-  // Returns true if the PDF font specified an encoding.
-  GBool getHasEncoding() { return hasEncoding; }
+    // Returns true if the PDF font specified an encoding.
+    GBool getHasEncoding() {
+        return hasEncoding;
+    }
 
-  // Returns true if the PDF font specified MacRomanEncoding.
-  GBool getUsesMacRomanEnc() { return usesMacRomanEnc; }
+    // Returns true if the PDF font specified MacRomanEncoding.
+    GBool getUsesMacRomanEnc() {
+        return usesMacRomanEnc;
+    }
 
-  // Get width of a character.
-  double getWidth(Guchar c) { return widths[c]; }
+    // Get width of a character.
+    double getWidth(Guchar c) {
+        return widths[c];
+    }
 
-  // Return a char code-to-GID mapping for the provided font file.
-  // (This is only useful for TrueType fonts.)
-  Gushort *getCodeToGIDMap(FoFiTrueType *ff);
+    // Return a char code-to-GID mapping for the provided font file.
+    // (This is only useful for TrueType fonts.)
+    Gushort *getCodeToGIDMap(FoFiTrueType *ff);
 
-  // Return the Type 3 CharProc dictionary, or NULL if none.
-  Dict *getCharProcs();
+    // Return the Type 3 CharProc dictionary, or NULL if none.
+    Dict *getCharProcs();
 
-  // Return the Type 3 CharProc for the character associated with <code>.
-  Object *getCharProc(int code, Object *proc);
+    // Return the Type 3 CharProc for the character associated with <code>.
+    Object *getCharProc(int code, Object *proc);
 
-  // Return the Type 3 Resources dictionary, or NULL if none.
-  Dict *getResources();
+    // Return the Type 3 Resources dictionary, or NULL if none.
+    Dict *getResources();
 
 private:
 
-  char *enc[256];		// char code --> char name
-  char encFree[256];		// boolean for each char name: if set,
-				//   the string is malloc'ed
-  CharCodeToUnicode *ctu;	// char code --> Unicode
-  GBool hasEncoding;
-  GBool usesMacRomanEnc;
-  double widths[256];		// character widths
-  Object charProcs;		// Type 3 CharProcs dictionary
-  Object resources;		// Type 3 Resources dictionary
+    char *enc[256];		// char code --> char name
+    char encFree[256];		// boolean for each char name: if set,
+    //   the string is malloc'ed
+    CharCodeToUnicode *ctu;	// char code --> Unicode
+    GBool hasEncoding;
+    GBool usesMacRomanEnc;
+    double widths[256];		// character widths
+    Object charProcs;		// Type 3 CharProcs dictionary
+    Object resources;		// Type 3 Resources dictionary
 };
 
 //------------------------------------------------------------------------
@@ -256,39 +311,45 @@ private:
 class GfxCIDFont: public GfxFont {
 public:
 
-  GfxCIDFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
-	     Dict *fontDict);
+    GfxCIDFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
+               Dict *fontDict);
 
-  virtual ~GfxCIDFont();
+    virtual ~GfxCIDFont();
 
-  virtual GBool isCIDFont() { return gTrue; }
+    virtual GBool isCIDFont() {
+        return gTrue;
+    }
 
-  virtual int getNextChar(char *s, int len, CharCode *code,
-			  Unicode *u, int uSize, int *uLen,
-			  double *dx, double *dy, double *ox, double *oy);
+    virtual int getNextChar(char *s, int len, CharCode *code,
+                            Unicode *u, int uSize, int *uLen,
+                            double *dx, double *dy, double *ox, double *oy);
 
-  // Return the writing mode (0=horizontal, 1=vertical).
-  virtual int getWMode();
+    // Return the writing mode (0=horizontal, 1=vertical).
+    virtual int getWMode();
 
-  // Return the Unicode map.
-  CharCodeToUnicode *getToUnicode();
+    // Return the Unicode map.
+    CharCodeToUnicode *getToUnicode();
 
-  // Get the collection name (<registry>-<ordering>).
-  GString *getCollection();
+    // Get the collection name (<registry>-<ordering>).
+    GString *getCollection();
 
-  // Return the CID-to-GID mapping table.  These should only be called
-  // if type is fontCIDType2.
-  Gushort *getCIDToGID() { return cidToGID; }
-  int getCIDToGIDLen() { return cidToGIDLen; }
+    // Return the CID-to-GID mapping table.  These should only be called
+    // if type is fontCIDType2.
+    Gushort *getCIDToGID() {
+        return cidToGID;
+    }
+    int getCIDToGIDLen() {
+        return cidToGIDLen;
+    }
 
 private:
 
-  CMap *cMap;			// char code --> CID
-  CharCodeToUnicode *ctu;	// CID --> Unicode
-  GfxFontCIDWidths widths;	// character widths
-  Gushort *cidToGID;		// CID --> GID mapping (for embedded
-				//   TrueType fonts)
-  int cidToGIDLen;
+    CMap *cMap;			// char code --> CID
+    CharCodeToUnicode *ctu;	// CID --> Unicode
+    GfxFontCIDWidths widths;	// character widths
+    Gushort *cidToGID;		// CID --> GID mapping (for embedded
+    //   TrueType fonts)
+    int cidToGIDLen;
 };
 
 //------------------------------------------------------------------------
@@ -298,23 +359,27 @@ private:
 class GfxFontDict {
 public:
 
-  // Build the font dictionary, given the PDF font dictionary.
-  GfxFontDict(XRef *xref, Ref *fontDictRef, Dict *fontDict);
+    // Build the font dictionary, given the PDF font dictionary.
+    GfxFontDict(XRef *xref, Ref *fontDictRef, Dict *fontDict);
 
-  // Destructor.
-  ~GfxFontDict();
+    // Destructor.
+    ~GfxFontDict();
 
-  // Get the specified font.
-  GfxFont *lookup(char *tag);
+    // Get the specified font.
+    GfxFont *lookup(char *tag);
 
-  // Iterative access.
-  int getNumFonts() { return numFonts; }
-  GfxFont *getFont(int i) { return fonts[i]; }
+    // Iterative access.
+    int getNumFonts() {
+        return numFonts;
+    }
+    GfxFont *getFont(int i) {
+        return fonts[i];
+    }
 
 private:
 
-  GfxFont **fonts;		// list of fonts
-  int numFonts;			// number of fonts
+    GfxFont **fonts;		// list of fonts
+    int numFonts;			// number of fonts
 };
 
 #endif

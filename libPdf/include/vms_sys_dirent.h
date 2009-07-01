@@ -21,26 +21,26 @@ extern "C" {
 
 #define dirent GOO_dirent
 
-struct	dirent {
-	long		d_off;		/* offset of next disk dir entry */
-	unsigned long	d_fileno;	/* file number of entry */
-	unsigned short	d_reclen;	/* length of this record */
-	unsigned short	d_namlen;	/* length of string in d_name */
-	char		d_name[255+1];	/* name (up to MAXNAMLEN + 1) */
-};
+    struct	dirent {
+        long		d_off;		/* offset of next disk dir entry */
+        unsigned long	d_fileno;	/* file number of entry */
+        unsigned short	d_reclen;	/* length of this record */
+        unsigned short	d_namlen;	/* length of string in d_name */
+        char		d_name[255+1];	/* name (up to MAXNAMLEN + 1) */
+    };
 
 #ifndef	_POSIX_SOURCE
-/*
- * It's unlikely to change, but make sure that sizeof d_name above is
- * at least MAXNAMLEN + 1 (more may be added for padding).
- */
+    /*
+     * It's unlikely to change, but make sure that sizeof d_name above is
+     * at least MAXNAMLEN + 1 (more may be added for padding).
+     */
 #define	MAXNAMLEN	255
-/*
- * The macro DIRSIZ(dp) gives the minimum amount of space required to represent
- * a directory entry.  For any directory entry dp->d_reclen >= DIRSIZ(dp).
- * Specific filesystem types may use this macro to construct the value
- * for d_reclen.
- */
+    /*
+     * The macro DIRSIZ(dp) gives the minimum amount of space required to represent
+     * a directory entry.  For any directory entry dp->d_reclen >= DIRSIZ(dp).
+     * Specific filesystem types may use this macro to construct the value
+     * for d_reclen.
+     */
 #undef	DIRSIZ
 #define	DIRSIZ(dp) \
 	(((sizeof(struct dirent) - (MAXNAMLEN+1) + ((dp)->d_namlen+1)) +3) & ~3)

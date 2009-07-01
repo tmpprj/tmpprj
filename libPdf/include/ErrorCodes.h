@@ -16,10 +16,10 @@
 #define errBadCatalog       2	// couldn't read the page catalog
 
 #define errDamaged          3	// PDF file was damaged and couldn't be
-				// repaired
+// repaired
 
 #define errEncrypted        4	// file was encrypted and password was
-				// incorrect or not supplied
+// incorrect or not supplied
 
 #define errHighlightFile    5	// nonexistent or invalid highlight file
 
