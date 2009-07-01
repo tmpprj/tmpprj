@@ -36,6 +36,16 @@ public:
     virtual ~ITextExtractor(){}
 
     virtual void Extract( const QString& strFileNmae, QString& strText ) = 0;
+
+    const QString& GetName()
+    {
+        return m_strName;
+    }
+
+protected:
+
+    QString m_strName;
+
 };
 
 class CTextExtractorFactory

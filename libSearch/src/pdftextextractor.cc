@@ -4,6 +4,7 @@
 
 CPdfTextExtractor::CPdfTextExtractor()
 {
+    m_strName = "PDF Parser";
 }
 
 void CPdfTextExtractor::WriterFunc( QString& strBuf, unsigned int* data, size_t stSize )

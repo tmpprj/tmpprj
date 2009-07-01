@@ -106,7 +106,7 @@ void QSearchWindow::browse()
 
 void QSearchWindow::fileMatched( const QString& strFilename, bool bFound )
 {
-    CLog(debug) << __FUNCTION__ << std::endl;
+    CLog(debug) << __FUNCTION__;
     showSearchStatus( strFilename );
 
     if( bFound )
@@ -115,7 +115,7 @@ void QSearchWindow::fileMatched( const QString& strFilename, bool bFound )
 
 void QSearchWindow::searchDone()
 {
-    CLog(debug) << __FUNCTION__ << std::endl;
+    CLog(debug) << __FUNCTION__;
     m_progressMovie.stop();
     showDefaultStatus();
 }

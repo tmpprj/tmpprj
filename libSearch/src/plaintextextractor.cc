@@ -18,28 +18,58 @@ void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
 {
     try
     {
+        QTime timer;
+        timer.start();
+        
         //Process file
         QString strContent;
-        TextExtractorFactory::Instance().GetExtractor( strFileName )->Extract( strFileName, strContent );
+        
+        ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
+        
+        CLog(debug) << "CPlainTextExtractor::WorkerFunc: processing " << strFileName << " with " << pExtractor->GetName();
+        pExtractor->Extract( strFileName, strContent );
+
         structFileData Data = { strFileName, strContent };
         m_sigDataObtained( Data );
+        
+        CLog(debug) << "CPlainTextExtractor::WorkerFunc: (" << pExtractor->GetName() << "," << strFileName << ") time elapsed: " << timer.elapsed() << " ms";
     }
     catch( CUserLevelError& e )
     {
         SigError()( strFileName, e.whatQ() );
+        CLog(error) << "CPlainTextExtractor::WorkerFunc: " << e.what();
+    }
+    catch( std::exception& e )
+    {
+        CLog(error) << "CPlainTextExtractor::WorkerFunc: (" << strFileName.toStdString() << "): " << e.what();
+    }
+    catch( boost::thread_interrupted& )
+    {
+        throw;
+    }
+    catch( ... )
+    {
+        CLog(error) << "CPlainTextExtractor::WorkerFunc: (" << strFileName.toStdString() << "): unknown error";
     }
 }
 
 CTextExtractorFactory::CTextExtractorFactory()
     : m_pDefaultExtractor( NULL )
 {
-    RegisterName( "TXT Parser", new CTxtTextExtractor );
-    RegisterName( "DOC Parser", new CMsWordTextExtractor );
-    RegisterName( "XLS Parser", new CXlsTextExtractor );
-    RegisterName( "PPT Parser", new CPptTextExtractor );
-    RegisterName( "PDF Parser", new CPdfTextExtractor );
+    ITextExtractor* pExt = new CTxtTextExtractor;
+    pExt = new CMsWordTextExtractor;
+    RegisterName( pExt->GetName(), pExt );
+    pExt = new CXlsTextExtractor;
+    RegisterName( pExt->GetName(), pExt );
+    pExt = new CPptTextExtractor;
+    RegisterName( pExt->GetName(), pExt );
+    pExt = new CPdfTextExtractor;
+    RegisterName( pExt->GetName(), pExt );
 
-    m_pDefaultExtractor = m_mapNameExtractor[ "TXT Parser" ];
+
+    pExt = new CTxtTextExtractor;
+    RegisterName( pExt->GetName(), pExt );
+    m_pDefaultExtractor = pExt;
 }
 
 CTextExtractorFactory::~CTextExtractorFactory()
@@ -66,6 +96,7 @@ ITextExtractor* CTextExtractorFactory::GetExtractor( const QString& strFileName 
 
 bool CTextExtractorFactory::RegisterName( const QString& strName, ITextExtractor* pTextExtractor )
 {
+    CLog(debug) << "CTextExtractorFactory::RegisterName: " << strName << " registred";
     MapNameExtractor_t::iterator p = m_mapNameExtractor.find( strName );
 
     if( p != m_mapNameExtractor.end() )
@@ -77,6 +108,7 @@ bool CTextExtractorFactory::RegisterName( const QString& strName, ITextExtractor
 
 bool CTextExtractorFactory::RegisterExtension( const QString& strExtension, const QString& strName )
 {
+    CLog(debug) << "CTextExtractorFactory::RegisterExtension: " << strExtension << ":" << strName << " registred";
     if( m_mapNameExtractor.count( strName ) == 0 )
         return false;
 

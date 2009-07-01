@@ -32,18 +32,18 @@ void QSearchFacade::OnDataObtained( const CPlainTextExtractor::structFileData& f
 
 void QSearchFacade::OnFileMatched( const CPatternMatcher::structFindData& findData )
 {
-    CLog(debug) << __FUNCTION__ << std::endl;
+    CLog(debug) << __FUNCTION__;
     Q_EMIT fileMatched( findData.strFileName, findData.bFound );
 }
 
 void QSearchFacade::OnSearchDone()
 {
-    CLog(debug) << __FUNCTION__ << std::endl;
+    CLog(debug) << __FUNCTION__;
     Q_EMIT searchDone();
 }
 
 void QSearchFacade::OnError( const QString& strFileName, const QString& strError )
 {
-    CLog(debug) << __FUNCTION__ << std::endl;
+    CLog(debug) << __FUNCTION__;
     Q_EMIT error( strFileName, strError );
 }

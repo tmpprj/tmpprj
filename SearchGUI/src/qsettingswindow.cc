@@ -53,7 +53,7 @@ void QSettingsWindow::SaveSettings()
         QComboBox* pParserCombo = dynamic_cast< QComboBox* >( tableExtensions->cellWidget( i, 1 ) );
         if( !pParserCombo )
         {
-            CLog(error) << "QSettingsWindow::SaveSettings: pParserCombo is NULL" << std::endl;
+            CLog(error) << "QSettingsWindow::SaveSettings: pParserCombo is NULL";
             continue;
         }
         QString strParser = pParserCombo->currentText();
@@ -68,7 +68,7 @@ void QSettingsWindow::InitParserCombo( QComboBox* pParserCombo )
     const CTextExtractorFactory::MapNameExtractor_t& mapNameExtractor = 
         TextExtractorFactory::Instance().GetMapNameExtractor();
 
-    CLog(debug) << "QSettingsWindow::InitParserCombo: Count: " << mapNameExtractor.size() << std::endl;
+    CLog(debug) << "QSettingsWindow::InitParserCombo: Count: " << mapNameExtractor.size();
     FOREACH( p, mapNameExtractor )
         pParserCombo->addItem( p->first );
 }

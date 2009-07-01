@@ -46,6 +46,11 @@ public:
         return *this;
     }
 
+    CLog& operator<<( const QString& str )
+    {
+        GetFile() << str.toStdString();
+        return *this;
+    }
 
     CLog& operator<<( Manip_t m )
     {

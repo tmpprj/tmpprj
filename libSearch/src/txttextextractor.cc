@@ -11,6 +11,7 @@
 
 void CTxtTextExtractor::Extract( const QString& strFileName, QString& strText )
 {
+    CLog(debug) << "CTxtTextExtractor::Extract: " << strFileName;
     std::string strLine;
     QFile file( strFileName );
     if( !file.open(QIODevice::ReadOnly) )
@@ -29,7 +30,7 @@ void CTxtTextExtractor::Extract( const QString& strFileName, QString& strText )
 
     QTextCodec* pTextCodec = strCharset.empty() ? QTextCodec::codecForLocale() : QTextCodec::codecForName( strCharset.c_str() );
     if( NULL == pTextCodec )
-         CLog(debug) << "Cant get codec" << std::endl;
+         CLog(debug) << "Cant get codec";
     else
     {
         vecBuf.resize( 1024000 );
