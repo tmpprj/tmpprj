@@ -26,10 +26,9 @@ void LoadStringListToCombo( QComboBox* pComboBox, const QStringList& list, const
 {
     pComboBox->clear();
     BOOST_FOREACH( QString str, list )
-        if( !str.isEmpty() )
-            pComboBox->addItem( str );
+        pComboBox->addItem( str );
 
-    if( pComboBox->count() == 0 && !strDefault.isEmpty() )
+    if( pComboBox->count() == 0 )
         pComboBox->addItem( strDefault );
 }
 

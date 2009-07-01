@@ -10,6 +10,7 @@ namespace SearchGUI
     {
         ConfParam< QMap< QString, QVariant > > mapExtensions;
         ConfParam< bool > bCaseSensitive;
+        ConfParam< bool > bRecursive;
         ConfParam< QStringList > listMasks;
         ConfParam< QStringList > listSearches;
         ConfParam< QStringList > listSearchPaths;

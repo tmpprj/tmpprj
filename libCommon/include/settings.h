@@ -11,7 +11,7 @@ template < class T > class ConfParam
     T m_value;
 
 public:
-    ConfParam( const QString& strKey, const QString& strDefault = "" )
+    ConfParam( const QString& strKey, const QVariant& strDefault = QVariant() )
         : m_strKey( strKey )
     {
         QVariant var = Settings().value( strKey, strDefault );
