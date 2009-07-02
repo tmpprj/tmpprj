@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <xls.h>
 #include <ppt.h>
+#include <log.hpp>
 
 int signature_check = 1;
 int forced_charset = 0; /* Flag which disallow rtf parser override charset*/
@@ -20,13 +21,22 @@ namespace MsWord
 {
     void Extract( boost::function<void ( unsigned short* )> Writer, const QString& strFileName )
     {
-        FILE *f;
+        FILE *f = NULL;
         source_charset = read_charset( source_csname );
         if ( !source_charset )
             throw std::runtime_error( "MsWord::Extract: src charset not found" );
 
         set_std_func();
-        f=fopen( strFileName.toUtf8().constData(),"rb" );
+
+#ifdef WIN32
+        wchar_t filename[strFileName.size()*4+1];
+        size_t stCount = strFileName.toWCharArray( filename );
+        filename[stCount] = 0;
+        if( stCount > 0 )
+            f = _wfopen( filename, L"rb");
+#else
+        f = fopen( strFileName.toUtf8().constData(),"rb");
+#endif
         if ( !f )
             throw std::runtime_error( "MsWord::Extract: file not found" );
 
@@ -37,14 +47,22 @@ namespace MsWord
 
     void ExtractXls( boost::function<void ( unsigned short* )> XlsWriter, const QString& strFileName )
     {
-        FILE *f, *new_file, *ole_file;
+        FILE *f = NULL, *new_file, *ole_file;
 
         source_charset = read_charset( source_csname );
         if ( !source_charset )
             throw std::runtime_error( "MsWord::ExtractXls: src charset not found" );
 
         set_std_func();
-        f=fopen( strFileName.toUtf8().constData(),"rb" );
+#ifdef WIN32
+        wchar_t filename[strFileName.size()*4+1];
+        size_t stCount = strFileName.toWCharArray( filename );
+        filename[stCount] = 0;
+        if( stCount > 0 )
+            f = _wfopen( filename, L"rb");
+#else
+        f = fopen( strFileName.toUtf8().constData(),"rb");
+#endif
         if ( !f )
             throw std::runtime_error( "MsWord::ExtractXls: src charset not found" );
 
@@ -79,7 +97,17 @@ namespace MsWord
 
     void ExtractPpt( boost::function<void ( unsigned short* )> PptWriter, const QString& strFileName )
     {
-        FILE *f = fopen( strFileName.toUtf8().constData(),"rb"), *new_file, *ole_file;
+        FILE *f = NULL, *new_file, *ole_file;
+
+#ifdef WIN32
+        wchar_t filename[strFileName.size()*4+1];
+        size_t stCount = strFileName.toWCharArray( filename );
+        filename[stCount] = 0;
+        if( stCount > 0 )
+            f = _wfopen( filename, L"rb");
+#else
+        f = fopen( strFileName.toUtf8().constData(),"rb");
+#endif
 
         if(!f)
             throw std::runtime_error( "MsWord::ExtractPpt: src charset not found" );

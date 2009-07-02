@@ -39,7 +39,15 @@ void Extract( boost::function<void (unsigned int*, size_t)> Writer, const QStrin
     if ( !(uMap = globalParams->getTextEncoding()) )
         throw std::runtime_error( "PdfExtractor: unable to read file: " + strFileName.toStdString() );
 
-    pDoc = std::auto_ptr<PDFDoc>( new PDFDoc(fileName, NULL, NULL) );
+#ifdef WIN32
+        boost::ignore_unused_variable_warning( fileName );
+        wchar_t filename[strFileName.size()*4+1];
+        size_t stCount = strFileName.toWCharArray( filename );
+        pDoc = std::auto_ptr<PDFDoc>( new PDFDoc(filename, stCount, NULL, NULL, NULL) );
+#else
+        pDoc = std::auto_ptr<PDFDoc>( new PDFDoc(fileName, NULL, NULL) );
+#endif
+
     if (!pDoc->isOk())
         throw std::runtime_error( "PdfExtractor: unable to read file: " + strFileName.toStdString() );
 

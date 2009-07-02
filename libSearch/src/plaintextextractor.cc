@@ -33,13 +33,13 @@ void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
 
         ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
         
-        CLog(debug) << "CPlainTextExtractor::WorkerFunc: processing " << strFileName << " with " << pExtractor->GetName();
+        CLog(debug) << "CPlainTextExtractor::WorkerFunc: processing " << qPrintable(strFileName) << " with " << pExtractor->GetName();
         pExtractor->Extract( strFileName, strContent );
         
         structFileData Data = { strFileName, strContent };
         m_sigDataObtained( Data );
         
-        CLog(debug) << "CPlainTextExtractor::WorkerFunc: (" << pExtractor->GetName() << "," << strFileName << ") time elapsed: " << timer.elapsed() << " ms";
+        CLog(debug) << "CPlainTextExtractor::WorkerFunc: (" << pExtractor->GetName() << "," << qPrintable(strFileName) << ") time elapsed: " << timer.elapsed() << " ms";
     }
     catch( CUserLevelError& e )
     {
@@ -48,7 +48,7 @@ void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
     }
     catch( std::exception& e )
     {
-        CLog(error) << "CPlainTextExtractor::WorkerFunc: (" << strFileName.toStdString() << "): " << e.what();
+        CLog(error) << "CPlainTextExtractor::WorkerFunc: (" << qPrintable(strFileName) << "): " << e.what();
     }
     catch( boost::thread_interrupted& )
     {
@@ -56,7 +56,7 @@ void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
     }
     catch( ... )
     {
-        CLog(error) << "CPlainTextExtractor::WorkerFunc: (" << strFileName.toStdString() << "): unknown error";
+        CLog(error) << "CPlainTextExtractor::WorkerFunc: (" << qPrintable(strFileName) << "): unknown error";
     }
 }
 

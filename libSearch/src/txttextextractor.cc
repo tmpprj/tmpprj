@@ -11,7 +11,6 @@
 
 void CTxtTextExtractor::Extract( const QString& strFileName, QString& strText )
 {
-    CLog(debug) << "CTxtTextExtractor::Extract: " << strFileName;
     std::string strLine;
     QFile file( strFileName );
     if( !file.open(QIODevice::ReadOnly) )
