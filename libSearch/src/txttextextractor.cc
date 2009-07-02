@@ -27,7 +27,10 @@ void CTxtTextExtractor::Extract( const QString& strFileName, QString& strText )
 
     std::string strCharset = CharDet.GetCharset();
 
-    QTextCodec* pTextCodec = strCharset.empty() ? QTextCodec::codecForLocale() : QTextCodec::codecForName( strCharset.c_str() );
+    QTextCodec* pTextCodec = NULL;
+    if( strCharset.empty() || NULL == ( pTextCodec = QTextCodec::codecForName( strCharset.c_str() ) ) )
+        pTextCodec = QTextCodec::codecForLocale();
+
     if( NULL == pTextCodec )
          CLog(debug) << "Cant get codec";
     else

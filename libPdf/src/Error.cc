@@ -26,9 +26,9 @@ void CDECL error(int pos, char *msg, ...) {
     if (globalParams.get() && globalParams->getErrQuiet()) {
         return;
     }
-    CLog(debug) << "libPdf::error: ";
+    CLog(debug,true) << "libPdf::error: ";
     if (pos >= 0)
-        CLog(debug) << "(" << pos << "):";
+        CLog(debug,true) << "(" << pos << "):";
 
     char buf[1024];
     va_start(args, msg);

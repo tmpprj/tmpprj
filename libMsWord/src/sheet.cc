@@ -118,24 +118,24 @@ void print_value( unsigned char *value )
     }
     if ( quotes )
     {
-        fputc( '\"',stdout );
+        //fputc( '\"',stdout );
         for ( i=0;i<len;i++ )
         {
             if ( value[i]=='\"' )
             {
-                fputc( '\"',stdout );
-                fputc( '\"',stdout );
+                //fputc( '\"',stdout );
+                //fputc( '\"',stdout );
             }
             else
             {
-                fputc( value[i],stdout );
+                //fputc( value[i],stdout );
             }
         }
-        fputc( '\"',stdout );
+        //fputc( '\"',stdout );
     }
     else
     {
-        fputs(( char * )value,stdout );
+        //fputs(( char * )value,stdout );
     }
 }
 /*
@@ -156,7 +156,7 @@ void print_sheet( void )
             {
                 if ( j )
                 {
-                    fputc( cell_separator,stdout );
+                    //fputc( cell_separator,stdout );
                     printed=1;
                 }
                 if ( *col )
@@ -167,10 +167,10 @@ void print_sheet( void )
             }
             if ( printed )
             {
-                fputc( '\n',stdout );
+                //fputc( '\n',stdout );
                 printed=0;
             }
         }
     }
-    fputs( sheet_separator,stdout );
+    //fputs( sheet_separator,stdout );
 }

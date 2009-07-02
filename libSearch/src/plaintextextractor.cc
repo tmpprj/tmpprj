@@ -39,7 +39,7 @@ void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
         structFileData Data = { strFileName, strContent };
         m_sigDataObtained( Data );
         
-        CLog(debug) << "CPlainTextExtractor::WorkerFunc: (" << pExtractor->GetName() << "," << qPrintable(strFileName) << ") time elapsed: " << timer.elapsed() << " ms";
+        CLog(debug) << "CPlainTextExtractor::WorkerFunc: (" << pExtractor->GetName() << "," << qPrintable(strFileName) << ") time elapsed: " << std::dec << timer.elapsed() << " ms";
     }
     catch( CUserLevelError& e )
     {

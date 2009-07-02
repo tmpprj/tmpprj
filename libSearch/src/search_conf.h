@@ -6,7 +6,7 @@
 
 struct SearchParams
 {
-    ConfParam< size_t > stCharDetBlockSize;
+    ConfParam< uint > stCharDetBlockSize;
 
     SearchParams();
 };

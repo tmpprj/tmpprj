@@ -29,9 +29,11 @@ class CLog
         return mtxLock;
     }
 
+    bool m_bMultiString;
+
 public:
 
-    CLog( LogLevelManip_t m )
+    CLog( LogLevelManip_t m, bool bMultiString = false ):m_bMultiString( bMultiString )
     {
         GetLock().lock();
 
@@ -42,7 +44,8 @@ public:
     {
         GetLock().unlock();
 
-        GetFile() << std::endl;
+        if( !m_bMultiString )
+            GetFile() << std::endl;
     }
 
     template< class T > CLog& operator<<( const T& t )

@@ -363,12 +363,12 @@ static void process_item (int rectype, long reclen, int flags, FILE* input, int*
 		break;
 
 		/*	case :
-		fprintf(stdout,", reclen=%ld\n", reclen);
+//		fprintf(stdout,", reclen=%ld\n", reclen);
 		catdoc_seek(input, reclen, SEEK_CUR);
 		break;*/
 
 		/*	case :
-		fprintf(stdout,", reclen=%ld\n", reclen);
+//		fprintf(stdout,", reclen=%ld\n", reclen);
 		catdoc_seek(input, reclen, SEEK_CUR);
 		break;*/
 

@@ -344,7 +344,7 @@ int parse_rtf( FILE *f )
             {
                 /*add_to_buffer(&bufptr,0);
                 output_paragraph(buffer);
-                fprintf(stderr,"\nGROUP_END para_mode=%d group_count=%d bufptr=%d\n", para_mode,group_count,bufptr);
+//                fprintf(stderr,"\nGROUP_END para_mode=%d group_count=%d bufptr=%d\n", para_mode,group_count,bufptr);
                 bufptr=-1;*/
                 para_mode=0;
             }
