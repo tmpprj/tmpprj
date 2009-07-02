@@ -652,7 +652,9 @@ char *copy_unicode_string( unsigned char **src, const char* strCharsetName )
         }
     }
 
-    CLog(debug) << "copy_unicode_string: charset name " << strCharsetName;
+
+    if( NULL != strCharsetName )
+        CLog(debug) << "copy_unicode_string: charset name " << strCharsetName;
 
     vecUString.push_back(0);
     if ( !XlsWriterImpl.empty() )
@@ -662,6 +664,7 @@ char *copy_unicode_string( unsigned char **src, const char* strCharsetName )
     }
 
     *src=( unsigned char* )s+to_skip;
+
     return dest;
 }
 
