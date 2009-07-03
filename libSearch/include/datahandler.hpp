@@ -10,6 +10,10 @@ template< typename DataType >
 class CDataHandler: private boost::noncopyable
 {
 public:
+    CDataHandler( int nMaxQueueSize = 1 )
+        : m_Queue( nMaxQueueSize )
+    {
+    }
 
     virtual ~CDataHandler()
     {

@@ -31,6 +31,7 @@ class CFileSearcher: public CDataHandler< FileSearcher::structParams >
     virtual void WorkerFunc( const FileSearcher::structParams& Params );
 
 public:
+    CFileSearcher();
 
     void StartSearch( const QString& strPath, const QStringList& listMasks, bool bRecursive );
 

@@ -8,6 +8,11 @@
 
 using namespace std;
 
+CFileSearcher::CFileSearcher()
+: CDataHandler< FileSearcher::structParams >( 1 )
+{
+}
+
 void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks, bool bRecursive )
 {
     {
