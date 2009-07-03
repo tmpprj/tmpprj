@@ -1,0 +1,46 @@
+import os;
+from subprocess import call;
+
+
+env  = Environment(ENV = os.environ)
+
+env.StaticLibrary( 'UnitTest++', 
+	[ 'src/AssertException.cpp', 
+	  'src/Test.cpp', 
+  	  'src/Checks.cpp',
+	  'src/TestRunner.cpp', 
+  	  'src/TestResults.cpp',
+	  'src/TestReporter.cpp',
+	  'src/TestReporterStdout.cpp',
+	  'src/ReportAssert.cpp',
+	  'src/TestList.cpp',
+	  'src/TimeConstraint.cpp',
+	  'src/TestDetails.cpp',
+	  'src/MemoryOutStream.cpp',
+	  'src/DeferredTestReporter.cpp',
+	  'src/DeferredTestResult.cpp',
+	  'src/XmlTestReporter.cpp',
+	  'src/CurrentTest.cpp',
+ 	  'src/Posix/SignalTranslator.cpp',
+	  'src/Posix/TimeHelpers.cpp' ] )
+
+test = env.Program( 'TestUnitTest++',
+	[ 'src/tests/Main.cpp',
+	  'src/tests/TestAssertHandler.cpp',
+	  'src/tests/TestChecks.cpp',
+	  'src/tests/TestUnitTest++.cpp',
+	  'src/tests/TestTest.cpp',
+	  'src/tests/TestTestResults.cpp',
+	  'src/tests/TestTestRunner.cpp',
+	  'src/tests/TestCheckMacros.cpp',
+	  'src/tests/TestTestList.cpp',
+	  'src/tests/TestTestMacros.cpp',
+	  'src/tests/TestTimeConstraint.cpp',
+	  'src/tests/TestTimeConstraintMacro.cpp',
+	  'src/tests/TestMemoryOutStream.cpp',
+	  'src/tests/TestDeferredTestReporter.cpp',
+	  'src/tests/TestXmlTestReporter.cpp',
+	  'src/tests/TestCurrentTest.cpp',
+      'libUnitTest++.a' ] )
+
+env.AddPostAction( test, './TestUnitTest++' )
