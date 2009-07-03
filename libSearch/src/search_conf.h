@@ -7,6 +7,8 @@
 struct SearchParams
 {
     ConfParam< uint > stCharDetBlockSize;
+    ConfParam< uint > nFileChunkSize;
+    ConfParam< uint > nCheckerQueueSize;
 
     SearchParams();
 };

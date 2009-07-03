@@ -60,8 +60,8 @@ void QSearchWindow::connectSearcher()
 {
     connect( &m_search, SIGNAL( fileProcessing( const QString& ) ), 
             this, SLOT( fileProcessing( const QString& ) ), Qt::QueuedConnection );
-    connect( &m_search, SIGNAL( fileMatched( const QString&, bool ) ), 
-            this, SLOT( fileMatched( const QString&, bool ) ), Qt::QueuedConnection );
+    connect( &m_search, SIGNAL( fileMatched( const QString& ) ), 
+            this, SLOT( fileMatched( const QString& ) ), Qt::QueuedConnection );
     connect( &m_search, SIGNAL( searchDone() ), this, SLOT( searchDone() ), Qt::QueuedConnection );
     connect( &m_search, SIGNAL( error( const QString&, const QString& ) ),
             this, SLOT( searchError( const QString&, const QString& ) ), Qt::QueuedConnection );
@@ -127,12 +127,11 @@ void QSearchWindow::fileProcessing( const QString& strFilename )
     m_strCurrentFile = strFilename;
 }
 
-void QSearchWindow::fileMatched( const QString& strFilename, bool bFound )
+void QSearchWindow::fileMatched( const QString& strFilename )
 {
-    CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename ) << " " << bFound << std::endl;
+    CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename ) << std::endl;
 
-    if( bFound )
-        filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
+    filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
 }
 
 void QSearchWindow::searchDone()

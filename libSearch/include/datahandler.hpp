@@ -1,6 +1,7 @@
 #ifndef __DATAHANDLER__HPP
 #define __DATAHANDLER__HPP
 
+#include <boost/signals2.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <mt_queue.hpp>
@@ -10,7 +11,7 @@ template< typename DataType >
 class CDataHandler: private boost::noncopyable
 {
 public:
-    CDataHandler( int nMaxQueueSize = 1 )
+    CDataHandler( int nMaxQueueSize )
         : m_Queue( nMaxQueueSize )
     {
     }

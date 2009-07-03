@@ -14,23 +14,25 @@ SOURCES += src/filesearcher.cc \
     src/plaintextextractor.cc \
     src/txttextextractor.cc \
     src/multipatternsearcher.cc \
-    src/patternmatcher.cc \
     src/mswordtextextractor.cc \
     src/pdftextextractor.cc \
     src/qsearchfacade.cc \
     src/libsearch_common.cc \
+    src/documentchecker.cc \
+    src/patterncounter.cc \
     src/search_conf.cc
 HEADERS += ./include/searchfacade.h \
     ./include/filesearcher.h \
     include/plaintextextractor.h \
     include/txttextextractor.h \
     include/multipatternsearcher.h \
-    include/patternmatcher.h \
     include/mswordtextextractor.h \
     include/pdftextextractor.h \
     include/datahandler.hpp \
     include/qsearchfacade.h \
     src/libsearch_common.h \
+    include/documentchecker.h \
+    src/patterncounter.h \
     src/search_conf.h
 DEPENDPATH += ./include \
     ../libCommon/include \
