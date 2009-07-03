@@ -32,7 +32,7 @@ private Q_SLOTS:
     void updateTimer();
 
     void fileProcessing( const QString& strFilename );
-    void fileMatched( const QString& strFilename, bool bFound ); 
+    void fileMatched( const QString& strFilename ); 
     void searchDone();
     void searchError( const QString& strFilename, const QString& strError );
 

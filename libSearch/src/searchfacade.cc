@@ -5,26 +5,22 @@
 CSearchFacade::CSearchFacade()
 {
     m_sigStop.connect( 0, boost::bind( &CFileSearcher::OnStop, &m_searcher ) );
-    m_sigStop.connect( 1, boost::bind( &CPlainTextExtractor::OnStop, &m_extractor ) );
-    m_sigStop.connect( 2, boost::bind( &CPatternMatcher::OnStop, &m_matcher ) );
+    m_sigStop.connect( 1, boost::bind( &CDocumentChecker::OnStop, &m_checker ) );
 
-    m_searcher.SigFileFound().connect( boost::bind( &CPlainTextExtractor::OnData, &m_extractor, _1 ) );
-    m_extractor.SigDataObtained().connect( boost::bind( &CPatternMatcher::OnData, &m_matcher, _1 ) );
+    m_searcher.SigFileFound().connect( boost::bind( &CDocumentChecker::OnData, &m_checker, _1 ) );
     
     m_searcher.SigQueueEmpty().connect( boost::bind( &CSearchFacade::OnSomeQueueEmpty, this ) );
-    m_extractor.SigQueueEmpty().connect( boost::bind( &CSearchFacade::OnSomeQueueEmpty, this ) );
-    m_matcher.SigQueueEmpty().connect( boost::bind( &CSearchFacade::OnSomeQueueEmpty, this ) );
+    m_checker.SigQueueEmpty().connect( boost::bind( &CSearchFacade::OnSomeQueueEmpty, this ) );
 
     m_searcher.SigError().connect( boost::bind( &CSearchFacade::OnError, this, _1, _2 ) );
-    m_extractor.SigError().connect( boost::bind( &CSearchFacade::OnError, this, _1, _2 ) );
-    m_matcher.SigError().connect( boost::bind( &CSearchFacade::OnError, this, _1, _2 ) );
+    m_checker.SigError().connect( boost::bind( &CSearchFacade::OnError, this, _1, _2 ) );
 }
 
 void CSearchFacade::Start( const SearchOptions& options )
 {
     CLog(debug) << "CSearchFacade::Start: pattern count - " << options.listPatterns.size();
     
-    m_matcher.SetSearchParameters( options.listPatterns, options.bCaseSensitive );
+    m_checker.SetSearchParameters( options.listPatterns, options.bCaseSensitive );
     m_searcher.StartSearch( options.strPath, options.listMasks, options.bRecursive );
 }
 
@@ -40,7 +36,7 @@ CSearchFacade::~CSearchFacade()
 
 void CSearchFacade::OnSomeQueueEmpty()
 {
-    if( m_searcher.IsQueueEmpty() && m_extractor.IsQueueEmpty() && m_matcher.IsQueueEmpty() )
+    if( m_searcher.IsQueueEmpty() && m_checker.IsQueueEmpty() )
         m_sigDone();
 }
 
@@ -56,17 +52,12 @@ boost::signals2::signal1< void, const QString& >& CSearchFacade::SigFileFound()
 
 boost::signals2::signal1< void, const QString& >& CSearchFacade::SigFileProcessing()
 {
-    return m_extractor.SigFileProcessing();
+    return m_checker.SigFileProcessing();
 }
 
-boost::signals2::signal1< void, const CPlainTextExtractor::structFileData& >& CSearchFacade::SigDataObtained()
+boost::signals2::signal1< void, const QString& >& CSearchFacade::SigFileMatched()
 {
-    return m_extractor.SigDataObtained();
-}
-
-boost::signals2::signal1< void, const CPatternMatcher::structFindData& >& CSearchFacade::SigFileMatched()
-{
-    return m_matcher.SigFileMatched();
+    return m_checker.SigFileMatched();
 }
 
 boost::signals2::signal0< void >& CSearchFacade::SigSearchDone()

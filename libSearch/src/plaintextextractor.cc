@@ -10,56 +10,6 @@
 
 #include <QThread>
 
-boost::signals2::signal1< void, const CPlainTextExtractor::structFileData& >& CPlainTextExtractor::SigDataObtained()
-{
-    return m_sigDataObtained;
-}
-
-boost::signals2::signal1< void, const QString& >& CPlainTextExtractor::SigFileProcessing()
-{
-    return m_sigFileProcessing;
-}
-
-void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
-{
-    try
-    {
-        QTime timer;
-        timer.start();
-        
-        //Process file
-        QString strContent;
-        m_sigFileProcessing( strFileName );
-
-        ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
-        
-        CLog(debug) << "CPlainTextExtractor::WorkerFunc: processing " << qPrintable(strFileName) << " with " << pExtractor->GetName();
-//        pExtractor->Extract( strFileName, strContent );
-        
-        structFileData Data = { strFileName, strContent };
-        m_sigDataObtained( Data );
-        
-        CLog(debug) << "CPlainTextExtractor::WorkerFunc: (" << pExtractor->GetName() << "," << qPrintable(strFileName) << ") time elapsed: " << std::dec << timer.elapsed() << " ms";
-    }
-    catch( CUserLevelError& e )
-    {
-        SigError()( strFileName, e.whatQ() );
-        CLog(error) << "CPlainTextExtractor::WorkerFunc: " << e.what();
-    }
-    catch( std::exception& e )
-    {
-        CLog(error) << "CPlainTextExtractor::WorkerFunc: (" << qPrintable(strFileName) << "): " << e.what();
-    }
-    catch( boost::thread_interrupted& )
-    {
-        throw;
-    }
-    catch( ... )
-    {
-        CLog(error) << "CPlainTextExtractor::WorkerFunc: (" << qPrintable(strFileName) << "): unknown error";
-    }
-}
-
 CTextExtractorFactory::CTextExtractorFactory()
     : m_pDefaultExtractor( NULL )
 {
