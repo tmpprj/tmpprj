@@ -47,7 +47,11 @@ void QSearchWindow::setupControls()
     textComboBox->setInsertPolicy( QComboBox::NoInsert );
     
     QCompleter *completer = new QCompleter( this );
-    completer->setModel( new QDirModel( completer ) );
+    QDirModel* model = new QDirModel( completer );
+    model->setFilter( QDir::AllDirs | QDir::Drives | QDir::NoDotAndDotDot );
+    model->setSorting( QDir::Name );
+    completer->setModel( model );
+    
     directoryComboBox->setCompleter( completer );
     directoryComboBox->setInsertPolicy( QComboBox::NoInsert );
 }
