@@ -4,11 +4,12 @@
 
 bool WriterF( unsigned int* pBuf, size_t stLen )
 {
-    std::cout << "WriterFunc:" << std::endl;
+    std::cout << "WriterFunc: len=" << stLen << std::endl;
     for( size_t i = 0; i < stLen; ++i )
     {
         std::cout << std::hex << pBuf[i] << " ";
     }
+    std::cout << std::endl;
     return true;
 }
 

@@ -3489,6 +3489,9 @@ void TextPage::dump(void *outputStream, TextOutputFunc outputFunc, GBool physLay
     double delta;
     int col, i, j, d, n;
 
+    unsigned int uiEol = 0x0A;
+    unsigned int uiSpace = 0x20;
+
     // get the output encoding
     if (!(uMap = globalParams->getTextEncoding())) {
         return;
@@ -3528,6 +3531,7 @@ void TextPage::dump(void *outputStream, TextOutputFunc outputFunc, GBool physLay
                     (*outputFunc)(outputStream, space, spaceLen);
                 }
             } else {
+                Writer( &uiEol, 1 );
                 (*outputFunc)(outputStream, eol, eolLen);
             }
         }
@@ -3612,6 +3616,7 @@ void TextPage::dump(void *outputStream, TextOutputFunc outputFunc, GBool physLay
                     d = 1;
                 }
                 for (; d > 0; --d) {
+                    Writer( &uiEol, 1 );
                     (*outputFunc)(outputStream, eol, eolLen);
                 }
                 col = 0;
@@ -3636,20 +3641,25 @@ void TextPage::dump(void *outputStream, TextOutputFunc outputFunc, GBool physLay
                     delete s;
                     if (!line->hyphenated) {
                         if (line->next) {
+                            Writer( &uiSpace, 1 );
                             (*outputFunc)(outputStream, space, spaceLen);
                         } else if (blk->next) {
                             //~ this is a bit of a kludge - we should really do a more
                             //~ intelligent determination of paragraphs
                             if (blk->next->lines->words->fontSize ==
                                     blk->lines->words->fontSize) {
+                                Writer( &uiSpace, 1 );
                                 (*outputFunc)(outputStream, space, spaceLen);
                             } else {
+                                Writer( &uiEol, 1 );
                                 (*outputFunc)(outputStream, eol, eolLen);
                             }
                         }
                     }
                 }
             }
+            Writer( &uiEol, 1 );
+            Writer( &uiEol, 1 );
             (*outputFunc)(outputStream, eol, eolLen);
             (*outputFunc)(outputStream, eol, eolLen);
         }
