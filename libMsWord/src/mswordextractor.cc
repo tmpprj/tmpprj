@@ -19,7 +19,7 @@ char *input_buffer;
 
 namespace MsWord
 {
-    void Extract( boost::function<void ( unsigned short* )> Writer, const QString& strFileName )
+    void Extract( boost::function<bool ( unsigned short* )> Writer, const QString& strFileName )
     {
         FILE *f = NULL;
         source_charset = read_charset( source_csname );
@@ -45,7 +45,7 @@ namespace MsWord
         fclose( f );
     }
 
-    void ExtractXls( boost::function<void ( unsigned short* )> XlsWriter, const QString& strFileName )
+    void ExtractXls( boost::function<bool ( unsigned short* )> XlsWriter, const QString& strFileName )
     {
         FILE *f = NULL, *new_file, *ole_file;
 
@@ -95,7 +95,7 @@ namespace MsWord
         }
     }
 
-    void ExtractPpt( boost::function<void ( unsigned short* )> PptWriter, const QString& strFileName )
+    void ExtractPpt( boost::function<bool ( unsigned short* )> PptWriter, const QString& strFileName )
     {
         FILE *f = NULL, *new_file, *ole_file;
 

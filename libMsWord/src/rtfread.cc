@@ -169,23 +169,27 @@ int rtf_level=0;
  *
  */
 extern unsigned short int buffer[];
-void add_to_buffer( int *bufptr,unsigned short int c )
+bool add_to_buffer( int *bufptr,unsigned short int c )
 {
+    bool bRes = true;
     buffer[++( *bufptr )]=c;
     if ( *bufptr > PARAGRAPH_BUFFER-2 )
     {
         buffer[++( *bufptr )]=0;
-        output_paragraph( buffer );
+        bRes = output_paragraph( buffer );
         *bufptr=-1;
+        
     }
+    return bRes;
 }
 
-void end_paragraph( int *bufptr )
+bool end_paragraph( int *bufptr )
 {
     add_to_buffer( bufptr,0x000a );
     add_to_buffer( bufptr,0 );
-    output_paragraph( buffer );
+    bool bRes = output_paragraph( buffer );
     *bufptr=-1;
+    return bRes;
 }
 
 /**
@@ -229,51 +233,64 @@ int parse_rtf( FILE *f )
                 }
                 else if ( com.numarg == '\r' )
                 {
-                    end_paragraph( &bufptr );
+                    if( !end_paragraph( &bufptr ) )
+                        ::fseek( f, 0L, SEEK_END ); 
                 }
                 else if ( com.numarg == '~' )
                 {
-                    add_to_buffer( &bufptr,0xA0 );/* NO-BREAK SPACE */
+                    if( !add_to_buffer( &bufptr,0xA0 ) )/* NO-BREAK SPACE */
+                        ::fseek( f, 0L, SEEK_END ); 
                 }
                 else if ( com.numarg == '-' )
                 {
-                    add_to_buffer( &bufptr,0xAD );/* Optional hyphen */
+                    if( !add_to_buffer( &bufptr,0xAD ) )/* Optional hyphen */
+                        ::fseek( f, 0L, SEEK_END ); 
                 }
 
                 break;
             case RTF_EMDASH:
-                add_to_buffer( &bufptr,0x2014 );/* EM DASH*/
+                if( !add_to_buffer( &bufptr,0x2014 ) )/* EM DASH*/
+                    ::fseek( f, 0L, SEEK_END ); 
                 break;
             case RTF_ENDASH:
-                add_to_buffer( &bufptr,0x2013 );
+                if( !add_to_buffer( &bufptr,0x2013 ) )
+                    ::fseek( f, 0L, SEEK_END ); 
                 break;
             case RTF_BULLET:
-                add_to_buffer( &bufptr,0x2022 );
+                if( !add_to_buffer( &bufptr,0x2022 ) )
+                    ::fseek( f, 0L, SEEK_END ); 
                 break;
             case RTF_LQUOTE:
-                add_to_buffer( &bufptr,0x2018 );
+                if( !add_to_buffer( &bufptr,0x2018 ) )
+                    ::fseek( f, 0L, SEEK_END ); 
                 break;
             case RTF_RQUOTE:
-                add_to_buffer( &bufptr,0x2019 );
+                if( !add_to_buffer( &bufptr,0x2019 ) )
+                    ::fseek( f, 0L, SEEK_END ); 
                 break;
             case RTF_LDBLQUOTE:
-                add_to_buffer( &bufptr,0x201C );
+                if( !add_to_buffer( &bufptr,0x201C ) )
+                    ::fseek( f, 0L, SEEK_END ); 
                 break;
             case RTF_RDBLQUOTE:
-                add_to_buffer( &bufptr,0x201D );
+                if( !add_to_buffer( &bufptr,0x201D ) )
+                    ::fseek( f, 0L, SEEK_END ); 
                 break;
             case RTF_ZWNONJOINER:
-                add_to_buffer( &bufptr,0xfeff );
+                if( !add_to_buffer( &bufptr,0xfeff ) )
+                    ::fseek( f, 0L, SEEK_END ); 
                 break;
             case RTF_EMSPACE:
             case RTF_ENSPACE:
-                add_to_buffer( &bufptr,' ' );
+                if( !add_to_buffer( &bufptr,' ' ) )
+                    ::fseek( f, 0L, SEEK_END ); 
                 break;
             case RTF_CHAR:
                 //fprintf(stderr, "RTF char %d\n", com.numarg);
                 if( data_skip_mode == 0 && skip_chars == 0 )
                 {
-                    add_to_buffer( &bufptr,rtf_to_unicode( com.numarg ) );
+                    if( !add_to_buffer( &bufptr,rtf_to_unicode( com.numarg ) ) )
+                        ::fseek( f, 0L, SEEK_END ); 
                 }
                 if( skip_chars > 0 )
                     --skip_chars;
@@ -282,19 +299,22 @@ int parse_rtf( FILE *f )
                 groups[group_count].uc=com.numarg;
                 break;
             case RTF_TAB:
-                add_to_buffer( &bufptr,0x0009 );
+                if( !add_to_buffer( &bufptr,0x0009 ) )
+                    ::fseek( f, 0L, SEEK_END ); 
                 break;
             case RTF_UNICODE_CHAR:
                 if ( com.numarg < 0 )
                     com.numarg = com.numarg + 65536;
                 //fprintf(stderr, "Unicode char %04X\n", com.numarg);
                 if ( data_skip_mode == 0 )
-                    add_to_buffer( &bufptr,com.numarg );
+                    if( !add_to_buffer( &bufptr,com.numarg ) )
+                        ::fseek( f, 0L, SEEK_END ); 
                 skip_chars = groups[group_count].uc;
                 break;
             case RTF_PARA:
                 /*if (para_mode > 0) {*/
-                end_paragraph( &bufptr );
+                if( !end_paragraph( &bufptr ) )
+                    ::fseek( f, 0L, SEEK_END ); 
                 /*}*/
                 para_mode=group_count;
                 break;
@@ -333,7 +353,8 @@ int parse_rtf( FILE *f )
                     throw std::runtime_error( "MsWord::Ole: not enough memory" );
             }
             if ( para_mode )
-                add_to_buffer( &bufptr,0x20 );
+                if( !add_to_buffer( &bufptr,0x20 ) )
+                    ::fseek( f, 0L, SEEK_END ); 
             groups[group_count]=groups[group_count-1];
             break;
         case '}':
@@ -356,14 +377,13 @@ int parse_rtf( FILE *f )
         default:
             if ( data_skip_mode == 0 )
                 if ( c != '\n' && c != '\r' )
-                    add_to_buffer( &bufptr,rtf_to_unicode( c ) );
+                    if( !add_to_buffer( &bufptr,rtf_to_unicode( c ) ) )
+                        ::fseek( f, 0L, SEEK_END ); 
         }
     }
     if ( bufptr>=0 )
     {
-        add_to_buffer( &bufptr,'\n' );
-        add_to_buffer( &bufptr,0 );
-        output_paragraph( buffer );
+        if( add_to_buffer( &bufptr,'\n' ) && add_to_buffer( &bufptr,0 ) && output_paragraph( buffer ) );
     }
     free( groups );
     return 0;

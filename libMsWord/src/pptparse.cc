@@ -7,10 +7,10 @@
 #include "ppttypes.h"
 #include <vector>
 
-static void process_item(int rectype, long reclen, int flags, FILE* input, int* iOffset, int* iLevel);
+static bool process_item(int rectype, long reclen, int flags, FILE* input, int* iOffset, int* iLevel);
 
-boost::function< void ( unsigned short* ) > PptWriterImpl;
-void set_ppt_writer( boost::function< void ( unsigned short* ) > Func )
+boost::function< bool ( unsigned short* ) > PptWriterImpl;
+void set_ppt_writer( boost::function< bool ( unsigned short* ) > Func )
 {
     PptWriterImpl = Func;
 }
@@ -52,7 +52,8 @@ void do_ppt(FILE *input)
         if (reclen < 0)
 			return;
 
-		process_item(rectype,reclen,flags,input,&iOffset,&iLevel);
+		if( !process_item(rectype,reclen,flags,input,&iOffset,&iLevel) )
+            break;
 	}
 }
 
@@ -64,7 +65,7 @@ void do_ppt(FILE *input)
  * @param reclen 
  * @param input 
  */
-static void process_item (int rectype, long reclen, int flags, FILE* input, int* iOffset, int* iLevel ) 
+static bool process_item (int rectype, long reclen, int flags, FILE* input, int* iOffset, int* iLevel ) 
 {
     //fprintf( stdout, "level=%d ", (*iLevel)++ );
     
@@ -93,7 +94,7 @@ static void process_item (int rectype, long reclen, int flags, FILE* input, int*
 			if( catdoc_eof(input) )
 			{
                 (*iLevel)--;
-				return;
+				return true;
 			}
 
 			if( tmpitemsread < 8 )
@@ -107,14 +108,15 @@ static void process_item (int rectype, long reclen, int flags, FILE* input, int*
 			if (reclen < 0) 
             {
                 (*iLevel)--;
-				return;
+				return true;
             }
 
-			process_item( tmprectype, tmpreclen, tmpflags, input, &iTmpOffset, iLevel );
+			if( !process_item( tmprectype, tmpreclen, tmpflags, input, &iTmpOffset, iLevel ) )
+                return false;
 		}
 		(*iOffset) += reclen;
         (*iLevel)--;
-		return;
+		return true;
 	}
 
 
@@ -198,12 +200,14 @@ static void process_item (int rectype, long reclen, int flags, FILE* input, int*
 			else
             {
                 vecBuf.push_back(0);
-                PptWriterImpl( &vecBuf[0] );
+                if( !PptWriterImpl( &vecBuf[0] ) )
+                    return false;
                 vecBuf.clear();
             }
 		}
         vecBuf.push_back(0);
-        PptWriterImpl( &vecBuf[0] );
+        if( !PptWriterImpl( &vecBuf[0] ) )
+            return false;
         vecBuf.clear();
 
 		(*iOffset) += reclen;
@@ -225,12 +229,14 @@ static void process_item (int rectype, long reclen, int flags, FILE* input, int*
 			else
             {
                 vecBuf.push_back(0);
-                PptWriterImpl( &vecBuf[0] );
+                if( !PptWriterImpl( &vecBuf[0] ) )
+                    return false;
                 vecBuf.clear();
             }
 		}
         vecBuf.push_back(0);
-        PptWriterImpl( &vecBuf[0] );
+        if( !PptWriterImpl( &vecBuf[0] ) )
+            return false;
         vecBuf.clear();
 
 		(*iOffset) += reclen;
@@ -379,4 +385,6 @@ static void process_item (int rectype, long reclen, int flags, FILE* input, int*
 
 	}
     (*iLevel)--;
+
+    return true;
 }

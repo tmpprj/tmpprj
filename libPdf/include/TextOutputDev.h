@@ -534,7 +534,7 @@ public:
                         double *xMax, double *yMax);
 
     // Dump contents of page to a file.
-    void dump(void *outputStream, TextOutputFunc outputFunc, GBool physLayout, boost::function<void ( unsigned int*, size_t )> Writer);
+    void dump(void *outputStream, TextOutputFunc outputFunc, GBool physLayout, boost::function<bool ( unsigned int*, size_t )> Writer);
 
     // Get the head of the linked list of TextFlows.
     TextFlow *getFlows() {
@@ -615,7 +615,7 @@ public:
     // <physLayoutA> is true, the original physical layout of the text
     // is maintained.  If <rawOrder> is true, the text is kept in
     // content stream order.
-    TextOutputDev(TextOutputFunc func, void *stream,GBool physLayoutA, GBool rawOrderA, boost::function<void ( unsigned int*, size_t )> Writer);
+    TextOutputDev(TextOutputFunc func, void *stream,GBool physLayoutA, GBool rawOrderA, boost::function<bool ( unsigned int*, size_t )> Writer);
 
     // Destructor.
     virtual ~TextOutputDev();
@@ -722,7 +722,7 @@ public:
 
 private:
 
-    boost::function<void ( unsigned int*, size_t )> writer_func;
+    boost::function<bool ( unsigned int*, size_t )> writer_func;
 
     TextOutputFunc outputFunc;	// output function
     void *outputStream;		// output stream

@@ -37,7 +37,12 @@ public:
 
     virtual ~ITextExtractor(){}
 
-    virtual void Extract( const QString& strFileNmae, QString& strText ) = 0;
+    virtual void Extract( const QString& strFileName, QString& strText, size_t stChunkSize ) = 0;
+
+    boost::signals2::signal1< bool, QString >& SigChunk()
+    {
+        return m_sigChunk;
+    }
 
     const QString& GetName()
     {
@@ -47,6 +52,10 @@ public:
 protected:
 
     QString m_strName;
+
+private:
+
+    boost::signals2::signal1< bool, QString > m_sigChunk;
 
 };
 

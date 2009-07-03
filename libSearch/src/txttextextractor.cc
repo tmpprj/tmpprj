@@ -8,40 +8,51 @@
 #include "search_conf.h"
 #include "log.hpp"
 
-
-void CTxtTextExtractor::Extract( const QString& strFileName, QString& strText )
+void CTxtTextExtractor::Extract( const QString& strFileName, QString& strText, size_t stChunkSize )
 {
     std::string strLine;
-    QFile file( strFileName );
-    if( !file.open(QIODevice::ReadOnly) )
+    m_pFile = boost::shared_ptr<QFile>( new QFile(strFileName) );
+    if( !m_pFile->open(QIODevice::ReadOnly) )
         return;
 
     CCharsetDetector CharDet;
-    std::vector<unsigned char> vecBuf(SearchConf().stCharDetBlockSize.Value());
-    size_t stBytesRead = 0;
+    size_t stBlockSize = SearchConf().stCharDetBlockSize.Value();
+    m_vecBuf.resize( stChunkSize < stBlockSize ? stChunkSize : stBlockSize );
 
-    stBytesRead = file.read( (char*)&vecBuf[0], vecBuf.size() );
+    size_t stBytesRead = 0;
+    stBytesRead = m_pFile->read( (char*)&m_vecBuf[0], m_vecBuf.size() );
+
     boost::this_thread::interruption_point();
-    CharDet.HandleData( (char*)&vecBuf[0], stBytesRead );
+
+    CharDet.HandleData( (char*)&m_vecBuf[0], stBytesRead );
     CharDet.DataEnd();
 
     std::string strCharset = CharDet.GetCharset();
 
-    QTextCodec* pTextCodec = NULL;
-    if( strCharset.empty() || NULL == ( pTextCodec = QTextCodec::codecForName( strCharset.c_str() ) ) )
-        pTextCodec = QTextCodec::codecForLocale();
+    if( strCharset.empty() || NULL == ( m_pTextCodec = QTextCodec::codecForName( strCharset.c_str() ) ) )
+        m_pTextCodec = QTextCodec::codecForLocale();
 
-    if( NULL == pTextCodec )
-         CLog(debug) << "Cant get codec";
-    else
+    if( NULL == m_pTextCodec )
     {
-        vecBuf.resize( 1024000 );
-        strText += pTextCodec->toUnicode( QByteArray( (const char*)&vecBuf[0], stBytesRead ) );
-        while( !file.atEnd() )
-        {
-            stBytesRead = file.read( (char*)&vecBuf[0], vecBuf.size() );
-            strText += pTextCodec->toUnicode( QByteArray( (const char*)&vecBuf[0], stBytesRead ) );
-        }
-        
+        CLog(debug) << "Cant get codec";
+        return;
+    }
+
+    strText += m_pTextCodec->toUnicode( QByteArray( (const char*)&m_vecBuf[0], stBytesRead ) );
+
+    if( m_vecBuf.size() < stChunkSize )
+        m_vecBuf.resize( stChunkSize );
+
+    while( m_pFile->atEnd() )
+    {
+        size_t stBytesRead = m_pFile->read( (char*)&m_vecBuf[0], stChunkSize );
+    
+        strText += m_pTextCodec->toUnicode( QByteArray( (const char*)&m_vecBuf[0], stBytesRead ) );
+
+        if( !SigChunk()( strText ) )
+            break;
+
+        strText.clear();
     }
 }
+

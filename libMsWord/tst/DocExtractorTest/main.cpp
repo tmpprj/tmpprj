@@ -1,7 +1,7 @@
 #include "mswordextractor.h"
 #include <iostream>
 
-void WriterF( unsigned short int* pBuf )
+bool WriterF( unsigned short int* pBuf )
 {
     std::cout << "WriterFunc:" << std::endl;
     while( *pBuf )
@@ -9,6 +9,7 @@ void WriterF( unsigned short int* pBuf )
         std::cout << std::hex << *pBuf << " ";
         pBuf++;
     }
+    return true;
 }
 
 int main(int argc, char **argv)

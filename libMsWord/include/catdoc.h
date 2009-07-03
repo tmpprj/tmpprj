@@ -57,14 +57,14 @@ extern  short int *read_charset(const char *filename);
 
 extern int to_unicode (short int *charset, int c) ;
 
-void set_writer( boost::function< void ( unsigned short* ) > Func );
+void set_writer( boost::function< bool ( unsigned short* ) > Func );
 
 extern int signature_check;
 extern int unknown_as_hex;
 
 int check_charset(char **filename,const char *charset);
 int process_file(FILE *f,long stop);
-void output_paragraph(unsigned short int *buffer) ;
+bool output_paragraph(unsigned short int *buffer) ;
 int parse_rtf(FILE *f);
 /* format recognition*/
 int analyze_format(FILE *f);

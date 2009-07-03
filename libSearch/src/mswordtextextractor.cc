@@ -10,7 +10,7 @@ CMsWordTextExtractor::CMsWordTextExtractor()
     m_strName = "DOC Parser";
 }
 
-void CMsWordTextExtractor::WriterFunc( QString& strBuf, unsigned short* data )
+bool CMsWordTextExtractor::WriterFunc( QString& strBuf, unsigned short* data, size_t stChunkSize )
 {
     unsigned short* start = data;
     while( *data )
@@ -20,12 +20,20 @@ void CMsWordTextExtractor::WriterFunc( QString& strBuf, unsigned short* data )
 
         if( (data - start)%100 == 0 )
             boost::this_thread::interruption_point();
+
+        if( (size_t)strBuf.size() >= stChunkSize )
+        {
+            if( !SigChunk()( strBuf ) )
+                return false;
+            strBuf.clear();
+        }
     }
+    return true;
 }
 
-void CMsWordTextExtractor::Extract( const QString& strFileName, QString& strText )
+void CMsWordTextExtractor::Extract( const QString& strFileName, QString& strText, size_t stChunkSize )
 {
-    MsWord::Extract( boost::bind( &CMsWordTextExtractor::WriterFunc, this, boost::ref(strText), _1 ), strFileName );
+    MsWord::Extract( boost::bind( &CMsWordTextExtractor::WriterFunc, this, boost::ref(strText), _1, stChunkSize ), strFileName );
 }
 
 CXlsTextExtractor::CXlsTextExtractor()
@@ -33,9 +41,9 @@ CXlsTextExtractor::CXlsTextExtractor()
     m_strName = "XLS Parser";
 }
 
-void CXlsTextExtractor::Extract( const QString& strFileName, QString& strText )
+void CXlsTextExtractor::Extract( const QString& strFileName, QString& strText, size_t stChunkSize )
 {
-    MsWord::ExtractXls( boost::bind( &CXlsTextExtractor::WriterFunc, this, boost::ref(strText), _1 ), strFileName );
+    MsWord::ExtractXls( boost::bind( &CXlsTextExtractor::WriterFunc, this, boost::ref(strText), _1, stChunkSize ), strFileName );
 }
 
 CPptTextExtractor::CPptTextExtractor()
@@ -43,7 +51,7 @@ CPptTextExtractor::CPptTextExtractor()
     m_strName = "PPT Parser";
 }
 
-void CPptTextExtractor::Extract( const QString& strFileName, QString& strText )
+void CPptTextExtractor::Extract( const QString& strFileName, QString& strText, size_t stChunkSize )
 {
-    MsWord::ExtractPpt( boost::bind( &CPptTextExtractor::WriterFunc, this, boost::ref(strText), _1 ), strFileName );
+    MsWord::ExtractPpt( boost::bind( &CPptTextExtractor::WriterFunc, this, boost::ref(strText), _1, stChunkSize ), strFileName );
 }

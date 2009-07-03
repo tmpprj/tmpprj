@@ -14,9 +14,9 @@
 #include "catdoc.h"
 #include <boost/thread.hpp>
 
-boost::function< void ( unsigned short* ) > WriterImpl;
+boost::function< bool ( unsigned short* ) > WriterImpl;
 
-void set_writer( boost::function< void ( unsigned short* ) > Func )
+void set_writer( boost::function< bool ( unsigned short* ) > Func )
 {
     WriterImpl = Func;
 }
@@ -27,10 +27,10 @@ void set_writer( boost::function< void ( unsigned short* ) > Func )
  * in the buffer as array of unicode 16-bit codes and pass to this
  * function
  ************************************************************************/
-void output_paragraph( unsigned short int *buffer )
+bool output_paragraph( unsigned short int *buffer )
 {
     boost::this_thread::interruption_point();
     if ( !WriterImpl.empty() )
-        WriterImpl( buffer );
+        return WriterImpl( buffer );
 }
 

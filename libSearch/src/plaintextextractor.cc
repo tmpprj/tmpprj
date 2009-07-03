@@ -34,7 +34,7 @@ void CPlainTextExtractor::WorkerFunc( const QString& strFileName )
         ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
         
         CLog(debug) << "CPlainTextExtractor::WorkerFunc: processing " << qPrintable(strFileName) << " with " << pExtractor->GetName();
-        pExtractor->Extract( strFileName, strContent );
+//        pExtractor->Extract( strFileName, strContent );
         
         structFileData Data = { strFileName, strContent };
         m_sigDataObtained( Data );

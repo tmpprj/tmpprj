@@ -23,7 +23,7 @@ void outputToNull(void *stream, char *text, int len)
     boost::ignore_unused_variable_warning( len );
 }
 
-void Extract( boost::function<void (unsigned int*, size_t)> Writer, const QString& strFileName )
+void Extract( boost::function<bool (unsigned int*, size_t)> Writer, const QString& strFileName )
 {
     std::auto_ptr<PDFDoc> pDoc;
     GString* fileName = new GString( strFileName.toUtf8().constData() );

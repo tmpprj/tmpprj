@@ -2,7 +2,7 @@
 #include <iostream>
 #include <iomanip>
 
-void WriterF( unsigned short int* pBuf )
+bool WriterF( unsigned short int* pBuf )
 {
     std::cout << "WriterFunc:" << std::endl;
     while( *pBuf )
@@ -10,6 +10,7 @@ void WriterF( unsigned short int* pBuf )
         std::cout << std::hex << std::setw(4) << std::setfill('0') << *pBuf << " ";
         pBuf++;
     }
+    return true;
 }
 
 int main(int argc, char **argv)

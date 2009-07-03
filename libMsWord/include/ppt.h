@@ -5,7 +5,7 @@
 #include <math.h>
 #include <boost/function.hpp>
 
-void set_ppt_writer( boost::function< void ( unsigned short* ) > Func );
+void set_ppt_writer( boost::function< bool ( unsigned short* ) > Func );
 void do_ppt(FILE *input);
 
 #endif /* _PPT_H */

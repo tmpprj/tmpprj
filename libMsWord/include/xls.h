@@ -12,7 +12,7 @@
 #define QUOTE_ALL_STRINGS 2
 #define QUOTE_EVERYTHING 3
 
-void set_xls_writer( boost::function< void ( unsigned short* ) > Func );
+void set_xls_writer( boost::function< bool ( unsigned short* ) > Func );
 
 struct rowdescr
 {
@@ -32,10 +32,10 @@ char *format_double(char *rec,int offset,int format_code);
 char *format_int(int value,int format_code);
 char *format_rk(char *rec,short int format_code);
 char *gettypename(long rectype);
-void parse_sst(char *sstbuf,int bufsize);
-void process_item (int rectype, int reclen, char *rec, std::vector<unsigned int>&, std::vector<unsigned int>& vecXfFonts );
+bool parse_sst(char *sstbuf,int bufsize);
+bool process_item (int rectype, int reclen, char *rec, std::vector<unsigned int>&, std::vector<unsigned int>& vecXfFonts );
 unsigned char **allocate(int row,int col);
-char *copy_unicode_string(unsigned char **src, const char* strCharsetName = NULL );
+char *copy_unicode_string(unsigned char **src, bool& bEndFlag, const char* strCharsetName = NULL );
 char convert8to8(char *src,int count);
 char *convert16to8(char *src,int count);
 void do_table(FILE *input);

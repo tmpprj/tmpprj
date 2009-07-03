@@ -2,13 +2,14 @@
 #include <pdfextractor.h>
 #include <iostream>
 
-void WriterF( unsigned int* pBuf, size_t stLen )
+bool WriterF( unsigned int* pBuf, size_t stLen )
 {
     std::cout << "WriterFunc:" << std::endl;
     for( size_t i = 0; i < stLen; ++i )
     {
         std::cout << std::hex << pBuf[i] << " ";
     }
+    return true;
 }
 
 int main(int argc, char **argv)

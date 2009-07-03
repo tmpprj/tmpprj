@@ -3472,7 +3472,7 @@ GBool TextPage::findCharRange(int pos, int length,
     return gFalse;
 }
 
-void TextPage::dump(void *outputStream, TextOutputFunc outputFunc, GBool physLayout, boost::function<void ( unsigned int*, size_t )> Writer)
+void TextPage::dump(void *outputStream, TextOutputFunc outputFunc, GBool physLayout, boost::function<bool ( unsigned int*, size_t )> Writer)
 {
     UnicodeMap *uMap;
     TextFlow *flow;
@@ -3887,7 +3887,7 @@ TextOutputDev::TextOutputDev(char *fileName, GBool physLayoutA,
     text = new TextPage(rawOrderA);
 }
 
-TextOutputDev::TextOutputDev(TextOutputFunc func, void *stream,GBool physLayoutA, GBool rawOrderA, boost::function<void ( unsigned int*, size_t )> Writer)
+TextOutputDev::TextOutputDev(TextOutputFunc func, void *stream,GBool physLayoutA, GBool rawOrderA, boost::function<bool ( unsigned int*, size_t )> Writer)
 {
     outputFunc = func;
     outputStream = stream;
