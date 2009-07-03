@@ -19,12 +19,12 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    TextExtractorFactory::Instance().RegisterExtension( ".txt", "TXT Parser" );
-    TextExtractorFactory::Instance().RegisterExtension( ".doc", "DOC Parser" );
-    TextExtractorFactory::Instance().RegisterExtension( ".rtf", "DOC Parser" );
-    TextExtractorFactory::Instance().RegisterExtension( ".xls", "XLS Parser" );
-    TextExtractorFactory::Instance().RegisterExtension( ".ppt", "PPT Parser" );
-    TextExtractorFactory::Instance().RegisterExtension( ".pdf", "PDF Parser" );
+    TextExtractorFactory::Instance().RegisterExtension( ".txt", "Plain Text Document Parser" );
+    TextExtractorFactory::Instance().RegisterExtension( ".doc", "Microsoft Word Document Parser" );
+    TextExtractorFactory::Instance().RegisterExtension( ".rtf", "Microsoft Word Document Parser" );
+    TextExtractorFactory::Instance().RegisterExtension( ".xls", "Microsoft Excel Spreadsheet Parser" );
+    TextExtractorFactory::Instance().RegisterExtension( ".ppt", "Microsoft PowerPoint Document Parser" );
+    TextExtractorFactory::Instance().RegisterExtension( ".pdf", "Portable Document Format Parser" );
 
     CPlainTextExtractor TextExt;
 
