@@ -16,7 +16,7 @@ public:
 
     virtual ~ITextExtractor(){}
 
-    virtual void Extract( const QString& strFileName, QString& strText, size_t stChunkSize ) = 0;
+    virtual void Extract( const QString& strFileName, size_t stChunkSize ) = 0;
 
     boost::signals2::signal1< bool, QString >& SigChunk()
     {

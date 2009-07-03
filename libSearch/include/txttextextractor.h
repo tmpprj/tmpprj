@@ -15,7 +15,7 @@ public:
         m_strName = "Plain Text Document Parser";
     }
 
-    virtual void Extract( const QString& strFileName, QString& strText, size_t stChunkSize );
+    virtual void Extract( const QString& strFileName, size_t stChunkSize );
 
 private:
 

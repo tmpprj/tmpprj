@@ -5,10 +5,11 @@
 #include <QTextCodec>
 
 
-void OnData( const CPlainTextExtractor::structFileData& Data )
+bool OnData( QString Data )
 {
     QTextCodec::setCodecForLocale( QTextCodec::codecForName("CP1251") );
-    qDebug() << "file: " << Data.strFileName << " data: " << Data.strFileData;
+    qDebug() << Data;
+    return true;
 }
 
 int main(int argc, char *argv[])
@@ -26,16 +27,9 @@ int main(int argc, char *argv[])
     TextExtractorFactory::Instance().RegisterExtension( ".ppt", "Microsoft PowerPoint Document Parser" );
     TextExtractorFactory::Instance().RegisterExtension( ".pdf", "Portable Document Format Parser" );
 
-    CPlainTextExtractor TextExt;
+    ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( argv[1] );
+    pExtractor->SigChunk().connect( OnData );
 
-    TextExt.SigDataObtained().connect( OnData );
-    TextExt.OnData( argv[1] );
-//
-//
-//    std::string str;
-//    std::getline(std::cin, str);
-//
-//    TextExt.OnStop();
-
+    pExtractor->Extract( argv[1], 10000 );
     return 0;
 }

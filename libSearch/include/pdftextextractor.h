@@ -9,11 +9,15 @@ public:
 
     CPdfTextExtractor();
 
-    virtual void Extract( const QString& strFileName, QString& strText, size_t stChunkSize );
+    virtual void Extract( const QString& strFileName, size_t stChunkSize );
 
 protected:
 
     bool WriterFunc( QString& strBuf, unsigned int* data, size_t stSize, size_t stChunkSize );
+
+private:
+
+    QString m_strBuf;
 
 };
 #endif // PDFTEXTEXTRACTOR_H

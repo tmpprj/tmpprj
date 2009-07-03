@@ -8,7 +8,7 @@
 #include "search_conf.h"
 #include "log.hpp"
 
-void CTxtTextExtractor::Extract( const QString& strFileName, QString& strText, size_t stChunkSize )
+void CTxtTextExtractor::Extract( const QString& strFileName, size_t stChunkSize )
 {
     std::string strLine;
     m_pFile = boost::shared_ptr<QFile>( new QFile(strFileName) );
@@ -38,7 +38,8 @@ void CTxtTextExtractor::Extract( const QString& strFileName, QString& strText, s
         return;
     }
 
-    strText += m_pTextCodec->toUnicode( QByteArray( (const char*)&m_vecBuf[0], stBytesRead ) );
+    QString strBuf;
+    strBuf += m_pTextCodec->toUnicode( QByteArray( (const char*)&m_vecBuf[0], stBytesRead ) );
 
     if( m_vecBuf.size() < stChunkSize )
         m_vecBuf.resize( stChunkSize );
@@ -47,12 +48,12 @@ void CTxtTextExtractor::Extract( const QString& strFileName, QString& strText, s
     {
         size_t stBytesRead = m_pFile->read( (char*)&m_vecBuf[0], stChunkSize );
     
-        strText += m_pTextCodec->toUnicode( QByteArray( (const char*)&m_vecBuf[0], stBytesRead ) );
+        strBuf += m_pTextCodec->toUnicode( QByteArray( (const char*)&m_vecBuf[0], stBytesRead ) );
 
-        if( !SigChunk()( strText ) )
+        if( !SigChunk()( strBuf ) )
             break;
 
-        strText.clear();
+        strBuf.clear();
     }
 }
 

@@ -42,11 +42,10 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
         ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
         pExtractor->SigChunk().connect( boost::bind( &CPatternCounter::OnChunk, &counter, _1 ) );
         
-        CLog(debug) << "CPlainTextExtractor::WorkerFunc: processing " 
+        CLog(debug) << "CDocumentChecker::WorkerFunc: processing " 
             << qPrintable( strFileName ) << " with " << pExtractor->GetName();
 
-        QString strText;
-        pExtractor->Extract( strFileName, strText, SearchConf().nFileChunkSize.Value() );
+        pExtractor->Extract( strFileName, SearchConf().nFileChunkSize.Value() );
 
         if( counter.MatchedOk() )
             m_sigFileMatched( strFileName );

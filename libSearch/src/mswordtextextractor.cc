@@ -31,9 +31,10 @@ bool CMsWordTextExtractor::WriterFunc( QString& strBuf, unsigned short* data, si
     return true;
 }
 
-void CMsWordTextExtractor::Extract( const QString& strFileName, QString& strText, size_t stChunkSize )
+void CMsWordTextExtractor::Extract( const QString& strFileName, size_t stChunkSize )
 {
-    MsWord::Extract( boost::bind( &CMsWordTextExtractor::WriterFunc, this, boost::ref(strText), _1, stChunkSize ), strFileName );
+    MsWord::Extract( boost::bind( &CMsWordTextExtractor::WriterFunc, this, boost::ref(m_strBuf), _1, stChunkSize ), strFileName );
+    SigChunk()( m_strBuf );
 }
 
 CXlsTextExtractor::CXlsTextExtractor()
@@ -41,9 +42,10 @@ CXlsTextExtractor::CXlsTextExtractor()
     m_strName = "Microsoft Excel Spreadsheet Parser";
 }
 
-void CXlsTextExtractor::Extract( const QString& strFileName, QString& strText, size_t stChunkSize )
+void CXlsTextExtractor::Extract( const QString& strFileName, size_t stChunkSize )
 {
-    MsWord::ExtractXls( boost::bind( &CXlsTextExtractor::WriterFunc, this, boost::ref(strText), _1, stChunkSize ), strFileName );
+    MsWord::ExtractXls( boost::bind( &CXlsTextExtractor::WriterFunc, this, boost::ref(m_strBuf), _1, stChunkSize ), strFileName );
+    SigChunk()( m_strBuf );
 }
 
 CPptTextExtractor::CPptTextExtractor()
@@ -51,7 +53,8 @@ CPptTextExtractor::CPptTextExtractor()
     m_strName = "Microsoft PowerPoint Document Parser";
 }
 
-void CPptTextExtractor::Extract( const QString& strFileName, QString& strText, size_t stChunkSize )
+void CPptTextExtractor::Extract( const QString& strFileName, size_t stChunkSize )
 {
-    MsWord::ExtractPpt( boost::bind( &CPptTextExtractor::WriterFunc, this, boost::ref(strText), _1, stChunkSize ), strFileName );
+    MsWord::ExtractPpt( boost::bind( &CPptTextExtractor::WriterFunc, this, boost::ref(m_strBuf), _1, stChunkSize ), strFileName );
+    SigChunk()( m_strBuf );
 }
