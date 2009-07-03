@@ -1,22 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
+<ui version="4.0" >
  <class>SettingsWindowBase</class>
- <widget class="QDialog" name="SettingsWindowBase">
-  <property name="geometry">
+ <widget class="QDialog" name="SettingsWindowBase" >
+  <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>450</width>
     <height>300</height>
    </rect>
   </property>
-  <property name="windowTitle">
+  <property name="minimumSize" >
+   <size>
+    <width>450</width>
+    <height>300</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
    <string>Settings</string>
   </property>
-  <layout class="QVBoxLayout">
+  <layout class="QVBoxLayout" >
    <item>
-    <widget class="QTableWidget" name="tableExtensions">
-     <property name="columnCount">
+    <widget class="QTableWidget" name="tableExtensions" >
+     <property name="columnCount" >
       <number>2</number>
      </property>
      <column/>
@@ -24,27 +29,27 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout">
+    <layout class="QHBoxLayout" >
      <item>
-      <widget class="QPushButton" name="addButton">
-       <property name="text">
+      <widget class="QPushButton" name="addButton" >
+       <property name="text" >
         <string>&amp;Add</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="removeButton">
-       <property name="text">
+      <widget class="QPushButton" name="removeButton" >
+       <property name="text" >
         <string>&amp;Remove</string>
        </property>
       </widget>
      </item>
      <item>
       <spacer>
-       <property name="orientation">
+       <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" stdset="0">
+       <property name="sizeHint" >
         <size>
          <width>111</width>
          <height>28</height>
@@ -53,8 +58,8 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="okButton">
-       <property name="text">
+      <widget class="QPushButton" name="okButton" >
+       <property name="text" >
         <string>&amp;Ok</string>
        </property>
       </widget>
