@@ -8,12 +8,17 @@
 
 using namespace std;
 
+CFileSearcher::CFileSearcher()
+: CDataHandler< FileSearcher::structParams >( 1 )
+{
+}
+
 void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks, bool bRecursive )
 {
     {
         QDir dirFiles( strPath, "", QDir::Unsorted );
         QFileInfoList listFiles = dirFiles.entryInfoList( listMasks, 
-                QDir::AllDirs | QDir::Files | QDir::Hidden | QDir::System );
+                QDir::AllDirs | QDir::Files | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot );
 
         for (int i = 0; i < listFiles.size(); ++i)
         {
@@ -21,8 +26,7 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
             if( listFiles[ i ].isDir() )
             {
                 if( bRecursive )
-                    if( listFiles[ i ].fileName() != "." && listFiles[ i ].fileName() != ".." )
-                        Search( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ), listMasks, bRecursive );
+                    Search( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ), listMasks, bRecursive );
             }
             else
             {

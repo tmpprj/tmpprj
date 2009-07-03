@@ -4,7 +4,7 @@
 
 CPdfTextExtractor::CPdfTextExtractor()
 {
-    m_strName = "PDF Parser";
+    m_strName = "Portable Document Format Parser";
 }
 
 bool CPdfTextExtractor::WriterFunc( QString& strBuf, unsigned int* data, size_t stSize, size_t stChunkSize )

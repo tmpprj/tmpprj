@@ -12,7 +12,7 @@ public:
 
     CTxtTextExtractor():m_pTextCodec(NULL)
     {
-        m_strName = "TXT Parser";
+        m_strName = "Plain Text Document Parser";
     }
 
     virtual void Extract( const QString& strFileName, QString& strText, size_t stChunkSize );

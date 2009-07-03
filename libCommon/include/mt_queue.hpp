@@ -10,11 +10,13 @@ class mt_queue
 {
     std::queue< T > m_queue;
     boost::shared_mutex m_mtxAccess;
-    boost::interprocess::interprocess_semaphore m_smpQueue;
+    boost::interprocess::interprocess_semaphore m_smpQueueEmpty;
+    boost::interprocess::interprocess_semaphore m_smpQueueFull;
 
 public:
-    mt_queue()
-        : m_smpQueue( 0 )
+    mt_queue( int nMaxSize )
+        : m_smpQueueEmpty( 0 ),
+          m_smpQueueFull( nMaxSize )
     {
     }
 
@@ -32,39 +34,35 @@ public:
 
     void clear()
     {
-        boost::unique_lock< boost::shared_mutex > lock( m_mtxAccess );
-
-        while( !m_queue.empty() )
-        {
-            m_smpQueue.try_wait();
-            m_queue.pop();
-        }
+        while( !pop() );
     }
 
     void push( const T& elem )
     {
+        m_smpQueueFull.wait();
         boost::unique_lock< boost::shared_mutex > lock( m_mtxAccess );
+        
         m_queue.push( elem );
-        m_smpQueue.post();
+        m_smpQueueEmpty.post();
     }
 
     bool pop()
     {
-        m_smpQueue.wait();
+        m_smpQueueEmpty.wait();
         boost::unique_lock< boost::shared_mutex > lock( m_mtxAccess );
 
-        const T elem = m_queue.front();
         m_queue.pop();
+        m_smpQueueFull.post();
         return m_queue.empty();
     }
 
     const T front()
     {
-        m_smpQueue.wait();
+        m_smpQueueEmpty.wait();
         boost::unique_lock< boost::shared_mutex > lock( m_mtxAccess );
 
         const T elem = m_queue.front();
-        m_smpQueue.post();
+        m_smpQueueEmpty.post();
         return elem;
     }
 };

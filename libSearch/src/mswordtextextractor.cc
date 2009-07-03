@@ -7,7 +7,7 @@
 
 CMsWordTextExtractor::CMsWordTextExtractor()
 {
-    m_strName = "DOC Parser";
+    m_strName = "Microsoft Word Document Parser";
 }
 
 bool CMsWordTextExtractor::WriterFunc( QString& strBuf, unsigned short* data, size_t stChunkSize )
@@ -38,7 +38,7 @@ void CMsWordTextExtractor::Extract( const QString& strFileName, QString& strText
 
 CXlsTextExtractor::CXlsTextExtractor()
 {
-    m_strName = "XLS Parser";
+    m_strName = "Microsoft Excel Spreadsheet Parser";
 }
 
 void CXlsTextExtractor::Extract( const QString& strFileName, QString& strText, size_t stChunkSize )
@@ -48,7 +48,7 @@ void CXlsTextExtractor::Extract( const QString& strFileName, QString& strText, s
 
 CPptTextExtractor::CPptTextExtractor()
 {
-    m_strName = "PPT Parser";
+    m_strName = "Microsoft PowerPoint Document Parser";
 }
 
 void CPptTextExtractor::Extract( const QString& strFileName, QString& strText, size_t stChunkSize )

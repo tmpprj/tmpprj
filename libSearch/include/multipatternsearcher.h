@@ -15,6 +15,7 @@
 #define HASH_MASK   15
 
 typedef std::vector< std::string > PatternsContainer;
+typedef std::set< std::string > PatternMatchContainer;
 
 struct PatternInfo
 {
@@ -23,7 +24,7 @@ struct PatternInfo
 };
 
 typedef std::vector< PatternInfo > PatternsInfoContainer;
-        
+
 class MultiPatternSearcher
 {
     int LONG;
@@ -45,12 +46,13 @@ class MultiPatternSearcher
     int m_nMinPatternSize;
     
     void PreparePattern( int nIndex );
-    int AlgorithmMonkey( unsigned char* text, int start, int end );
-    int AlgorithmShort( unsigned char* text, int start, int end );
+    int AlgorithmMonkey( unsigned char* text, int start, int end, PatternMatchContainer& matches );
+    int AlgorithmShort( unsigned char* text, int start, int end, PatternMatchContainer& matches );
     
 public:  
     MultiPatternSearcher();
     void LoadPatterns( const PatternsContainer& vPatterns );
+    int FindPatterns( const std::string& strText, PatternMatchContainer& matches );
     int FindPatterns( const std::string& strText );
     size_t GetPatternCount();
 };
