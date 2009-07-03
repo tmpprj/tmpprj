@@ -108,7 +108,7 @@ void MultiPatternSearcher::LoadPatterns( const PatternsContainer& vPatterns )
         PreparePattern( i );
 }
 
-int MultiPatternSearcher::AlgorithmMonkey( unsigned char* text, int start, int end )
+int MultiPatternSearcher::AlgorithmMonkey( unsigned char* text, int start, int end, PatternMatchContainer& matches )
 {
     register unsigned char* textend;
     register unsigned int hash, i;
@@ -120,8 +120,6 @@ int MultiPatternSearcher::AlgorithmMonkey( unsigned char* text, int start, int e
     register struct pat_list *p;
     unsigned char *lastout;
 
-    int retWeight = 0;
-    
     textend = text + end;
     m1 = m - 1;
     lastout = text + start + 1;
@@ -157,8 +155,8 @@ int MultiPatternSearcher::AlgorithmMonkey( unsigned char* text, int start, int e
                 p = p->next;
                 qx = text-m1;
                 j = 0;
-                while( tr[ ( unsigned char )*( lpPatternInfo[ pat_index ].strPattern.c_str()
-                        + j ) ] == tr[ *( qx++ ) ] )
+                while( *( lpPatternInfo[ pat_index ].strPattern.c_str() + j ) != 0 && *( qx ) != 0 &&
+                        tr[ ( unsigned char )*( lpPatternInfo[ pat_index ].strPattern.c_str() + j ) ] == tr[ *( qx++ ) ] )
                     j++;
                 
                 if (j > m1 ) 
@@ -166,7 +164,7 @@ int MultiPatternSearcher::AlgorithmMonkey( unsigned char* text, int start, int e
                     if( lpPatternLengths[ pat_index ] <= j ) 
                         if( nUpdateId != lpPatternInfo[ pat_index ].nUpdateId )
                         {
-                            retWeight++;
+                            matches.insert( lpPatternInfo[ pat_index ].strPattern );
                             lpPatternInfo[ pat_index ].nUpdateId = nUpdateId;
                         }
                 }
@@ -183,10 +181,10 @@ int MultiPatternSearcher::AlgorithmMonkey( unsigned char* text, int start, int e
         text = text + shift;
     }
     
-    return retWeight;
+    return matches.size();
 }
 
-int MultiPatternSearcher::AlgorithmShort( unsigned char* text, int start, int end )
+int MultiPatternSearcher::AlgorithmShort( unsigned char* text, int start, int end, PatternMatchContainer& matches )
 {
     register unsigned char *textend;
     register int  j; 
@@ -195,8 +193,6 @@ int MultiPatternSearcher::AlgorithmShort( unsigned char* text, int start, int en
     int MATCHED = 0;
     unsigned char *lastout;
     unsigned char *qx;
-    
-    int retWeight = 0;
     
     textend = text + end;
     lastout = text + start + 1;
@@ -218,32 +214,39 @@ int MultiPatternSearcher::AlgorithmShort( unsigned char* text, int start, int en
             p = p->next;
             qx = text;
             j = 0;
-            while( tr[ ( unsigned char )*( lpPatternInfo[ pat_index ].strPattern.c_str() 
-                   + j ) ] == tr[ *( qx++ ) ] )
+            while( *( lpPatternInfo[ pat_index ].strPattern.c_str() + j ) != 0 && *( qx ) != 0 &&
+                    tr[ ( unsigned char )*( lpPatternInfo[ pat_index ].strPattern.c_str() + j ) ] == tr[ *( qx++ ) ] )
                 j++;
             
             if( lpPatternLengths[ pat_index ] <= j ) 
                 if( nUpdateId != lpPatternInfo[ pat_index ].nUpdateId )
                 {
-                    retWeight++;
+                    matches.insert( lpPatternInfo[ pat_index ].strPattern );
+
                     lpPatternInfo[ pat_index ].nUpdateId = nUpdateId;
                 }
         }
         MATCHED = 0;
     }
     
-    return retWeight;
+    return matches.size();
 }
 
-int MultiPatternSearcher::FindPatterns( const std::string& strText )
+int MultiPatternSearcher::FindPatterns( const std::string& strText, PatternMatchContainer& matches )
 {
     if( m_vPatternInfo.size() == 0 )
         return 0;
     
     if( SHORT )
-        return AlgorithmShort( ( unsigned char* )strText.c_str(), 0, strText.size() - 1 );
+        return AlgorithmShort( ( unsigned char* )strText.c_str(), 0, strText.size() - 1, matches );
     else
-        return AlgorithmMonkey( ( unsigned char* )strText.c_str(), 0, strText.size() - 1 );
+        return AlgorithmMonkey( ( unsigned char* )strText.c_str(), 0, strText.size() - 1, matches );
+}
+
+int MultiPatternSearcher::FindPatterns( const std::string& strText )
+{
+    PatternMatchContainer matches;
+    return FindPatterns( strText, matches );
 }
 
 size_t MultiPatternSearcher::GetPatternCount()
