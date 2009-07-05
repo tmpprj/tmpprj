@@ -14,9 +14,6 @@ public:
 protected:
 
     bool WriterFunc( QString& strBuf, unsigned short* data, size_t stChunkSize );
-
-    QString m_strBuf;
-
 };
 
 class CXlsTextExtractor: public CMsWordTextExtractor

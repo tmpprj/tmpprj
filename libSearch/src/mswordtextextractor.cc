@@ -23,7 +23,7 @@ bool CMsWordTextExtractor::WriterFunc( QString& strBuf, unsigned short* data, si
 
         if( (size_t)strBuf.size() >= stChunkSize )
         {
-            if( !SigChunk()( strBuf ) )
+            if( !*SigChunk()( strBuf ) )
                 return false;
             strBuf.clear();
         }
@@ -33,8 +33,9 @@ bool CMsWordTextExtractor::WriterFunc( QString& strBuf, unsigned short* data, si
 
 void CMsWordTextExtractor::Extract( const QString& strFileName, size_t stChunkSize )
 {
-    MsWord::Extract( boost::bind( &CMsWordTextExtractor::WriterFunc, this, boost::ref(m_strBuf), _1, stChunkSize ), strFileName );
-    SigChunk()( m_strBuf );
+    QString strBuf;
+    MsWord::Extract( boost::bind( &CMsWordTextExtractor::WriterFunc, this, boost::ref( strBuf ), _1, stChunkSize ), strFileName );
+    SigChunk()( strBuf );
 }
 
 CXlsTextExtractor::CXlsTextExtractor()
@@ -44,8 +45,9 @@ CXlsTextExtractor::CXlsTextExtractor()
 
 void CXlsTextExtractor::Extract( const QString& strFileName, size_t stChunkSize )
 {
-    MsWord::ExtractXls( boost::bind( &CXlsTextExtractor::WriterFunc, this, boost::ref(m_strBuf), _1, stChunkSize ), strFileName );
-    SigChunk()( m_strBuf );
+    QString strBuf;
+    MsWord::ExtractXls( boost::bind( &CXlsTextExtractor::WriterFunc, this, boost::ref( strBuf ), _1, stChunkSize ), strFileName );
+    SigChunk()( strBuf );
 }
 
 CPptTextExtractor::CPptTextExtractor()
@@ -55,6 +57,7 @@ CPptTextExtractor::CPptTextExtractor()
 
 void CPptTextExtractor::Extract( const QString& strFileName, size_t stChunkSize )
 {
-    MsWord::ExtractPpt( boost::bind( &CPptTextExtractor::WriterFunc, this, boost::ref(m_strBuf), _1, stChunkSize ), strFileName );
-    SigChunk()( m_strBuf );
+    QString strBuf;
+    MsWord::ExtractPpt( boost::bind( &CPptTextExtractor::WriterFunc, this, boost::ref( strBuf ), _1, stChunkSize ), strFileName );
+    SigChunk()( strBuf );
 }

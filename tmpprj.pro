@@ -1,7 +1,7 @@
 TEMPLATE      = subdirs
 CONFIG += ordered
 SUBDIRS       = \
-	libCommon\
+    libCommon\
     libCommon/tst/unit_tests \
     libChardet \
     libMsWord \

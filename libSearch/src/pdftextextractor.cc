@@ -13,7 +13,7 @@ bool CPdfTextExtractor::WriterFunc( QString& strBuf, unsigned int* data, size_t 
     {
         if( (size_t)strBuf.size() >= stChunkSize )
         {
-            if( !SigChunk()( strBuf ) )
+            if( !*SigChunk()( strBuf ) )
                 return false;
             strBuf.clear();
         }

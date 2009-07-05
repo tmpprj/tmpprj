@@ -1,5 +1,6 @@
 #include "patterncounter.h"
 
+#include <log.hpp>
 
 CPatternCounter::CPatternCounter( MultiPatternSearcher& searcher )
     : m_searcher( searcher )
@@ -14,10 +15,13 @@ bool CPatternCounter::OnChunk( const QString& strChunk )
 
     m_foundPatterns.insert( chunkPatterns.begin(), chunkPatterns.end() );
 
-    return m_foundPatterns.size() < m_searcher.GetPatternCount();
+    bool bRet = m_foundPatterns.size() < m_searcher.GetPatternCount();
+    CLog( debug ) << "Processing chunk: size( " << strChunk.size() << " ) " << bRet << '\t' << m_foundPatterns.size() << '\t' << m_searcher.GetPatternCount() << std::endl;
+
+    return bRet;
 }
 
 bool CPatternCounter::MatchedOk()
 {
-    return m_foundPatterns.size() < m_searcher.GetPatternCount();
+    return m_foundPatterns.size() >= m_searcher.GetPatternCount();
 }

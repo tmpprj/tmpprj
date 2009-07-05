@@ -18,7 +18,7 @@ public:
 
     virtual void Extract( const QString& strFileName, size_t stChunkSize ) = 0;
 
-    boost::signals2::signal1< bool, QString >& SigChunk()
+    boost::signals2::signal1< bool, const QString& >& SigChunk()
     {
         return m_sigChunk;
     }
@@ -34,7 +34,7 @@ protected:
 
 private:
 
-    boost::signals2::signal1< bool, QString > m_sigChunk;
+    boost::signals2::signal1< bool, const QString& > m_sigChunk;
 
 };
 

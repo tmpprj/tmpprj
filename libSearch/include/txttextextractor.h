@@ -15,6 +15,7 @@ public:
         m_strName = "Plain Text Document Parser";
     }
 
+    bool DetectCharset( const char* pData, size_t nSize );
     virtual void Extract( const QString& strFileName, size_t stChunkSize );
 
 private:
@@ -22,8 +23,6 @@ private:
     boost::shared_ptr<QFile> m_pFile;
 
     QTextCodec* m_pTextCodec;
-
-    std::vector<unsigned char> m_vecBuf;
 };
 
 #endif // CTXTTEXTEXTRACTOR_H

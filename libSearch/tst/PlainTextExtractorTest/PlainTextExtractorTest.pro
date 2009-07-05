@@ -7,6 +7,7 @@
 QT       -= gui
 
 TARGET = PlainTextExtractorTest
+DESTDIR = ../../../bin
 POST_TARGETDEPS += ../../../lib/libSearch.a ../../../lib/libChardet.a ../../../lib/libCommon.a ../../../lib/libMsWord.a
 CONFIG   += console
 CONFIG   -= app_bundle

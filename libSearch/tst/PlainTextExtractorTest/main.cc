@@ -7,7 +7,7 @@
 
 bool OnData( QString Data )
 {
-    QTextCodec::setCodecForLocale( QTextCodec::codecForName("CP1251") );
+    QTextCodec::setCodecForLocale( QTextCodec::codecForName("CP866") );
     qDebug() << Data;
     return true;
 }

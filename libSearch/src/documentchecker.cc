@@ -32,6 +32,11 @@ boost::signals2::signal1< void, const QString& >& CDocumentChecker::SigFileMatch
     return m_sigFileMatched;
 }
 
+int Func( const QString& str )
+{
+    return 123;
+}
+
 void CDocumentChecker::WorkerFunc( const QString& strFileName )
 {
     try
@@ -40,13 +45,16 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
 
         CPatternCounter counter( m_searcher );
         ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
-        pExtractor->SigChunk().connect( boost::bind( &CPatternCounter::OnChunk, &counter, _1 ) );
-        
-        CLog(debug) << "CDocumentChecker::WorkerFunc: processing " 
-            << qPrintable( strFileName ) << " with " << pExtractor->GetName();
+        CLog( debug ) << "Processing file " << qPrintable( strFileName ) <<
+                " with parser " << pExtractor->GetName() << std::endl;
+
+        boost::signals2::scoped_connection scoped_conn;
+        scoped_conn = pExtractor->SigChunk().connect(
+                boost::bind( &CPatternCounter::OnChunk, &counter, _1 ) );
 
         pExtractor->Extract( strFileName, SearchConf().nFileChunkSize.Value() );
 
+        CLog( debug ) << "Matched ok: " << counter.MatchedOk() << std::endl;
         if( counter.MatchedOk() )
             m_sigFileMatched( strFileName );
     }

@@ -8,6 +8,30 @@
 #include "search_conf.h"
 #include "log.hpp"
 
+bool CTxtTextExtractor::DetectCharset( const char* pData, size_t nSize )
+{
+    CCharsetDetector CharDet;
+
+    boost::this_thread::interruption_point();
+
+    CharDet.HandleData( pData, nSize );
+    CharDet.DataEnd();
+
+    std::string strCharset = CharDet.GetCharset();
+    CLog( debug ) << "Charset detected: " << strCharset << std::endl;
+
+    if( strCharset.empty() || NULL == ( m_pTextCodec = QTextCodec::codecForName( strCharset.c_str() ) ) )
+        m_pTextCodec = QTextCodec::codecForLocale();
+
+    if( NULL == m_pTextCodec )
+    {
+        CLog( error ) << "Cant get codec";
+        return false;
+    }
+
+    return true;
+}
+
 void CTxtTextExtractor::Extract( const QString& strFileName, size_t stChunkSize )
 {
     std::string strLine;
@@ -15,45 +39,26 @@ void CTxtTextExtractor::Extract( const QString& strFileName, size_t stChunkSize 
     if( !m_pFile->open(QIODevice::ReadOnly) )
         return;
 
-    CCharsetDetector CharDet;
-    size_t stBlockSize = SearchConf().stCharDetBlockSize.Value();
-    m_vecBuf.resize( stChunkSize < stBlockSize ? stChunkSize : stBlockSize );
+    std::vector< char > vChunk( stChunkSize );
+    bool bFirstRead = true;
 
-    size_t stBytesRead = 0;
-    stBytesRead = m_pFile->read( (char*)&m_vecBuf[0], m_vecBuf.size() );
-
-    boost::this_thread::interruption_point();
-
-    CharDet.HandleData( (char*)&m_vecBuf[0], stBytesRead );
-    CharDet.DataEnd();
-
-    std::string strCharset = CharDet.GetCharset();
-
-    if( strCharset.empty() || NULL == ( m_pTextCodec = QTextCodec::codecForName( strCharset.c_str() ) ) )
-        m_pTextCodec = QTextCodec::codecForLocale();
-
-    if( NULL == m_pTextCodec )
+    while( !m_pFile->atEnd() )
     {
-        CLog(debug) << "Cant get codec";
-        return;
-    }
+        size_t stBytesRead = m_pFile->read( (char*)&vChunk[0], vChunk.size() );
 
-    QString strBuf;
-    strBuf += m_pTextCodec->toUnicode( QByteArray( (const char*)&m_vecBuf[0], stBytesRead ) );
+        if( bFirstRead )
+        {
+            if( !DetectCharset( &vChunk[ 0 ], stBytesRead ) )
+                return;
+            bFirstRead = false;
+        }
 
-    if( m_vecBuf.size() < stChunkSize )
-        m_vecBuf.resize( stChunkSize );
-
-    while( m_pFile->atEnd() )
-    {
-        size_t stBytesRead = m_pFile->read( (char*)&m_vecBuf[0], stChunkSize );
-    
-        strBuf += m_pTextCodec->toUnicode( QByteArray( (const char*)&m_vecBuf[0], stBytesRead ) );
-
-        if( !SigChunk()( strBuf ) )
+        QString strChunk = m_pTextCodec->toUnicode( QByteArray( (const char*)&vChunk[0], stBytesRead ) );
+        if( !*SigChunk()( strChunk ) )
+        {
+            CLog( debug ) << "STOP Searching" << std::endl;
             break;
-
-        strBuf.clear();
+        }
     }
 }
 
