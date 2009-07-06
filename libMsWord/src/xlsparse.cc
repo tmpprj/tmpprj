@@ -644,7 +644,7 @@ char *copy_unicode_string( unsigned char **src, bool& bEndFlag, const char* strC
 
 
     static CCharsetCache cache;
-    short int* Charset;
+    short int* Charset = NULL;
     if( NULL != strCharsetName )
         Charset = cache.GetCharset( strCharsetName );
     else if( !source_charset )
