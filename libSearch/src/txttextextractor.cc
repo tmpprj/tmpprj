@@ -18,7 +18,7 @@ bool CTxtTextExtractor::DetectCharset( const char* pData, size_t nSize )
     CharDet.DataEnd();
 
     std::string strCharset = CharDet.GetCharset();
-    CLog( debug ) << "Charset detected: " << strCharset << std::endl;
+    CLog( debug ) << "Charset detected: " << strCharset;
 
     if( strCharset.empty() || NULL == ( m_pTextCodec = QTextCodec::codecForName( strCharset.c_str() ) ) )
         m_pTextCodec = QTextCodec::codecForLocale();
@@ -57,7 +57,7 @@ void CTxtTextExtractor::Extract( const QString& strFileName, size_t stChunkSize 
         QString strChunk = m_pTextCodec->toUnicode( QByteArray( (const char*)&vChunk[0], stBytesRead ) );
         if( !*SigChunk()( strChunk ) )
         {
-            CLog( debug ) << "STOP Searching" << std::endl;
+            CLog( debug ) << "STOP Searching";
             break;
         }
     }
