@@ -13,6 +13,7 @@
 #include "CharTypes.h"
 #include "UnicodeMap.h"
 #include "Error.h"
+#include <exceptions.h>
 
 namespace Pdf
 {
@@ -49,7 +50,7 @@ void Extract( boost::function<bool (unsigned int*, size_t)> Writer, const QStrin
 #endif
 
     if (!pDoc->isOk())
-        throw std::runtime_error( "PdfExtractor: unable to read file: " + strFileName.toStdString() );
+        throw CUserLevelError( "PdfExtractor: unable to read file: " + strFileName );
 
     int firstPage = 1;
     int lastPage = pDoc->getNumPages();
