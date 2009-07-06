@@ -603,10 +603,12 @@ Plugin::~Plugin() {
 // parsing
 //------------------------------------------------------------------------
 
-GlobalParams::GlobalParams(char *cfgFileName) {
+GlobalParams::GlobalParams(char *cfgFileName) 
+{
+    boost::ignore_unused_variable_warning( cfgFileName );
     UnicodeMap *map;
-    GString *fileName;
-    FILE *f;
+//    GString *fileName;
+//    FILE *f;
     int i;
 
 #if MULTITHREADED

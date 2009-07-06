@@ -6,6 +6,7 @@
 
 #include <log.hpp>
 #include <exceptions.h>
+#include <boost/concept_check.hpp>
 
 CDocumentChecker::CDocumentChecker()
     : CDataHandler< QString >( SearchConf().nCheckerQueueSize.Value() )
@@ -34,6 +35,7 @@ boost::signals2::signal1< void, const QString& >& CDocumentChecker::SigFileMatch
 
 int Func( const QString& str )
 {
+    boost::ignore_unused_variable_warning( str );
     return 123;
 }
 

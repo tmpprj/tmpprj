@@ -32,5 +32,6 @@ bool output_paragraph( unsigned short int *buffer )
     boost::this_thread::interruption_point();
     if ( !WriterImpl.empty() )
         return WriterImpl( buffer );
+    return true;
 }
 

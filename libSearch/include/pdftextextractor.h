@@ -15,9 +15,5 @@ protected:
 
     bool WriterFunc( QString& strBuf, unsigned int* data, size_t stSize, size_t stChunkSize );
 
-private:
-
-    QString m_strBuf;
-
 };
 #endif // PDFTEXTEXTRACTOR_H
