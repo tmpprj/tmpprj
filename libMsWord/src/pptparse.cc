@@ -199,12 +199,14 @@ static bool process_item (int rectype, long reclen, int flags, FILE* input, int*
                 vecBuf.push_back( (unsigned char)*buf );
 			else
             {
+                vecBuf.push_back(0x0A);
                 vecBuf.push_back(0);
                 if( !PptWriterImpl( &vecBuf[0] ) )
                     return false;
                 vecBuf.clear();
             }
 		}
+        vecBuf.push_back(0x0A);
         vecBuf.push_back(0);
         if( !PptWriterImpl( &vecBuf[0] ) )
             return false;
@@ -228,12 +230,14 @@ static bool process_item (int rectype, long reclen, int flags, FILE* input, int*
                 vecBuf.push_back(u);
 			else
             {
+                vecBuf.push_back(0x0A);
                 vecBuf.push_back(0);
                 if( !PptWriterImpl( &vecBuf[0] ) )
                     return false;
                 vecBuf.clear();
             }
 		}
+        vecBuf.push_back(0x0A);
         vecBuf.push_back(0);
         if( !PptWriterImpl( &vecBuf[0] ) )
             return false;

@@ -705,6 +705,7 @@ char *copy_unicode_string( unsigned char **src, bool& bEndFlag, const char* strC
     }
 
 
+    vecUString.push_back(0x0A);
     vecUString.push_back(0);
     if ( !XlsWriterImpl.empty() )
     {
