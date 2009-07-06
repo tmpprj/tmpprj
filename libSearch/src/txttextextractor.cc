@@ -44,6 +44,7 @@ void CTxtTextExtractor::Extract( const QString& strFileName, size_t stChunkSize 
 
     while( !m_pFile->atEnd() )
     {
+        boost::this_thread::interruption_point();
         size_t stBytesRead = m_pFile->read( (char*)&vChunk[0], vChunk.size() );
 
         if( bFirstRead )
