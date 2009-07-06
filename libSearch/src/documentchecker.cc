@@ -63,18 +63,19 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
     catch( CUserLevelError& e )
     {
         SigError()( strFileName, e.whatQ() );
-        CLog(error) << "CPlainTextExtractor::WorkerFunc: " << e.what();
+        CLog( error ) << "CDocumentChecker::WorkerFunc: " << e.what();
     }
     catch( std::exception& e )
     {
-        CLog(error) << "CPlainTextExtractor::WorkerFunc: (" << qPrintable(strFileName) << "): " << e.what();
+        CLog( error ) << "CDocumentChecker::WorkerFunc: (" << qPrintable(strFileName) << "): " << e.what();
     }
     catch( boost::thread_interrupted& )
     {
+        CLog( error ) << "CDocumentChecker::WorkerFunc: interrupted";
         throw;
     }
     catch( ... )
     {
-        CLog(error) << "CPlainTextExtractor::WorkerFunc: (" << qPrintable(strFileName) << "): unknown error";
+        CLog( error ) << "CDocumentChecker::WorkerFunc: (" << qPrintable(strFileName) << "): unknown error";
     }
 }
