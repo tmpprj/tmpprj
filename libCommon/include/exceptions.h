@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <errno.h>
 
 
 class CUserLevelError: public std::exception
@@ -7,6 +8,11 @@ public:
     
     CUserLevelError( const QString& strDescr ):m_strDescr( strDescr )
     {}
+
+    CUserLevelError()
+    {
+		m_strDescr = ::strerror (errno);
+    }
 
     virtual ~CUserLevelError() throw()
     {}

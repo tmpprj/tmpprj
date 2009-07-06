@@ -9,6 +9,7 @@
 #include <xls.h>
 #include <ppt.h>
 #include <log.hpp>
+#include <exceptions.h>
 
 int signature_check = 1;
 int forced_charset = 0; /* Flag which disallow rtf parser override charset*/
@@ -38,7 +39,7 @@ namespace MsWord
         f = fopen( strFileName.toUtf8().constData(),"rb");
 #endif
         if ( !f )
-            throw std::runtime_error( "MsWord::Extract: file not found" );
+            throw CUserLevelError();
 
         set_writer( Writer );
         analyze_format( f );
@@ -64,7 +65,7 @@ namespace MsWord
         f = fopen( strFileName.toUtf8().constData(),"rb");
 #endif
         if ( !f )
-            throw std::runtime_error( "MsWord::ExtractXls: src charset not found" );
+            throw CUserLevelError();
 
         set_xls_writer( XlsWriter );
         if( ( new_file = ole_init( f, NULL, 0 ) ) != NULL )
@@ -91,7 +92,7 @@ namespace MsWord
         {
             if( new_file != f )
                 fclose(f);
-            throw std::runtime_error( "ExtractXls: incorrect file format" );
+            throw CUserLevelError( "ExtractXls: incorrect file format" );
         }
     }
 
@@ -110,7 +111,7 @@ namespace MsWord
 #endif
 
         if(!f)
-            throw std::runtime_error( "MsWord::ExtractPpt: src charset not found" );
+            throw CUserLevelError();
 
         set_ppt_writer( PptWriter );
         if( ( new_file=ole_init( f, NULL, 0 ) ) != NULL )
@@ -133,7 +134,7 @@ namespace MsWord
         {
             if( new_file != f )
                 fclose(f);
-            throw std::runtime_error( "ExtractPpt: incorrect file format" );
+            throw CUserLevelError( "ExtractPpt: incorrect file format" );
         }
     }
 }
