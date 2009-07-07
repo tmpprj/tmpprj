@@ -16,6 +16,8 @@ class QSearchWindow : public QMainWindow, private Ui::SearchWindowBase
     QSearchFacade m_search;
     QMovie m_progressMovie;
     QString m_strCurrentFile;
+    QTime m_SearchTimerStart, m_SearchTimerStop;
+    size_t m_stFilesProcessed, m_stFilesMatched;
 
 public:
     QSearchWindow(QWidget *parent = 0);

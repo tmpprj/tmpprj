@@ -86,7 +86,13 @@ void QSearchWindow::startStatusUpdateTimer()
 
 void QSearchWindow::showDefaultStatus()
 {
-    statusBar()->showMessage( "Status: Ready" );
+    QString strStatus = "Status: Ready";
+    if( !m_SearchTimerStart.isNull() && !m_SearchTimerStop.isNull() )
+        strStatus += ".   Time elapsed: " + QString::number( m_SearchTimerStart.secsTo(m_SearchTimerStop) ) + 
+            " sec.   Files processed: " + QString::number( m_stFilesProcessed ) +
+            ".   Files matched: " + QString::number( m_stFilesMatched );
+
+    statusBar()->showMessage( strStatus );
 }
 
 void QSearchWindow::showSearchStatus( const QString& strFilename )
@@ -125,6 +131,7 @@ void QSearchWindow::fileProcessing( const QString& strFilename )
 {
     CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename );
     m_strCurrentFile = strFilename;
+    ++m_stFilesProcessed;
 }
 
 void QSearchWindow::fileMatched( const QString& strFilename )
@@ -132,6 +139,8 @@ void QSearchWindow::fileMatched( const QString& strFilename )
     CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename );
 
     filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
+    
+    ++m_stFilesMatched;
 }
 
 void QSearchWindow::searchDone()
@@ -139,6 +148,7 @@ void QSearchWindow::searchDone()
     CLog(debug) << __FUNCTION__;
     m_progressMovie.stop();
     m_strCurrentFile.clear();
+    m_SearchTimerStop = QTime::currentTime();
 }
 
 void QSearchWindow::searchError( const QString& strFilename, const QString& strError )
@@ -170,6 +180,9 @@ void QSearchWindow::find()
 
     m_search.GetSearcher().Start( options );
     m_progressMovie.start();
+    m_SearchTimerStart = QTime::currentTime();
+    m_stFilesProcessed = 0;
+    m_stFilesMatched = 0;
 }
 
 void QSearchWindow::stop()
