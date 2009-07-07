@@ -48,7 +48,7 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
         CPatternCounter counter( m_searcher );
         ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
         CLog( debug ) << "Processing file " << qPrintable( strFileName ) <<
-                " with parser " << pExtractor->GetName() << std::endl;
+                " with parser " << pExtractor->GetName();
 
         boost::signals2::scoped_connection scoped_conn;
         scoped_conn = pExtractor->SigChunk().connect(

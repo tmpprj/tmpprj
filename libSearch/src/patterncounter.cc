@@ -16,7 +16,8 @@ bool CPatternCounter::OnChunk( const QString& strChunk )
     m_foundPatterns.insert( chunkPatterns.begin(), chunkPatterns.end() );
 
     bool bRet = m_foundPatterns.size() < m_searcher.GetPatternCount();
-    CLog( debug ) << "Processing chunk: size( " << strChunk.size() << " ) " << bRet << '\t' << m_foundPatterns.size() << '\t' << m_searcher.GetPatternCount() << std::endl;
+    CLog( debug ) << "Processing chunk: size( " << strChunk.size() << " ) " << bRet << 
+        '\t' << m_foundPatterns.size() << '\t' << m_searcher.GetPatternCount();
 
     return bRet;
 }

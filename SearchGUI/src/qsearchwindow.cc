@@ -26,7 +26,7 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     startStatusUpdateTimer();
 
     reloadSettings();
-    CLog(debug) << "GUI THREAD: " << QThread::currentThreadId() << std::endl;
+    CLog(debug) << "GUI THREAD: " << QThread::currentThreadId();
 }
 
 QSearchWindow::~QSearchWindow()
@@ -129,14 +129,14 @@ void QSearchWindow::browse()
 
 void QSearchWindow::fileProcessing( const QString& strFilename )
 {
-    CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename ) << std::endl;
+    CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename );
     m_strCurrentFile = strFilename;
     ++m_stFilesProcessed;
 }
 
 void QSearchWindow::fileMatched( const QString& strFilename )
 {
-    CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename ) << std::endl;
+    CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename );
 
     filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
     
