@@ -22,7 +22,7 @@ class mt_queue
                 return;                 // Return while access mutex locked - save current transaction
             m_mtxAccess.unlock();
 
-            boost::this_thread::yield();
+            boost::this_thread::sleep( boost::posix_time::milliseconds( 20 ) );
         }
     }
 
@@ -36,7 +36,7 @@ class mt_queue
                 return;                 // Return while access mutex locked - save current transaction
             m_mtxAccess.unlock();
 
-            boost::this_thread::yield();
+            boost::this_thread::sleep( boost::posix_time::milliseconds( 20 ) );
         }
     }
 
