@@ -44,6 +44,9 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
     try
     {
         m_sigFileProcessing( strFileName );
+        
+        QTime timer;
+        timer.start();
 
         CPatternCounter counter( m_searcher );
         ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
@@ -56,7 +59,9 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
 
         pExtractor->Extract( strFileName, SearchConf().nFileChunkSize.Value() );
 
-        CLog( debug ) << "Matched ok: " << counter.MatchedOk() << std::endl;
+        CLog( debug ) << "Matched ok: " << counter.MatchedOk() << 
+            " time elapsed: " << timer.elapsed() << " ms" << std::endl;
+
         if( counter.MatchedOk() )
             m_sigFileMatched( strFileName );
     }
