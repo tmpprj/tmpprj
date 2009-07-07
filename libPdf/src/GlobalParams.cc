@@ -604,6 +604,7 @@ Plugin::~Plugin() {
 //------------------------------------------------------------------------
 
 GlobalParams::GlobalParams(char *cfgFileName) 
+    :m_bStopFlag( false )
 {
     boost::ignore_unused_variable_warning( cfgFileName );
     UnicodeMap *map;

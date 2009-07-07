@@ -3519,8 +3519,8 @@ void TextPage::dump(void *outputStream, TextOutputFunc outputFunc, GBool physLay
     if (rawOrder) {
 
         for (word = rawWords; word; word = word->next) {
+            globalParams->SetStopFlag( !Writer( word->text, word->len ) );
             s = new GString();
-            Writer( word->text, word->len );
             dumpFragment(word->text, word->len, uMap, s);
             (*outputFunc)(outputStream, s->getCString(), s->getLength());
             delete s;
@@ -3531,7 +3531,7 @@ void TextPage::dump(void *outputStream, TextOutputFunc outputFunc, GBool physLay
                     (*outputFunc)(outputStream, space, spaceLen);
                 }
             } else {
-                Writer( &uiEol, 1 );
+                globalParams->SetStopFlag( !Writer( &uiEol, 1 ) );
                 (*outputFunc)(outputStream, eol, eolLen);
             }
         }
@@ -3594,7 +3594,7 @@ void TextPage::dump(void *outputStream, TextOutputFunc outputFunc, GBool physLay
 
             // print the line
             s = new GString();
-            Writer( frag->line->text + frag->start, frag->len );
+            globalParams->SetStopFlag( !Writer( frag->line->text + frag->start, frag->len ) );
             col += dumpFragment(frag->line->text + frag->start, frag->len, uMap, s);
             (*outputFunc)(outputStream, s->getCString(), s->getLength());
             delete s;
@@ -3616,7 +3616,7 @@ void TextPage::dump(void *outputStream, TextOutputFunc outputFunc, GBool physLay
                     d = 1;
                 }
                 for (; d > 0; --d) {
-                    Writer( &uiEol, 1 );
+                    globalParams->SetStopFlag( !Writer( &uiEol, 1 ) );
                     (*outputFunc)(outputStream, eol, eolLen);
                 }
                 col = 0;
@@ -3635,31 +3635,31 @@ void TextPage::dump(void *outputStream, TextOutputFunc outputFunc, GBool physLay
                         --n;
                     }
                     s = new GString();
-                    Writer( line->text, n );
+                    globalParams->SetStopFlag( !Writer( line->text, n ) );
                     dumpFragment(line->text, n, uMap, s);
                     (*outputFunc)(outputStream, s->getCString(), s->getLength());
                     delete s;
                     if (!line->hyphenated) {
                         if (line->next) {
-                            Writer( &uiSpace, 1 );
+                            globalParams->SetStopFlag( !Writer( &uiSpace, 1 ) );
                             (*outputFunc)(outputStream, space, spaceLen);
                         } else if (blk->next) {
                             //~ this is a bit of a kludge - we should really do a more
                             //~ intelligent determination of paragraphs
                             if (blk->next->lines->words->fontSize ==
                                     blk->lines->words->fontSize) {
-                                Writer( &uiSpace, 1 );
+                                globalParams->SetStopFlag( !Writer( &uiSpace, 1 ) );
                                 (*outputFunc)(outputStream, space, spaceLen);
                             } else {
-                                Writer( &uiEol, 1 );
+                                globalParams->SetStopFlag( !Writer( &uiEol, 1 ) );
                                 (*outputFunc)(outputStream, eol, eolLen);
                             }
                         }
                     }
                 }
             }
-            Writer( &uiEol, 1 );
-            Writer( &uiEol, 1 );
+            globalParams->SetStopFlag( !Writer( &uiEol, 1 ) );
+            globalParams->SetStopFlag( !Writer( &uiEol, 1 ) );
             (*outputFunc)(outputStream, eol, eolLen);
             (*outputFunc)(outputStream, eol, eolLen);
         }

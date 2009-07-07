@@ -326,9 +326,14 @@ void PDFDoc::displayPages(OutputDev *out, int firstPage, int lastPage,
                           void *abortCheckCbkData) {
     int page;
 
-    for (page = firstPage; page <= lastPage; ++page) {
-        displayPage(out, page, hDPI, vDPI, rotate, useMediaBox, crop, printing,
-                    abortCheckCbk, abortCheckCbkData);
+    for (page = firstPage; page <= lastPage; ++page) 
+    {
+        displayPage(out, page, hDPI, vDPI, rotate, useMediaBox, crop, printing, abortCheckCbk, abortCheckCbkData);
+        if( globalParams->GetStopFlag() )
+        {
+            globalParams->SetStopFlag( false );
+            break;
+        }
     }
 }
 

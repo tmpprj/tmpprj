@@ -199,6 +199,16 @@ public:
 
     ~GlobalParams();
 
+    void SetStopFlag( bool bStopFlag )
+    {
+        m_bStopFlag = bStopFlag;
+    }
+
+    bool GetStopFlag()
+    {
+        return m_bStopFlag;
+    }
+
     void setBaseDir(char *dir);
     void setupBaseFonts(char *dir);
 
@@ -463,6 +473,8 @@ private:
     GMutex unicodeMapCacheMutex;
     GMutex cMapCacheMutex;
 #endif
+
+    bool m_bStopFlag;
 };
 
 #endif
