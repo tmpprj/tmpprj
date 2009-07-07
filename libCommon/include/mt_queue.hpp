@@ -9,60 +9,86 @@ template < class T >
 class mt_queue
 {
     std::queue< T > m_queue;
-    boost::shared_mutex m_mtxAccess;
-    boost::interprocess::interprocess_semaphore m_smpQueueEmpty;
-    boost::interprocess::interprocess_semaphore m_smpQueueFull;
+    int m_nMaxSize;
+    boost::recursive_mutex m_mtxAccess;
+
+    void waitWhileQueueEmpty()
+    {
+        while( true )
+        {
+            boost::this_thread::interruption_point();
+            m_mtxAccess.lock();
+            if( m_queue.size() > 0 )
+                return;                 // Return while access mutex locked - save current transaction
+            m_mtxAccess.unlock();
+
+            boost::this_thread::yield();
+        }
+    }
+
+    void waitWhileQueueFull()
+    {
+        while( true )
+        {
+            boost::this_thread::interruption_point();
+            m_mtxAccess.lock();
+            if( ( int )m_queue.size() < m_nMaxSize )
+                return;                 // Return while access mutex locked - save current transaction
+            m_mtxAccess.unlock();
+
+            boost::this_thread::yield();
+        }
+    }
 
 public:
     mt_queue( int nMaxSize )
-        : m_smpQueueEmpty( 0 ),
-          m_smpQueueFull( nMaxSize )
+        : m_nMaxSize( nMaxSize )
     {
     }
 
     bool empty()
     {
-        boost::shared_lock< boost::shared_mutex > lock( m_mtxAccess );
+        boost::unique_lock< boost::recursive_mutex > lock( m_mtxAccess );
         return m_queue.empty();
     }
 
     size_t size()
     {
-        boost::shared_lock< boost::shared_mutex > lock( m_mtxAccess );
+        boost::unique_lock< boost::recursive_mutex > lock( m_mtxAccess );
         return m_queue.size();
     }
 
     void clear()
     {
-        while( !pop() );
+        boost::unique_lock< boost::recursive_mutex > lock( m_mtxAccess );
+
+        while( m_queue.size() > 0 )
+            m_queue.pop();
     }
 
     void push( const T& elem )
     {
-        m_smpQueueFull.wait();
-        boost::unique_lock< boost::shared_mutex > lock( m_mtxAccess );
-        
+        waitWhileQueueFull();
         m_queue.push( elem );
-        m_smpQueueEmpty.post();
+        m_mtxAccess.unlock();
     }
 
     bool pop()
     {
-        m_smpQueueEmpty.wait();
-        boost::unique_lock< boost::shared_mutex > lock( m_mtxAccess );
-
+        waitWhileQueueEmpty();
         m_queue.pop();
-        m_smpQueueFull.post();
-        return m_queue.empty();
+        bool ret = m_queue.empty();
+        m_mtxAccess.unlock();
+
+        return ret;
     }
 
     const T front()
     {
-        m_smpQueueEmpty.wait();
-        boost::unique_lock< boost::shared_mutex > lock( m_mtxAccess );
-
+        waitWhileQueueEmpty();
         const T elem = m_queue.front();
-        m_smpQueueEmpty.post();
+        m_mtxAccess.unlock();
+        
         return elem;
     }
 };

@@ -9,7 +9,7 @@
 using namespace std;
 
 CFileSearcher::CFileSearcher()
-: CDataHandler< FileSearcher::structParams >( 1 )
+: CDataHandler< FileSearcher::structParams >( 2 )
 {
 }
 

@@ -45,7 +45,6 @@ public:
         if( NULL != m_pThread.get() )
         {
             m_pThread->interrupt();
-            m_Queue.push( DataType() );
             m_pThread->join();
             m_pThread.reset();
             m_Queue.clear();
