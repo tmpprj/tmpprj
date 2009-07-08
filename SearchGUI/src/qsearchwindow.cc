@@ -15,6 +15,7 @@ using namespace std;
 
 QSearchWindow::QSearchWindow(QWidget *parent)
     : QMainWindow(parent)
+    , m_tTimeElapsed(0)
 {
     setupUi( this );
 
@@ -87,8 +88,8 @@ void QSearchWindow::startStatusUpdateTimer()
 void QSearchWindow::showDefaultStatus()
 {
     QString strStatus = "Status: Ready";
-    if( !m_SearchTimerStart.isNull() && !m_SearchTimerStop.isNull() )
-        strStatus += ".   Time elapsed: " + QString::number( m_SearchTimerStart.secsTo(m_SearchTimerStop) ) + 
+    if( !m_SearchTimerStart.isNull() && 0 != m_tTimeElapsed )
+        strStatus += ".   Time elapsed: " + QString::number( m_tTimeElapsed/1000 ) + 
             " sec.   Files processed: " + QString::number( m_stFilesProcessed ) +
             ".   Files matched: " + QString::number( m_stFilesMatched );
 
@@ -148,7 +149,7 @@ void QSearchWindow::searchDone()
     CLog(debug) << __FUNCTION__;
     m_progressMovie.stop();
     m_strCurrentFile.clear();
-    m_SearchTimerStop = QTime::currentTime();
+    m_tTimeElapsed = m_SearchTimerStart.elapsed();
 }
 
 void QSearchWindow::searchError( const QString& strFilename, const QString& strError )
