@@ -13,6 +13,7 @@ public:
     CPatternCounter( MultiPatternSearcher& searcher );
     bool OnChunk( const QString& strChunk );
     bool MatchedOk();
+    bool SomePatterns();
 };
 
 #endif

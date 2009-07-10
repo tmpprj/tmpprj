@@ -49,15 +49,20 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
         timer.start();
 
         CPatternCounter counter( m_searcher );
-        ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
-        CLog( debug ) << "Processing file " << qPrintable( strFileName ) <<
-                " with parser " << pExtractor->GetName();
+        if( counter.SomePatterns() )
+        {
+            ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
+            CLog( debug ) << "Processing file " << qPrintable( strFileName ) <<
+                    " with parser " << pExtractor->GetName();
 
-        boost::signals2::scoped_connection scoped_conn;
-        scoped_conn = pExtractor->SigChunk().connect(
-                boost::bind( &CPatternCounter::OnChunk, &counter, _1 ) );
+            boost::signals2::scoped_connection scoped_conn;
+            scoped_conn = pExtractor->SigChunk().connect(
+                    boost::bind( &CPatternCounter::OnChunk, &counter, _1 ) );
 
-        pExtractor->Extract( strFileName, SearchConf().nFileChunkSize.Value() );
+            pExtractor->Extract( strFileName, SearchConf().nFileChunkSize.Value() );
+        }
+        else
+            CLog( debug ) << "Processing file " << qPrintable( strFileName ) << " - empty patterns";
 
         CLog( debug ) << "Matched ok: " << counter.MatchedOk() << 
             " time elapsed: " << timer.elapsed() << " ms" << std::endl;
