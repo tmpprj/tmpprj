@@ -17,7 +17,6 @@
 static unsigned char rec[MAX_MS_RECSIZE];
 int biff_version=0;
 short int *formatTable=NULL;
-char *forced_date_format = NULL;
 size_t formatTableIndex = 0;
 size_t formatTableSize = 0;
 double date_shift = 25569.0;
@@ -41,6 +40,18 @@ const char* cCharsetMap[256] = { "cp1252", "cp1252", NULL, NULL, NULL, NULL, NUL
                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "cp874", NULL,
                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "cp1250", NULL,
                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, "cp850" };
+
+void CleanUp()
+{
+    if( NULL != formatTable )
+    {
+        ::free( formatTable );
+        formatTable = NULL;
+        formatTableIndex = 0;
+        formatTableSize = 0;
+    }
+    date_shift = 25569.0;
+}
 
 void CleanUpFormatIdxUsed( void );
 
@@ -381,7 +392,6 @@ bool process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
     {
         int row,col,format_code;
         unsigned char **pcell;
-
         saved_reference=NULL;
         row = getshort(( unsigned char* )rec,0 )-startrow;
         col = getshort(( unsigned char* )rec,2 );
@@ -404,7 +414,6 @@ bool process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
             pcell=allocate( row,col );
             format_code=getshort(( unsigned char* )rec,offset );
             *pcell=( unsigned char* )strdup( format_rk( rec+offset+2,format_code ) );
-
         }
         break;
     }
@@ -484,7 +493,8 @@ bool process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
             formatTable=( short int* )realloc( formatTable, ( formatTableSize+=16 )*sizeof( short int ) );
 
             if ( !formatTable )
-                throw std::runtime_error( "ExtractXls: not enough memory" );        }
+                throw std::runtime_error( "ExtractXls: not enough memory" );        
+        }
         formatTable[formatTableIndex++] = formatIndex;
         break;
     }
@@ -853,10 +863,7 @@ char *isDateFormat( int format_code )
     int index;
     int dateindex;
     if ( format_code>=( int )formatTableIndex )
-    {
-        CLog(debug) << "Format code " << format_code << " is used before definition";
         return NULL;
-    }
 
     index = formatTable[format_code];
     if ( IsFormatIdxUsed( index ) )
@@ -868,7 +875,6 @@ char *isDateFormat( int format_code )
     dateindex=BuiltInDateFormatIdx( index );
     if ( dateindex )
     {
-        if ( forced_date_format ) return forced_date_format;
         return GetBuiltInDateFormat( dateindex );
     }
     else

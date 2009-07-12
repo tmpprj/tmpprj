@@ -43,5 +43,6 @@ char *mark_string(char *instr);
 
 void SetFormatIdxUsed(int format_code);
 
+void CleanUp();
 
 #endif
