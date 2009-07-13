@@ -90,10 +90,12 @@ namespace MsWord
         }
         else
         {
+            CleanUp();
             if( new_file != f )
                 fclose(f);
             throw CUserLevelError( "ExtractXls: incorrect file format" );
         }
+        CleanUp();
     }
 
     void ExtractPpt( boost::function<bool ( unsigned short* )> PptWriter, const QString& strFileName )

@@ -25,12 +25,12 @@
 
 #define min(a,b) ((a) < (b) ? (a) : (b))
 
-long int sectorSize, shortSectorSize;
+int sectorSize, shortSectorSize;
 /* BBD Info */
-long int  bbdNumBlocks;
+int  bbdNumBlocks;
 unsigned char *BBD=NULL;
 /* SBD Info */
-long int sbdNumber, sbdStart, sbdLen;
+int sbdNumber, sbdStart, sbdLen;
 unsigned char *SBD=NULL;
 oleEntry *rootEntry=NULL;
 /* Properties Info */
@@ -60,7 +60,7 @@ FILE* ole_init( FILE *f, void *buffer, size_t bufSize )
     unsigned char *tmpBuf;
     FILE *newfile;
     int ret=0, i;
-    long int sbdMaxLen, sbdCurrent, propMaxLen, propCurrent, mblock, msat_size;
+    int sbdMaxLen, sbdCurrent, propMaxLen, propCurrent, mblock, msat_size;
     oleEntry *tEntry;
 
     /* deleting old data (if it was allocated) */
@@ -494,8 +494,9 @@ size_t ole_read( void *ptr, size_t size, size_t nmemb, FILE *stream )
         int readbytes;
         blockNumber++;
         newoffset = calcFileBlockOffset( e,blockNumber );
-        if ( newoffset != e->file_offset );
-        fseek( e->file, e->file_offset=newoffset , SEEK_SET );
+        //TODO:
+        if ( newoffset != e->file_offset )
+            fseek( e->file, e->file_offset=newoffset , SEEK_SET );
         readbytes=fread( cptr+rread, 1, min( llen-rread, ssize ), e->file );
         rread +=readbytes;
         e->file_offset +=readbytes;
