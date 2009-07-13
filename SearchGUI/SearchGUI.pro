@@ -47,3 +47,4 @@ LIBS += -L../ \
     -lboost_thread-mt \
     -lboost_system-mt \
     -Wl,-Bdynamic
+DEFINES += REVISION=\"\\\"$$quote( $$system( git tag -l ) )\\\"\"
