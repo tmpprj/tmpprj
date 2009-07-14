@@ -121,7 +121,8 @@ void QSearchWindow::browse()
     if( strBrowseDir.isEmpty() )
         strBrowseDir = QDir::currentPath();
 
-    QString directory = QFileDialog::getExistingDirectory( this, tr( "Find Files" ), strBrowseDir );
+    QString directory = QFileDialog::getExistingDirectory( this, tr( "Find Files" ), strBrowseDir, 
+            QFileDialog::DontUseNativeDialog | QFileDialog::ShowDirsOnly );
     if( !directory.isEmpty() ) 
     {
         directoryComboBox->insertItem( 0, directory );
