@@ -15,6 +15,7 @@ MultiPatternSearcher::MultiPatternSearcher()
     SHORT = 0;
     pt = NULL;
     qt = NULL;
+    nUpdateId = 0;
 }
 
 void MultiPatternSearcher::PreparePattern( int nIndex )
@@ -128,7 +129,6 @@ int MultiPatternSearcher::AlgorithmMonkey( unsigned char* text, int start, int e
     PatternInfo* lpPatternInfo = &m_vPatternInfo[ 0 ];
     int* lpPatternLengths = &m_vPatternsLengths[ 0 ];
     
-    static int nUpdateId = 0;
     nUpdateId++;
 
     while( text <= textend ) 
@@ -201,7 +201,6 @@ int MultiPatternSearcher::AlgorithmShort( unsigned char* text, int start, int en
     PatternInfo* lpPatternInfo = &m_vPatternInfo[ 0 ];
     int* lpPatternLengths = &m_vPatternsLengths[ 0 ];
 
-    static int nUpdateId = 0;
     nUpdateId++;
 
     while( ++text <= textend ) 

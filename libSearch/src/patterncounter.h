@@ -8,9 +8,10 @@
 class CPatternCounter
 {
     MultiPatternSearcher& m_searcher;
+    bool m_bCaseSensitive;
     PatternMatchContainer m_foundPatterns;
 public:
-    CPatternCounter( MultiPatternSearcher& searcher );
+    CPatternCounter( MultiPatternSearcher& searcher, bool bCaseSensitive );
     bool OnChunk( const QString& strChunk );
     bool MatchedOk();
     bool SomePatterns();
