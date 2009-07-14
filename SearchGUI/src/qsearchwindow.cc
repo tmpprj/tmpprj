@@ -63,6 +63,7 @@ void QSearchWindow::connectSearcher()
             this, SLOT( fileProcessing( const QString& ) ), Qt::QueuedConnection );
     connect( &m_search, SIGNAL( fileMatched( const QString& ) ), 
             this, SLOT( fileMatched( const QString& ) ), Qt::QueuedConnection );
+    connect( &m_search, SIGNAL( searchStart() ), this, SLOT( searchStart() ), Qt::QueuedConnection );
     connect( &m_search, SIGNAL( searchDone() ), this, SLOT( searchDone() ), Qt::QueuedConnection );
     connect( &m_search, SIGNAL( error( const QString&, const QString& ) ),
             this, SLOT( searchError( const QString&, const QString& ) ), Qt::QueuedConnection );
@@ -144,9 +145,15 @@ void QSearchWindow::fileMatched( const QString& strFilename )
     ++m_stFilesMatched;
 }
 
+void QSearchWindow::searchStart()
+{
+    CLog( debug ) << __FUNCTION__;
+    m_progressMovie.start();
+}
+
 void QSearchWindow::searchDone()
 {
-    CLog(debug) << __FUNCTION__;
+    CLog( debug ) << __FUNCTION__;
     m_progressMovie.stop();
     m_strCurrentFile.clear();
     m_tTimeElapsed = m_SearchTimerStart.elapsed();
@@ -180,7 +187,6 @@ void QSearchWindow::find()
     options.strPath = strPath;
 
     m_search.GetSearcher().Start( options );
-    m_progressMovie.start();
     m_SearchTimerStart = QTime::currentTime();
     m_stFilesProcessed = 0;
     m_stFilesMatched = 0;

@@ -16,22 +16,27 @@ CSearchFacade::CSearchFacade()
     m_checker.SigError().connect( boost::bind( &CSearchFacade::OnError, this, _1, _2 ) );
 }
 
+CSearchFacade::~CSearchFacade()
+{
+    // Disconnecting signals to not call OnSomeQueueEmpty when destroying objects separately
+    m_searcher.SigQueueEmpty().disconnect_all_slots();
+    m_checker.SigQueueEmpty().disconnect_all_slots();
+    
+    Stop();
+}
+
 void CSearchFacade::Start( const SearchOptions& options )
 {
     CLog(debug) << "CSearchFacade::Start: pattern count - " << options.listPatterns.size();
     
     m_checker.SetSearchParameters( options.listPatterns, options.bCaseSensitive );
     m_searcher.StartSearch( options.strPath, options.listMasks, options.bRecursive );
+    m_sigStart();
 }
 
 void CSearchFacade::Stop()
 {
     m_sigStop();
-}
-
-CSearchFacade::~CSearchFacade()
-{
-    Stop();
 }
 
 void CSearchFacade::OnSomeQueueEmpty()
@@ -58,6 +63,11 @@ boost::signals2::signal1< void, const QString& >& CSearchFacade::SigFileProcessi
 boost::signals2::signal1< void, const QString& >& CSearchFacade::SigFileMatched()
 {
     return m_checker.SigFileMatched();
+}
+
+boost::signals2::signal0< void >& CSearchFacade::SigSearchStart()
+{
+    return m_sigStart;
 }
 
 boost::signals2::signal0< void >& CSearchFacade::SigSearchDone()

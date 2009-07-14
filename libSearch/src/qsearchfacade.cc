@@ -9,6 +9,7 @@ QSearchFacade::QSearchFacade( QObject* parent )
     m_search.SigFileFound().connect( boost::bind( &QSearchFacade::OnFileFound, this, _1 ) );
     m_search.SigFileProcessing().connect( boost::bind( &QSearchFacade::OnFileProcessing, this, _1 ) );
     m_search.SigFileMatched().connect( boost::bind( &QSearchFacade::OnFileMatched, this, _1 ) );
+    m_search.SigSearchStart().connect( boost::bind( &QSearchFacade::OnSearchStart, this ) );
     m_search.SigSearchDone().connect( boost::bind( &QSearchFacade::OnSearchDone, this ) );
     m_search.SigError().connect( boost::bind( &QSearchFacade::OnError, this, _1, _2 ) );
 }
@@ -31,6 +32,11 @@ void QSearchFacade::OnFileProcessing( const QString& strFilename )
 void QSearchFacade::OnFileMatched( const QString& strFilename )
 {
     Q_EMIT fileMatched( strFilename );
+}
+
+void QSearchFacade::OnSearchStart()
+{
+    Q_EMIT searchStart();
 }
 
 void QSearchFacade::OnSearchDone()

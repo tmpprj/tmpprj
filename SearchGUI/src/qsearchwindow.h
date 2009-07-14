@@ -36,6 +36,7 @@ private Q_SLOTS:
 
     void fileProcessing( const QString& strFilename );
     void fileMatched( const QString& strFilename ); 
+    void searchStart();
     void searchDone();
     void searchError( const QString& strFilename, const QString& strError );
 
