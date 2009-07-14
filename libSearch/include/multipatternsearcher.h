@@ -44,6 +44,7 @@ class MultiPatternSearcher
   
     std::vector< int > m_vPatternsLengths;
     int m_nMinPatternSize;
+    int nUpdateId;
     
     void PreparePattern( int nIndex );
     int AlgorithmMonkey( unsigned char* text, int start, int end, PatternMatchContainer& matches );

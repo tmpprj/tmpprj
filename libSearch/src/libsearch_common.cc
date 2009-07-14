@@ -1,16 +1,20 @@
 #include "libsearch_common.h"
+#include <log.hpp>
+
+QByteArray StringToCommon( const QString& str, bool bCaseSensitive )
+{
+    if( bCaseSensitive )
+        return str.toUtf8();
+    else
+        return str.toLower().toUtf8();
+}
 
 void ConvertListToPatterns( const QStringList& listPatterns, bool bCaseSensitive, PatternsContainer& patterns )
 {
     for( int i = 0; i < listPatterns.size(); i++ )
     {
-        QString strData;
-        if( bCaseSensitive )
-            strData = listPatterns[ i ];
-        else
-            strData = listPatterns[ i ].toLower();
-
-        patterns.push_back( std::string( ( const char* )strData.utf16(), strData.size() * 2 ) );
+        QByteArray array = StringToCommon( listPatterns[ i ], bCaseSensitive );
+        patterns.push_back( std::string( ( const char* )array.data(), array.size() ) );
     }
 }
 
