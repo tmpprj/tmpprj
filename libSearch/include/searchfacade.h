@@ -17,6 +17,8 @@ struct SearchOptions
     QStringList listMasks;
     bool bCaseSensitive;
     bool bRecursive;
+    size_t stMinFileSize;
+    size_t stMaxFileSize;
 };
 
 
