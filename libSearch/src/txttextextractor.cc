@@ -42,15 +42,22 @@ void CTxtTextExtractor::Extract( const QString& strFileName, size_t stChunkSize 
     std::vector< char > vChunk( stChunkSize );
     bool bFirstRead = true;
 
+    long long llTotalBytesRead = 0;
+    long long llFileSize = m_pFile->size();
     while( !m_pFile->atEnd() )
     {
         boost::this_thread::interruption_point();
         size_t stBytesRead = m_pFile->read( (char*)&vChunk[0], vChunk.size() );
+        llTotalBytesRead += stBytesRead;
+        
+        //if file has grown
+        if( llTotalBytesRead > llFileSize )
+            break;
 
         if( bFirstRead )
         {
             if( !DetectCharset( &vChunk[ 0 ], stBytesRead ) )
-                return;
+                break;
             bFirstRead = false;
         }
 
