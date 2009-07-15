@@ -18,7 +18,6 @@ bool CPatternCounter::OnChunk( const QString& strChunk )
 
     m_foundPatterns.insert( chunkPatterns.begin(), chunkPatterns.end() );
     
-    CLog( debug ) << "Chunk: " << qPrintable( strChunk );
     CLog( debug ) << "Chunk patterns: " << chunkPatterns.size();
     CLog( debug ) << "Found patterns: " << m_foundPatterns.size();
 

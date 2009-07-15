@@ -44,7 +44,7 @@
          <x>0</x>
          <y>0</y>
          <width>691</width>
-         <height>99</height>
+         <height>118</height>
         </rect>
        </property>
        <attribute name="label">
@@ -184,7 +184,7 @@
          <x>0</x>
          <y>0</y>
          <width>691</width>
-         <height>102</height>
+         <height>80</height>
         </rect>
        </property>
        <attribute name="label">
@@ -238,7 +238,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="groupFileSize">
           <property name="title">
            <string>Enable File Size Limits</string>
           </property>
@@ -249,7 +249,7 @@
            <bool>true</bool>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
@@ -266,12 +266,18 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_6">
+            <widget class="QLineEdit" name="lineMinFileSize">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="inputMask">
+              <string/>
+             </property>
+             <property name="text">
+              <string>0</string>
              </property>
             </widget>
            </item>
@@ -290,12 +296,18 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_5">
+            <widget class="QLineEdit" name="lineMaxFileSize">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="inputMask">
+              <string/>
+             </property>
+             <property name="text">
+              <string>102400</string>
              </property>
             </widget>
            </item>
