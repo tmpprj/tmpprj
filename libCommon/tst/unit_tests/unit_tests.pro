@@ -7,7 +7,7 @@
 QT       -= gui
 
 TARGET = unit_tests
-POST_TARGETDEPS += ../../../lib/libSearch.a ../../../lib/libChardet.a ../../../lib/libCommon.a ../../../lib/libMsWord.a
+POST_TARGETDEPS += ../../../lib/libCommon.a
 CONFIG   += console
 CONFIG   -= app_bundle
 DEPENDPATH += ../../include ../../../libCommon/include

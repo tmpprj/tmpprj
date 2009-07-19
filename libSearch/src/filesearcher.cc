@@ -13,7 +13,7 @@ CFileSearcher::CFileSearcher()
 {
 }
 
-void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks, bool bRecursive )
+void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks, bool bRecursive, size_t stMinFileSize, size_t stMaxFileSize )
 {
     {
         QDir dirFiles( strPath, "", QDir::Unsorted );
@@ -26,7 +26,12 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
             if( listFiles[ i ].isDir() )
             {
                 if( bRecursive )
-                    Search( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ), listMasks, bRecursive );
+                    Search( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ), listMasks, bRecursive, stMinFileSize, stMaxFileSize );
+            }
+            else if( 0 != stMaxFileSize && ( listFiles[ i ].size() > stMaxFileSize*1024 || listFiles[ i ].size() < stMinFileSize*1024 ) )
+            {
+                CLog(debug) << "CFileSearcher::Search: file " << qPrintable( listFiles[i].fileName() ) << " is filtered by size: " << listFiles[ i ].size() << " bytes";
+                continue;
             }
             else
             {
@@ -38,13 +43,13 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
 
 void CFileSearcher::WorkerFunc( const FileSearcher::structParams& Params )
 {
-    Search( Params.strPath, Params.listMasks, Params.bRecursive );
+    Search( Params.strPath, Params.listMasks, Params.bRecursive, Params.stMinFileSize, Params.stMaxFileSize );
 }
 
 
-void CFileSearcher::StartSearch( const QString& strPath, const QStringList& listMasks, bool bRecursive )
+void CFileSearcher::StartSearch( const QString& strPath, const QStringList& listMasks, bool bRecursive, size_t stMinFileSize, size_t stMaxFileSize )
 {
-    FileSearcher::structParams Params = { strPath, listMasks, bRecursive };
+    FileSearcher::structParams Params = { strPath, listMasks, bRecursive, stMinFileSize, stMaxFileSize };
     OnData( Params );
 }
 

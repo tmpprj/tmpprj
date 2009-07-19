@@ -55,6 +55,11 @@ void QSearchWindow::setupControls()
     
     directoryComboBox->setCompleter( completer );
     directoryComboBox->setInsertPolicy( QComboBox::NoInsert );
+
+    QValidator* pValidatorMin = new QIntValidator( 0, 999999999LL, this );
+    lineMinFileSize->setValidator( pValidatorMin );
+    QValidator* pValidatorMax = new QIntValidator( 1, 999999999LL, this );
+    lineMaxFileSize->setValidator( pValidatorMax );
 }
 
 void QSearchWindow::connectSearcher()
@@ -184,8 +189,7 @@ void QSearchWindow::find()
     QStringList listMasks;
     ParseMasks( strMasks, listMasks );
 
-    SearchOptions options = { strPath, listPatterns, listMasks, bCaseSensitive, bRecursive };
-    options.strPath = strPath;
+    SearchOptions options = { strPath, listPatterns, listMasks, bCaseSensitive, bRecursive, groupFileSize->isChecked() ? lineMinFileSize->text().toULongLong() : 0, groupFileSize->isChecked() ? lineMaxFileSize->text().toULongLong() : 0 };
 
     m_search.GetSearcher().Start( options );
     m_SearchTimerStart = QTime::currentTime();
