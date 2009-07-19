@@ -1,6 +1,9 @@
+#include <QtPlugin>
 #include <QApplication>
 #include <log.hpp>
 #include "qsearchwindow.h"
+
+Q_IMPORT_PLUGIN(qgif)
 
 int main(int argc, char *argv[])
 {

@@ -39,7 +39,6 @@ private Q_SLOTS:
     void searchStart();
     void searchDone();
     void searchError( const QString& strFilename, const QString& strError );
-
 private:
     void setupProgressAnimation();
     void setupControls();

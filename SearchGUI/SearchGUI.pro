@@ -26,6 +26,7 @@ DEPENDPATH += ./include \
     ../libChardet/include \
     ../libMsWord/include \
     ../libSearch/include
+QTPLUGIN += qgif
 RESOURCES += ../libMsWord/charsets.qrc \
     res/SearchGUI.qrc
 INCLUDEPATH += ../external/boost \
