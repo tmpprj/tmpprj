@@ -42,10 +42,10 @@ public:
 
     virtual ~CLog()
     {
-        GetLock().unlock();
-
         if( !m_bMultiString )
             GetFile() << std::endl;
+        
+        GetLock().unlock();
     }
 
     template< class T > CLog& operator<<( const T& t )
