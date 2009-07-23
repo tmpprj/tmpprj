@@ -48,7 +48,7 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
         QTime timer;
         timer.start();
 
-        CPatternCounter counter( m_searcher, m_bCaseSensitive );
+        CPatternCounter counter( m_searcher, m_bCaseSensitive, SearchConf().nChunkOverlap.Value() );
         if( counter.SomePatterns() )
         {
             ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
