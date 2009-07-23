@@ -48,8 +48,8 @@ public:
             m_pThread->join();
             m_pThread.reset();
             m_Queue.clear();
+            m_sigQueueEmpty();
         }
-        m_sigQueueEmpty();
     }
 
     boost::signals2::signal0< void >& SigQueueEmpty()
