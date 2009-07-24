@@ -31,7 +31,8 @@ void CSearchFacade::Start( const SearchOptions& options )
     
     m_sigStart();
     m_checker.SetSearchParameters( options.listPatterns, options.bCaseSensitive );
-    m_searcher.StartSearch( options.strPath, options.listMasks, options.bRecursive, options.stMinFileSize, options.stMaxFileSize );
+    m_searcher.StartSearch( options.strPath, options.listMasks, 
+            options.bRecursive, options.stMinFileSize, options.stMaxFileSize );
 }
 
 void CSearchFacade::Stop()

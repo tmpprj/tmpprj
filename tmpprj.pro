@@ -12,6 +12,7 @@ SUBDIRS       = \
     libPdf/tst/PdfExtractorTest \
     libSearch \
     libSearch/tst/PlainTextExtractorTest \
+    libSearch/tst/SearchFacadeTest \
     libSearch/tst/MultiPatternSearcherTest \
     SearchGUI
 
