@@ -11,10 +11,11 @@ class CPatternCounter
     bool m_bCaseSensitive;
     int m_nOverlap;
     PatternMatchContainer m_foundPatterns;
-    QString m_strPreBlock;
+    QByteArray m_PreBlock;
 public:
     CPatternCounter( MultiPatternSearcher& searcher, bool bCaseSensitive, int nOverlap );
     bool OnChunk( const QString& strChunk );
+    bool OnChunkIsRaw( const QByteArray& array );
     bool MatchedOk();
     bool SomePatterns();
 };

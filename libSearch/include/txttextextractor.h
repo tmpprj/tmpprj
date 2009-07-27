@@ -15,7 +15,7 @@ public:
         m_strName = "Plain Text Document Parser";
     }
 
-    bool DetectCharset( const char* pData, size_t nSize );
+    bool DetectCharset( const char* pData, size_t nSize, bool& bCharsetDetected );
     virtual void Extract( const QString& strFileName, size_t stChunkSize );
 
 private:

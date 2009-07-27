@@ -55,9 +55,11 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
             CLog( debug ) << "Processing file " << qPrintable( strFileName ) <<
                     " with parser " << pExtractor->GetName();
 
-            boost::signals2::scoped_connection scoped_conn;
-            scoped_conn = pExtractor->SigChunk().connect(
+            boost::signals2::scoped_connection scoped_conn1, scoped_conn2;
+            scoped_conn1 = pExtractor->SigChunk().connect(
                     boost::bind( &CPatternCounter::OnChunk, &counter, _1 ) );
+            scoped_conn2 = pExtractor->SigChunkIsRaw().connect(
+                    boost::bind( &CPatternCounter::OnChunkIsRaw, &counter, _1 ) );
 
             pExtractor->Extract( strFileName, SearchConf().nFileChunkSize.Value() );
         }
@@ -65,7 +67,7 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
             CLog( debug ) << "Processing file " << qPrintable( strFileName ) << " - empty patterns";
 
         CLog( debug ) << "Matched ok: " << counter.MatchedOk() << 
-            " time elapsed: " << timer.elapsed() << " ms" << std::endl;
+            dec << " time elapsed: " << timer.elapsed() << " ms" << std::endl;
 
         if( counter.MatchedOk() )
             m_sigFileMatched( strFileName );

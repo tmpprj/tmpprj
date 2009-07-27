@@ -8,7 +8,7 @@
 #include "search_conf.h"
 #include "log.hpp"
 
-bool CTxtTextExtractor::DetectCharset( const char* pData, size_t nSize )
+bool CTxtTextExtractor::DetectCharset( const char* pData, size_t nSize, bool& bCharsetDetected )
 {
     CCharsetDetector CharDet;
 
@@ -22,6 +22,8 @@ bool CTxtTextExtractor::DetectCharset( const char* pData, size_t nSize )
 
     if( strCharset.empty() || NULL == ( m_pTextCodec = QTextCodec::codecForName( strCharset.c_str() ) ) )
         m_pTextCodec = QTextCodec::codecForLocale();
+    else
+        bCharsetDetected = true;
 
     if( NULL == m_pTextCodec )
     {
@@ -44,6 +46,7 @@ void CTxtTextExtractor::Extract( const QString& strFileName, size_t stChunkSize 
 
     long long llTotalBytesRead = 0;
     long long llFileSize = m_pFile->size();
+    bool bCharsetDetected = false;
     while( !m_pFile->atEnd() )
     {
         boost::this_thread::interruption_point();
@@ -56,13 +59,27 @@ void CTxtTextExtractor::Extract( const QString& strFileName, size_t stChunkSize 
 
         if( bFirstRead )
         {
-            if( !DetectCharset( &vChunk[ 0 ], stBytesRead ) )
+            if( !DetectCharset( &vChunk[ 0 ], stBytesRead, bCharsetDetected ) )
                 break;
             bFirstRead = false;
         }
 
-        QString strChunk = m_pTextCodec->toUnicode( QByteArray( (const char*)&vChunk[0], stBytesRead ) );
-        if( !*SigChunk()( strChunk ) )
+        bool bContinueSearch = true;
+
+        if( bCharsetDetected )
+        {
+            CLog( debug ) << "Call SigChunk";
+            QString strChunk = m_pTextCodec->toUnicode( QByteArray( (const char*)&vChunk[0], stBytesRead ) );
+            bContinueSearch = !*SigChunk()( strChunk );
+        }
+        else
+        {
+            CLog( debug ) << "Call SigChunkIsRaw";
+            QByteArray array( ( const char* )&vChunk[ 0 ], stBytesRead );
+            bContinueSearch = !*SigChunkIsRaw()( array );
+        }
+
+        if( !bContinueSearch )
         {
             CLog( debug ) << "STOP Searching";
             break;

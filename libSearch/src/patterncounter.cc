@@ -11,8 +11,14 @@ CPatternCounter::CPatternCounter( MultiPatternSearcher& searcher, bool bCaseSens
 
 bool CPatternCounter::OnChunk( const QString& strChunk )
 {
-    QByteArray array = StringToCommon( m_strPreBlock + strChunk, m_bCaseSensitive );
-    std::string strData = std::string( ( const char* )array, array.size() );
+    QByteArray array = StringToCommon( strChunk, m_bCaseSensitive );
+    OnChunkIsRaw( array );
+}
+
+bool CPatternCounter::OnChunkIsRaw( const QByteArray& array )
+{
+    const QByteArray arraySearch = m_PreBlock + array;
+    std::string strData = std::string( arraySearch.data(), arraySearch.size() );
     
     PatternMatchContainer chunkPatterns;
     m_searcher.FindPatterns( strData, chunkPatterns );
@@ -22,7 +28,7 @@ bool CPatternCounter::OnChunk( const QString& strChunk )
     CLog( debug ) << "Chunk patterns: " << chunkPatterns.size();
     CLog( debug ) << "Found patterns: " << m_foundPatterns.size();
 
-    m_strPreBlock = strChunk.right( m_nOverlap );
+    m_PreBlock = array;
 
     return ( m_foundPatterns.size() < m_searcher.GetPatternCount() );
 }
