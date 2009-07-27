@@ -12,13 +12,15 @@ SOURCES += ./src/main.cc \
     ./src/qfilestable.cc \
     ./src/qsettingstable.cc \
     ./src/guicommon.cc \
-    ./src/searchgui_conf.cc
+    ./src/searchgui_conf.cc \
+    ./src/contextmenu.cc
 HEADERS += ./src/qsearchwindow.h \
     ./src/qsettingswindow.h \
     ./src/qfilestable.h \
     ./src/qsettingstable.h \
     ./src/guicommon.h \
-    ./src/searchgui_conf.h
+    ./src/searchgui_conf.h \
+    ./src/contextmenu.h
 FORMS += ./src/searchwindow.ui \
     ./src/settingswindow.ui
 DEPENDPATH += ./include \
