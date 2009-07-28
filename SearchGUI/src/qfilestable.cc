@@ -44,7 +44,10 @@ void QFilesTable::contextMenuEvent ( QContextMenuEvent * e )
 {
     QTableWidgetItem* pItem;
     if( NULL != ( pItem = itemAt( e->pos() ) ) && 0 == pItem->column() )
-        m_CtxMenu.Show( e->pos(), pItem->text() );
+    {
+        QPoint pos = e->reason() == QContextMenuEvent::Mouse ? e->globalPos() : e->pos();
+        m_CtxMenu.Show( pos, pItem->text() );
+    }
 }
 
 void QFilesTable::mouseMoveEvent( QMouseEvent *event )
