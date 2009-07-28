@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
+<ui version="4.0" >
  <class>SearchWindowBase</class>
- <widget class="QMainWindow" name="SearchWindowBase">
-  <property name="geometry">
+ <widget class="QMainWindow" name="SearchWindowBase" >
+  <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
@@ -10,104 +9,104 @@
     <height>749</height>
    </rect>
   </property>
-  <property name="minimumSize">
+  <property name="minimumSize" >
    <size>
     <width>625</width>
     <height>0</height>
    </size>
   </property>
-  <property name="windowTitle">
+  <property name="windowTitle" >
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QVBoxLayout" >
     <item>
-     <widget class="QToolBox" name="toolBox">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+     <widget class="QToolBox" name="toolBox" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="frameShape">
+      <property name="frameShape" >
        <enum>QFrame::StyledPanel</enum>
       </property>
-      <property name="frameShadow">
+      <property name="frameShadow" >
        <enum>QFrame::Raised</enum>
       </property>
-      <property name="currentIndex">
+      <property name="currentIndex" >
        <number>0</number>
       </property>
-      <widget class="QWidget" name="page">
-       <property name="geometry">
+      <widget class="QWidget" name="page" >
+       <property name="geometry" >
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>691</width>
-         <height>99</height>
+         <width>689</width>
+         <height>118</height>
         </rect>
        </property>
-       <attribute name="label">
+       <attribute name="label" >
         <string>Search Data</string>
        </attribute>
-       <layout class="QVBoxLayout">
+       <layout class="QVBoxLayout" >
         <item>
-         <layout class="QHBoxLayout">
+         <layout class="QHBoxLayout" >
           <item>
-           <layout class="QVBoxLayout">
+           <layout class="QVBoxLayout" >
             <item>
-             <widget class="QLabel" name="label_3">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <widget class="QLabel" name="label_3" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="minimumSize">
+              <property name="minimumSize" >
                <size>
                 <width>0</width>
                 <height>0</height>
                </size>
               </property>
-              <property name="text">
+              <property name="text" >
                <string>Masks:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <widget class="QLabel" name="label" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="minimumSize">
+              <property name="minimumSize" >
                <size>
                 <width>0</width>
                 <height>0</height>
                </size>
               </property>
-              <property name="text">
+              <property name="text" >
                <string>Text:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_2">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <widget class="QLabel" name="label_2" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="minimumSize">
+              <property name="minimumSize" >
                <size>
                 <width>0</width>
                 <height>0</height>
                </size>
               </property>
-              <property name="text">
+              <property name="text" >
                <string>Directory:</string>
               </property>
              </widget>
@@ -115,57 +114,57 @@
            </layout>
           </item>
           <item>
-           <layout class="QVBoxLayout">
+           <layout class="QVBoxLayout" >
             <item>
-             <widget class="QComboBox" name="masksComboBox">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <widget class="QComboBoxExt" name="masksComboBox" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="toolTip">
+              <property name="toolTip" >
                <string>Example: *.doc; *.pdf; *.txt</string>
               </property>
-              <property name="editable">
+              <property name="editable" >
                <bool>true</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="textComboBox">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <widget class="QComboBoxExt" name="textComboBox" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="toolTip">
-               <string>Example: word &quot;sample phrase&quot;</string>
+              <property name="toolTip" >
+               <string>Example: word "sample phrase"</string>
               </property>
-              <property name="editable">
+              <property name="editable" >
                <bool>true</bool>
               </property>
              </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout">
+             <layout class="QHBoxLayout" >
               <item>
-               <widget class="QComboBox" name="directoryComboBox">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <widget class="QComboBoxExt" name="directoryComboBox" >
+                <property name="sizePolicy" >
+                 <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
-                <property name="editable">
+                <property name="editable" >
                  <bool>true</bool>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="browseButton">
-                <property name="text">
+               <widget class="QPushButton" name="browseButton" >
+                <property name="text" >
                  <string>&amp;Browse...</string>
                 </property>
                </widget>
@@ -178,43 +177,43 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_2">
-       <property name="geometry">
+      <widget class="QWidget" name="page_2" >
+       <property name="geometry" >
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>691</width>
-         <height>72</height>
+         <width>534</width>
+         <height>86</height>
         </rect>
        </property>
-       <attribute name="label">
+       <attribute name="label" >
         <string>Settings</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+       <layout class="QHBoxLayout" >
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
+         <layout class="QVBoxLayout" >
           <item>
-           <widget class="QCheckBox" name="recursiveCheckBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <widget class="QCheckBox" name="recursiveCheckBox" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="text">
+            <property name="text" >
              <string>Recursive</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="caseCheckBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <widget class="QCheckBox" name="caseCheckBox" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="text">
+            <property name="text" >
              <string>Case Sensitive</string>
             </property>
            </widget>
@@ -223,13 +222,13 @@
         </item>
         <item>
          <spacer>
-          <property name="orientation">
+          <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeType">
+          <property name="sizeType" >
            <enum>QSizePolicy::Fixed</enum>
           </property>
-          <property name="sizeHint" stdset="0">
+          <property name="sizeHint" >
            <size>
             <width>40</width>
             <height>16</height>
@@ -238,82 +237,82 @@
          </spacer>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupFileSize">
-          <property name="title">
+         <widget class="QGroupBox" name="groupFileSize" >
+          <property name="title" >
            <string>Enable File Size Limits</string>
           </property>
-          <property name="flat">
+          <property name="flat" >
            <bool>false</bool>
           </property>
-          <property name="checkable">
+          <property name="checkable" >
            <bool>true</bool>
           </property>
-          <property name="checked">
+          <property name="checked" >
            <bool>false</bool>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <layout class="QHBoxLayout" >
            <item>
-            <widget class="QLabel" name="label_10">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <widget class="QLabel" name="label_10" >
+             <property name="sizePolicy" >
+              <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="text">
+             <property name="text" >
               <string>Min:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineMinFileSize">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <widget class="QLineEdit" name="lineMinFileSize" >
+             <property name="sizePolicy" >
+              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="inputMask">
+             <property name="inputMask" >
               <string/>
              </property>
-             <property name="text">
+             <property name="text" >
               <string>0</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_4">
-             <property name="text">
+            <widget class="QLabel" name="label_4" >
+             <property name="text" >
               <string>Kb</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_9">
-             <property name="text">
+            <widget class="QLabel" name="label_9" >
+             <property name="text" >
               <string>Max:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineMaxFileSize">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <widget class="QLineEdit" name="lineMaxFileSize" >
+             <property name="sizePolicy" >
+              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="inputMask">
+             <property name="inputMask" >
               <string/>
              </property>
-             <property name="text">
+             <property name="text" >
               <string>102400</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_5">
-             <property name="text">
+            <widget class="QLabel" name="label_5" >
+             <property name="text" >
               <string>Kb</string>
              </property>
             </widget>
@@ -323,10 +322,10 @@
         </item>
         <item>
          <spacer>
-          <property name="orientation">
+          <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeHint" stdset="0">
+          <property name="sizeHint" >
            <size>
             <width>128</width>
             <height>20</height>
@@ -339,27 +338,27 @@
      </widget>
     </item>
     <item>
-     <widget class="QFilesTable" name="filesTable">
-      <property name="focusPolicy">
+     <widget class="QFilesTable" name="filesTable" >
+      <property name="focusPolicy" >
        <enum>Qt::WheelFocus</enum>
       </property>
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout">
+     <layout class="QHBoxLayout" >
       <item>
-       <widget class="QPushButton" name="settingsButton">
-        <property name="text">
+       <widget class="QPushButton" name="settingsButton" >
+        <property name="text" >
          <string>Se&amp;ttings</string>
         </property>
        </widget>
       </item>
       <item>
        <spacer>
-        <property name="orientation">
+        <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" stdset="0">
+        <property name="sizeHint" >
          <size>
           <width>40</width>
           <height>20</height>
@@ -368,15 +367,15 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="findButton">
-        <property name="text">
+       <widget class="QPushButton" name="findButton" >
+        <property name="text" >
          <string>&amp;Find</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="stopButton">
-        <property name="text">
+       <widget class="QPushButton" name="stopButton" >
+        <property name="text" >
          <string>&amp;Stop</string>
         </property>
        </widget>
@@ -384,42 +383,47 @@
      </layout>
     </item>
     <item>
-     <widget class="QLabel" name="progressLabel">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+     <widget class="QLabel" name="progressLabel" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="autoFillBackground">
+      <property name="autoFillBackground" >
        <bool>false</bool>
       </property>
-      <property name="frameShadow">
+      <property name="frameShadow" >
        <enum>QFrame::Plain</enum>
       </property>
-      <property name="lineWidth">
+      <property name="lineWidth" >
        <number>1</number>
       </property>
-      <property name="text">
+      <property name="text" >
        <string>Label control for search animation</string>
       </property>
-      <property name="scaledContents">
+      <property name="scaledContents" >
        <bool>true</bool>
       </property>
-      <property name="alignment">
+      <property name="alignment" >
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar" />
  </widget>
  <customwidgets>
   <customwidget>
    <class>QFilesTable</class>
    <extends>QTableWidget</extends>
    <header>qfilestable.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QComboBoxExt</class>
+   <extends>QComboBox</extends>
+   <header>qcomboboxext.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

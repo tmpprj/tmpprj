@@ -55,6 +55,7 @@ void QSearchWindow::setupControls()
     
     directoryComboBox->setCompleter( completer );
     directoryComboBox->setInsertPolicy( QComboBox::NoInsert );
+    directoryComboBox->SetDefaultElement( QDir::currentPath() );
 
     QValidator* pValidatorMin = new QIntValidator( 0, 999999999LL, this );
     lineMinFileSize->setValidator( pValidatorMin );
@@ -109,9 +110,9 @@ void QSearchWindow::showSearchStatus( const QString& strFilename )
 
 void QSearchWindow::saveCurrentUIItems()
 {
-    MoveCurrentToTop( masksComboBox );
-    MoveCurrentToTop( textComboBox );
-    MoveCurrentToTop( directoryComboBox );
+    masksComboBox->PushCurrentToList();
+    textComboBox->PushCurrentToList();
+    directoryComboBox->PushCurrentToList();
 }
 
 void QSearchWindow::closeEvent( QCloseEvent* )
@@ -122,7 +123,7 @@ void QSearchWindow::closeEvent( QCloseEvent* )
 
 void QSearchWindow::browse()
 {
-    QString strBrowseDir = directoryComboBox->currentText();
+    QString strBrowseDir = directoryComboBox->GetCurrentText();
     if( strBrowseDir.isEmpty() )
         strBrowseDir = QDir::currentPath();
 
@@ -177,11 +178,14 @@ void QSearchWindow::find()
    
     filesTable->ClearList();
 
-    QString strMasks = masksComboBox->currentText();
-    QString strText = textComboBox->currentText();
+    QString strMasks = masksComboBox->GetCurrentText();
+    QString strText = textComboBox->GetCurrentText();
     bool bCaseSensitive = ( caseCheckBox->checkState() == Qt::Checked );
     bool bRecursive = ( recursiveCheckBox->checkState() == Qt::Checked );
-    QString strPath = directoryComboBox->currentText();
+    QString strPath = directoryComboBox->GetCurrentText();
+
+    CLog( debug ) << "Masks : " << qPrintable( strMasks );
+    CLog( debug ) << "Text : " << qPrintable( strText );
 
     QStringList listPatterns;
     ParsePatterns( strText, listPatterns );
@@ -222,9 +226,10 @@ void QSearchWindow::reloadSettings()
 {
     caseCheckBox->setCheckState( SearchGUI::Conf().bCaseSensitive.Value() ? Qt::Checked : Qt::Unchecked );
     recursiveCheckBox->setCheckState( SearchGUI::Conf().bRecursive.Value() ? Qt::Checked : Qt::Unchecked );
-    LoadStringListToCombo( masksComboBox, SearchGUI::Conf().listMasks.Value(), "*" );
-    LoadStringListToCombo( textComboBox, SearchGUI::Conf().listSearches.Value() );
-    LoadStringListToCombo( directoryComboBox, SearchGUI::Conf().listSearchPaths.Value(), QDir::currentPath() );
+    
+    masksComboBox->SetFullElements( SearchGUI::Conf().listMasks.Value() );
+    textComboBox->SetFullElements( SearchGUI::Conf().listSearches.Value() );
+    directoryComboBox->SetFullElements( SearchGUI::Conf().listSearchPaths.Value() );
 
     reloadExtensions();
 }
@@ -233,9 +238,9 @@ void QSearchWindow::saveSettings()
 {
     SearchGUI::Conf().bCaseSensitive.Value() = ( caseCheckBox->checkState() == Qt::Checked );
     SearchGUI::Conf().bRecursive.Value() = ( recursiveCheckBox->checkState() == Qt::Checked );
-    SearchGUI::Conf().listMasks.Value() = GetComboStringList( masksComboBox, true );
-    SearchGUI::Conf().listSearches.Value() = GetComboStringList( textComboBox, true );
-    SearchGUI::Conf().listSearchPaths.Value() = GetComboStringList( directoryComboBox, true );
+    SearchGUI::Conf().listMasks.Value() = masksComboBox->GetFullElements();
+    SearchGUI::Conf().listSearches.Value() = textComboBox->GetFullElements();
+    SearchGUI::Conf().listSearchPaths.Value() = directoryComboBox->GetFullElements();
 }
 
 void QSearchWindow::updateTimer()
@@ -245,3 +250,4 @@ void QSearchWindow::updateTimer()
     else
         showSearchStatus( m_strCurrentFile ); 
 }
+
