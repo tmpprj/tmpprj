@@ -4,34 +4,6 @@
 #include <boost/foreach.hpp>
 #include <log.hpp>
 
-QStringList GetComboStringList( const QComboBox* pComboBox, bool bPutCurrentToTop )
-{
-    QStringList listElements;
-
-    if( bPutCurrentToTop )
-        listElements << pComboBox->currentText();
-
-    for( int i = 0; i < pComboBox->count(); i++ )
-    {
-        if( bPutCurrentToTop )
-           if( pComboBox->itemText( i ) == pComboBox->currentText() )
-               continue;
-        listElements << pComboBox->itemText( i );
-    }
-
-    return listElements;
-}
-
-void LoadStringListToCombo( QComboBox* pComboBox, const QStringList& list, const QString& strDefault )
-{
-    pComboBox->clear();
-    BOOST_FOREACH( QString str, list )
-        pComboBox->addItem( str );
-
-    if( pComboBox->count() == 0 )
-        pComboBox->addItem( strDefault );
-}
-
 QString FormatExtension( const QString& strExt )
 {
     QString strRet;
@@ -41,12 +13,6 @@ QString FormatExtension( const QString& strExt )
             strRet += strExt[ i ];
 
     return "." + strRet;
-}
-
-void MoveCurrentToTop( QComboBox* pComboBox )
-{
-    QStringList list = GetComboStringList( pComboBox, true );
-    LoadStringListToCombo( pComboBox, list );
 }
 
 void ParsePatterns( const QString& strText, QStringList& listPatterns )

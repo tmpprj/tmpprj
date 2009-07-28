@@ -13,7 +13,8 @@ SOURCES += ./src/main.cc \
     ./src/qsettingstable.cc \
     ./src/guicommon.cc \
     ./src/searchgui_conf.cc \
-    ./src/contextmenu.cc
+    ./src/contextmenu.cc \
+    ./src/qcomboboxext.cc
 HEADERS += ./src/qsearchwindow.h \
     ./src/qsettingswindow.h \
     ./src/qfilestable.h \
@@ -23,6 +24,7 @@ HEADERS += ./src/qsearchwindow.h \
     ./src/contextmenu.h \
     src/menuwrapper.hpp \
     src/comwrapper.hpp
+    ./src/qcomboboxext.h
 FORMS += ./src/searchwindow.ui \
     ./src/settingswindow.ui
 DEPENDPATH += ./include \
