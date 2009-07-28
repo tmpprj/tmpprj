@@ -26,10 +26,6 @@ CContextMenu::CContextMenu( WId WinId ):m_WinId( WinId )
 void CContextMenu::Show( QPoint ptWhere, QString strFileName )
 {
 #ifdef WIN32
-    QFileInfo pathInfo( strFileName );
-    QString fileName( QDir::toNativeSeparators( pathInfo.fileName() ) );
-    QString filePath( QDir::toNativeSeparators( pathInfo.absolutePath() ) );
-
     boost::filesystem::path pathFile( strFileName.toStdString() );
     // Get a pidl for the folder the file
     // is located in.
@@ -37,10 +33,7 @@ void CContextMenu::Show( QPoint ptWhere, QString strFileName )
     ::memset( Path, 0, sizeof(Path) );
     LPITEMIDLIST ParentPidl;
     DWORD Eaten;
-    QMessageBox::warning( NULL, "test", QString::fromStdString( pathFile.directory_string() ) );
-    QString::fromStdString( pathFile.directory_string() ).toWCharArray( Path );
-    filePath.toWCharArray( Path );
-    QMessageBox::warning( NULL, "test", filePath );
+    QString::fromStdString( pathFile.parent_path().directory_string() ).toWCharArray( Path );
     DWORD Result = m_DesktopFolder->ParseDisplayName( m_WinId, 0, Path, &Eaten, &ParentPidl, 0);
     if( Result != NOERROR )
     {
@@ -61,9 +54,7 @@ void CContextMenu::Show( QPoint ptWhere, QString strFileName )
     // Get a pidl for the file itself.
     LPITEMIDLIST Pidl;
     ::memset( Path, 0, sizeof(Path) );
-    QMessageBox::warning( NULL, "test", QString::fromStdString( pathFile.filename() ) );
     QString::fromStdString( pathFile.filename() ).toWCharArray( Path );
-    fileName.toWCharArray( Path );
     ParentFolder->ParseDisplayName( m_WinId, 0, Path, &Eaten, &Pidl, 0 );
 
     // Get the IContextMenu for the file.
