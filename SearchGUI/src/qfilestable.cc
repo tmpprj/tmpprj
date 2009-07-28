@@ -19,9 +19,11 @@ void QFilesTable::AddFile( const QString& filename, const QString& status, const
 {
     QTableWidgetItem *fileNameItem = new QTableWidgetItem( filename );
     fileNameItem->setFlags(Qt::ItemIsEnabled);
+    fileNameItem->setToolTip( filename );
 
     QTableWidgetItem *statusItem = new QTableWidgetItem( status );
     statusItem->setFlags(Qt::ItemIsEnabled);
+    statusItem->setToolTip( status );
 
     if( statusColor.isValid() )
         statusItem->setData( Qt::BackgroundColorRole, statusColor );
