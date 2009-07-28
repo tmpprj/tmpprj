@@ -15,7 +15,9 @@ public:
 
 protected:
 
-    virtual void contextMenuEvent ( QContextMenuEvent * e );
+    virtual void contextMenuEvent( QContextMenuEvent * e );
+    virtual void mouseDoubleClickEvent( QMouseEvent * e );
+    virtual void keyPressEvent( QKeyEvent * e );
 
 private:
 

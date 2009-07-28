@@ -2,14 +2,18 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QDir>
-#include <boost/filesystem.hpp>
 #include <boost/concept_check.hpp>
-#include <boost/bind.hpp>
 #include <boost/thread.hpp>
+#include <boost/shared_ptr.hpp>
+#include <log.hpp>
+#include <menuwrapper.hpp>
+
+#define SCRATCH_QCM_FIRST 1
+#define SCRATCH_QCM_LAST  0x7FFF
 
 #ifdef WIN32
-IContextMenu2 *g_pcm2;
-IContextMenu3 *g_pcm3;
+CComWrapper<IContextMenu2> g_Pcm2;
+CComWrapper<IContextMenu3> g_Pcm3;
 boost::mutex g_mtx;
 #endif
 
@@ -17,85 +21,42 @@ CContextMenu::CContextMenu( WId WinId ):m_WinId( WinId )
 {
 #ifdef WIN32
     // Get an IShellFolder for the desktop.
-    SHGetDesktopFolder( &m_DesktopFolder );
-    if( NULL == m_DesktopFolder )
-        QMessageBox::warning( NULL, "test", "!m_DesktopFolder" );
+    SHGetDesktopFolder( m_DesktopFolder.Set() );
+    SHGetMalloc( (IMalloc**)m_Malloc.Set() );
+#endif
+}
+
+CContextMenu::~CContextMenu()
+{
+#ifdef WIN32
 #endif
 }
 
 void CContextMenu::Show( QPoint ptWhere, QString strFileName )
 {
 #ifdef WIN32
-    boost::filesystem::path pathFile( strFileName.toStdString() );
-    // Get a pidl for the folder the file
-    // is located in.
-    wchar_t Path[MAX_PATH];
-    ::memset( Path, 0, sizeof(Path) );
-    LPITEMIDLIST ParentPidl;
-    DWORD Eaten;
-    QString::fromStdString( pathFile.parent_path().directory_string() ).toWCharArray( Path );
-    DWORD Result = m_DesktopFolder->ParseDisplayName( m_WinId, 0, Path, &Eaten, &ParentPidl, 0);
-    if( Result != NOERROR )
-    {
-        QMessageBox::warning( NULL, QString::number( Result ), "Invalid file name." );
-        return;
-    }
-
-    // Get an IShellFolder for the folder
-    // the file is located in.
-    LPSHELLFOLDER ParentFolder;
-    Result = m_DesktopFolder->BindToObject( ParentPidl, 0, IID_IShellFolder, (void**)&ParentFolder );
-    if( NULL == ParentFolder )
-    {
-        QMessageBox::warning( NULL, "test", "Invalid file name." );
-        return;
-    }
-
-    // Get a pidl for the file itself.
-    LPITEMIDLIST Pidl;
-    ::memset( Path, 0, sizeof(Path) );
-    QString::fromStdString( pathFile.filename() ).toWCharArray( Path );
-    ParentFolder->ParseDisplayName( m_WinId, 0, Path, &Eaten, &Pidl, 0 );
-
     // Get the IContextMenu for the file.
-    LPCONTEXTMENU CM;
-    ParentFolder->GetUIObjectOf( m_WinId, 1, (LPCITEMIDLIST*)&Pidl, IID_IContextMenu, 0, (void**)&CM );
+    CComWrapper<IContextMenu> CM;
+    GetUIObjectOfFile( strFileName, CM );
 
-    if (!CM)
-    {
-        QMessageBox::warning( NULL, "test", "Unable to get context menu interface." );
-        return;
-    }
-
-    HMENU hMenu = CreatePopupMenu();
+    CMenuWrapper Menu( CreatePopupMenu() );
     DWORD Flags = CMF_EXPLORE; //CMF_NORMAL?
-#define SCRATCH_QCM_FIRST 1
-#define SCRATCH_QCM_LAST  0x7FFF
-    CM->QueryContextMenu( hMenu, 0, SCRATCH_QCM_FIRST, SCRATCH_QCM_LAST, Flags );
+    CM.Get()->QueryContextMenu( Menu.Get(), 0, SCRATCH_QCM_FIRST, SCRATCH_QCM_LAST, Flags );
 
-    CM->QueryInterface(IID_IContextMenu2, (void**)&g_pcm2);
-    CM->QueryInterface(IID_IContextMenu3, (void**)&g_pcm3);
+    CM.Get()->QueryInterface( IID_IContextMenu2, (void**)g_Pcm2.Set() );
+    CM.Get()->QueryInterface( IID_IContextMenu3, (void**)g_Pcm3.Set() );
 
     // subclass window to handle menurelated messages in CShellContextMenu
     WNDPROC OldWndProc;
-    if( NULL != g_pcm2 || NULL != g_pcm3 )
+    if( NULL != g_Pcm2.Get() || NULL != g_Pcm3.Get() )
         OldWndProc = (WNDPROC)SetWindowLong( m_WinId, GWL_WNDPROC, (DWORD)HookWndProc );
     else
         OldWndProc = NULL;
 
-    int Cmd = TrackPopupMenuEx(hMenu, TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD, ptWhere.x(), ptWhere.y(), m_WinId, 0 );
+    int Cmd = TrackPopupMenuEx( Menu.Get(), TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD, ptWhere.x(), ptWhere.y(), m_WinId, 0 );
     if(OldWndProc) // unsubclass
         SetWindowLong( m_WinId, GWL_WNDPROC, (DWORD) OldWndProc );
 
-
-    if (g_pcm2) {
-        g_pcm2->Release();
-        g_pcm2 = NULL;
-    }
-    if (g_pcm3) {
-        g_pcm3->Release();
-        g_pcm3 = NULL;
-    }
     if (Cmd < 100 && Cmd != 0)
     {
         CMINVOKECOMMANDINFO info = { 0 };
@@ -103,21 +64,98 @@ void CContextMenu::Show( QPoint ptWhere, QString strFileName )
         info.hwnd = m_WinId;
         info.lpVerb  = MAKEINTRESOURCEA(Cmd - SCRATCH_QCM_FIRST);
         info.nShow = SW_SHOWNORMAL;
-        //        CI.lpParameters = "";
-        //        CI.lpDirectory = "";
-        CM->InvokeCommand(&info);
+        CM.Get()->InvokeCommand(&info);
     }
-    DestroyMenu(hMenu);
-    CM->Release();
+
+    g_Pcm2.Clear();
+    g_Pcm3.Clear();
 #else
     boost::ignore_unused_variable_warning( strFileName );
     boost::ignore_unused_variable_warning( ptWhere );
 #endif
 }
 
+bool CContextMenu::GetUIObjectOfFile( const QString& strFileName, CComWrapper<IContextMenu>& CM )
+{
+    if( NULL == m_DesktopFolder.Get() || NULL == m_Malloc.Get() )
+    {
+        CLog( debug ) << "CContextMenu::GetUIObjectOfFile: not initialized";
+        return false;
+    }
+
+    wchar_t Path[MAX_PATH], FileName[MAX_PATH];
+    ::memset( Path, 0, sizeof(Path) );
+    ::memset( FileName, 0, sizeof(FileName) );
+    QFileInfo pathInfo( strFileName );
+    QDir::toNativeSeparators( pathInfo.fileName() ).toWCharArray( FileName );
+    QDir::toNativeSeparators( pathInfo.absolutePath() ).toWCharArray( Path );
+
+    // Get a pidl for the folder the file
+    // is located in.
+    LPITEMIDLIST ParentPidl;
+    DWORD Eaten;
+    DWORD Result = m_DesktopFolder.Get()->ParseDisplayName( m_WinId, 0, Path, &Eaten, &ParentPidl, 0);
+    if( Result != NOERROR )
+    {
+        CLog( debug ) << "CContextMenu::GetUIObjectOfFile: Invalid file name: " << strFileName << " error = " << Result;
+        return false;
+    }
+
+    // Get an IShellFolder for the folder
+    // the file is located in.
+    CComWrapper<IShellFolder> ParentFolder;
+    Result = m_DesktopFolder.Get()->BindToObject( ParentPidl, 0, IID_IShellFolder, (void**)ParentFolder.Set() );
+    m_Malloc.Get()->Free( ParentPidl );
+    if( NULL == ParentFolder.Get() )
+    {
+        CLog( debug ) << "CContextMenu::GetUIObjectOfFile: Invalid file name: " << strFileName;
+        return false;
+    }
+
+    // Get a pidl for the file itself.
+    LPITEMIDLIST Pidl;
+    ParentFolder.Get()->ParseDisplayName( m_WinId, 0, FileName, &Eaten, &Pidl, 0 );
+
+    // Get the IContextMenu for the file.
+
+    ParentFolder.Get()->GetUIObjectOf( m_WinId, 1, (LPCITEMIDLIST*)&Pidl, IID_IContextMenu, 0, (void**)CM.Set() );
+    m_Malloc.Get()->Free( Pidl );
+    if( !CM.Get() )
+    {
+        CLog( debug ) << "CContextMenu::GetUIObjectOfFile: Unable to get context menu interface";
+        return false;
+    }
+    return true;
+}
 void CContextMenu::InvokeDefault( QString strFileName )
 {
 #ifdef WIN32
+    CComWrapper<IContextMenu> Pcm;
+    wchar_t Path[MAX_PATH];
+    ::memset( Path, 0, sizeof(Path) );
+    strFileName.toWCharArray(Path);
+    if( SUCCEEDED( GetUIObjectOfFile( strFileName, Pcm ) ) )
+    {
+        CMenuWrapper Menu( CreatePopupMenu() );
+        if( Menu.Get() )
+        {
+            if( SUCCEEDED( Pcm.Get()->QueryContextMenu( Menu.Get(), 0,
+                                                SCRATCH_QCM_FIRST, SCRATCH_QCM_LAST,
+                                                CMF_DEFAULTONLY ) ) )
+            {
+                UINT id = GetMenuDefaultItem( Menu.Get(), FALSE, 0 );
+                if( id != (UINT)-1 )
+                {
+                    CMINVOKECOMMANDINFO info = { 0 };
+                    info.cbSize = sizeof(info);
+                    info.hwnd = m_WinId;
+                    info.lpVerb = MAKEINTRESOURCEA(id - SCRATCH_QCM_FIRST);
+                    info.nShow = SW_SHOWNORMAL;
+                    Pcm.Get()->InvokeCommand(&info);
+                }
+            }
+        }
+    }
 #else
     boost::ignore_unused_variable_warning( strFileName );
 #endif
@@ -128,16 +166,16 @@ void CContextMenu::InvokeDefault( QString strFileName )
 LRESULT CALLBACK CContextMenu::HookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     boost::unique_lock<boost::mutex> lock( g_mtx );
-    if (g_pcm3)
+    if( g_Pcm3.Get() )
     {
         LRESULT lres;
-        if( SUCCEEDED( g_pcm3->HandleMenuMsg2( message, wParam, lParam, &lres ) ) )
+        if( SUCCEEDED( g_Pcm3.Get()->HandleMenuMsg2( message, wParam, lParam, &lres ) ) )
             return lres;
     }
-    else if( g_pcm2 )
-        if( SUCCEEDED( g_pcm2->HandleMenuMsg( message, wParam, lParam ) ) )
+    else if( g_Pcm2.Get() )
+        if( SUCCEEDED( g_Pcm2.Get()->HandleMenuMsg( message, wParam, lParam ) ) )
             return 0;
-    return ::CallWindowProc((WNDPROC) GetProp ( hWnd, TEXT ("OldWndProc")), hWnd, message, wParam, lParam);
+    return ::CallWindowProc((WNDPROC)GetProp( hWnd, TEXT ("OldWndProc")), hWnd, message, wParam, lParam );
 }
 #endif
 

@@ -20,7 +20,9 @@ HEADERS += ./src/qsearchwindow.h \
     ./src/qsettingstable.h \
     ./src/guicommon.h \
     ./src/searchgui_conf.h \
-    ./src/contextmenu.h
+    ./src/contextmenu.h \
+    src/menuwrapper.hpp \
+    src/comwrapper.hpp
 FORMS += ./src/searchwindow.ui \
     ./src/settingswindow.ui
 DEPENDPATH += ./include \

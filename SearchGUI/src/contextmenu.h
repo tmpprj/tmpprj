@@ -4,6 +4,7 @@
 #include <QString>
 #include <QPoint>
 #include <QWidget>
+#include <comwrapper.hpp>
 #ifdef WIN32
 #include <windows.h>
 #include <shlobj.h>
@@ -14,6 +15,7 @@ class CContextMenu
 public:
 
     CContextMenu( WId WinId );
+    ~CContextMenu();
 
     void Show( QPoint ptWhere, QString strFileName );
     void InvokeDefault( QString strFileName );
@@ -21,11 +23,16 @@ public:
 private:
 
 #ifdef WIN32
+    bool GetUIObjectOfFile( const QString& strFileName, CComWrapper<IContextMenu>& CM );
     static LRESULT CALLBACK HookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-    LPSHELLFOLDER m_DesktopFolder;
+    CComWrapper<IShellFolder> m_DesktopFolder;
+    CComWrapper<IMalloc> m_Malloc;
 #endif
     WId m_WinId;
 
 };
+
+
+
 
 #endif // CCONTEXTMENU_H

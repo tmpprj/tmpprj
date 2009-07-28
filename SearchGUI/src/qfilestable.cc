@@ -38,15 +38,31 @@ void QFilesTable::ClearList()
     setRowCount( 0 );
 }
 
-void QFilesTable::contextMenuEvent ( QContextMenuEvent * e )
+void QFilesTable::contextMenuEvent( QContextMenuEvent * e )
 {
     QTableWidgetItem* pItem;
     if( NULL != ( pItem = itemAt( e->pos() ) ) && 0 == pItem->column() )
-    {
-        QPoint pos = e->reason() == QContextMenuEvent::Mouse ? e->globalPos() : e->pos();
-        m_CtxMenu.Show( pos, pItem->text() );
-    }
+        m_CtxMenu.Show( e->globalPos(), pItem->text() );
 }
+
+void QFilesTable::mouseDoubleClickEvent( QMouseEvent * e )
+{
+    QTableWidgetItem* pItem;
+    if( NULL != ( pItem = itemAt( e->pos() ) ) && 0 == pItem->column() )
+        m_CtxMenu.InvokeDefault( pItem->text() );
+}
+
+void QFilesTable::keyPressEvent( QKeyEvent * e )
+{
+    if( e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return )
+    {
+        QTableWidgetItem* pItem = currentItem();
+        if( NULL != pItem )
+            m_CtxMenu.InvokeDefault( pItem->text() );
+    }
+    QTableWidget::keyPressEvent(e);
+}
+
 
 void QFilesTable::mouseMoveEvent( QMouseEvent *event )
 {
