@@ -1,7 +1,7 @@
 #ifndef LOG_H
 #define LOG_H
 
-#include <boost/thread/mutex.hpp>
+#include <boost/thread/recursive_mutex.hpp>
 #include <boost/thread/locks.hpp>
 #include <iostream>
 #include <fstream>
@@ -23,9 +23,9 @@ class CLog
         return file;
     }
     
-    boost::mutex& GetLock()
+    boost::recursive_mutex& GetLock()
     {
-        static boost::mutex mtxLock;
+        static boost::recursive_mutex mtxLock;
         return mtxLock;
     }
 

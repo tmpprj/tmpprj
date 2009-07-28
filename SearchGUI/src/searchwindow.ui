@@ -36,7 +36,7 @@
        <enum>QFrame::Raised</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page">
        <property name="geometry">
@@ -44,7 +44,7 @@
          <x>0</x>
          <y>0</y>
          <width>691</width>
-         <height>118</height>
+         <height>99</height>
         </rect>
        </property>
        <attribute name="label">
@@ -185,7 +185,6 @@
          <y>0</y>
          <width>691</width>
          <height>72</height>
-         <height>80</height>
         </rect>
        </property>
        <attribute name="label">
@@ -340,7 +339,11 @@
      </widget>
     </item>
     <item>
-     <widget class="QFilesTable" name="filesTable"/>
+     <widget class="QFilesTable" name="filesTable">
+      <property name="focusPolicy">
+       <enum>Qt::WheelFocus</enum>
+      </property>
+     </widget>
     </item>
     <item>
      <layout class="QHBoxLayout">

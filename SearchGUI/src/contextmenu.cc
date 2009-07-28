@@ -4,10 +4,13 @@
 #include <QDir>
 #include <boost/filesystem.hpp>
 #include <boost/concept_check.hpp>
+#include <boost/bind.hpp>
+#include <boost/thread.hpp>
 
 #ifdef WIN32
 IContextMenu2 *g_pcm2;
 IContextMenu3 *g_pcm3;
+boost::mutex g_mtx;
 #endif
 
 CContextMenu::CContextMenu( WId WinId ):m_WinId( WinId )
@@ -34,8 +37,8 @@ void CContextMenu::Show( QPoint ptWhere, QString strFileName )
     ::memset( Path, 0, sizeof(Path) );
     LPITEMIDLIST ParentPidl;
     DWORD Eaten;
-//    QMessageBox::warning( this, "test", QString::fromStdString( pathFile.parent_path() ) );
-//    QString::fromStdString( pathFile.parent_path() ).toWCharArray( Path );
+    QMessageBox::warning( NULL, "test", QString::fromStdString( pathFile.directory_string() ) );
+    QString::fromStdString( pathFile.directory_string() ).toWCharArray( Path );
     filePath.toWCharArray( Path );
     QMessageBox::warning( NULL, "test", filePath );
     DWORD Result = m_DesktopFolder->ParseDisplayName( m_WinId, 0, Path, &Eaten, &ParentPidl, 0);
@@ -58,8 +61,8 @@ void CContextMenu::Show( QPoint ptWhere, QString strFileName )
     // Get a pidl for the file itself.
     LPITEMIDLIST Pidl;
     ::memset( Path, 0, sizeof(Path) );
-//    QMessageBox::warning( this, "test", QString::fromStdString( pathFile.filename() ) );
-//    QString::fromStdString( pathFile.filename() ).toWCharArray( Path );
+    QMessageBox::warning( NULL, "test", QString::fromStdString( pathFile.filename() ) );
+    QString::fromStdString( pathFile.filename() ).toWCharArray( Path );
     fileName.toWCharArray( Path );
     ParentFolder->ParseDisplayName( m_WinId, 0, Path, &Eaten, &Pidl, 0 );
 
@@ -133,6 +136,7 @@ void CContextMenu::InvokeDefault( QString strFileName )
 
 LRESULT CALLBACK CContextMenu::HookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    boost::unique_lock<boost::mutex> lock( g_mtx );
     if (g_pcm3)
     {
         LRESULT lres;

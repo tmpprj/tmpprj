@@ -22,9 +22,6 @@ private:
 
 #ifdef WIN32
     static LRESULT CALLBACK HookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-    IContextMenu2 *g_pcm2;
-    IContextMenu3 *g_pcm3;
     LPSHELLFOLDER m_DesktopFolder;
 #endif
     WId m_WinId;
