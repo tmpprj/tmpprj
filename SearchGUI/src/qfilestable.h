@@ -2,6 +2,7 @@
 #define _QFILESTABLE_H_
 
 #include <QTableWidget>
+#include <contextmenu.h>
 
 class QFilesTable : public QTableWidget
 {
@@ -12,8 +13,15 @@ public:
     void AddFile( const QString& filename, const QString& status, const QColor& statusColor = QColor() );
     void ClearList();
 
+protected:
+
+    virtual void contextMenuEvent ( QContextMenuEvent * e );
+
 private:
+
     void mouseMoveEvent( QMouseEvent *event );
+
+    CContextMenu m_CtxMenu;
 };
 
 

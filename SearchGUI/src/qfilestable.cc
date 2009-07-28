@@ -3,6 +3,7 @@
 
 QFilesTable::QFilesTable( QWidget *parent )
     : QTableWidget( 0, 2, parent )
+    , m_CtxMenu( winId() )
 {
     QStringList labels;
     labels << tr( "File Name" ) << tr( "Status" );
@@ -35,6 +36,13 @@ void QFilesTable::ClearList()
 {
     clearContents();
     setRowCount( 0 );
+}
+
+void QFilesTable::contextMenuEvent ( QContextMenuEvent * e )
+{
+    QTableWidgetItem* pItem;
+    if( NULL != ( pItem = itemAt( e->pos() ) ) && 0 == pItem->column() )
+        m_CtxMenu.Show( e->pos(), pItem->text() );
 }
 
 void QFilesTable::mouseMoveEvent( QMouseEvent *event )

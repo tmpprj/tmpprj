@@ -92,8 +92,7 @@ void CContextMenu::Show( QPoint ptWhere, QString strFileName )
     else
         OldWndProc = NULL;
 
-    QPoint pt = QCursor::pos();
-    int Cmd = TrackPopupMenuEx(hMenu, TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD, pt.x(), pt.y(), m_WinId, 0 );
+    int Cmd = TrackPopupMenuEx(hMenu, TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD, ptWhere.x(), ptWhere.y(), m_WinId, 0 );
     if(OldWndProc) // unsubclass
         SetWindowLong( m_WinId, GWL_WNDPROC, (DWORD) OldWndProc );
 
@@ -121,6 +120,7 @@ void CContextMenu::Show( QPoint ptWhere, QString strFileName )
     CM->Release();
 #else
     boost::ignore_unused_variable_warning( strFileName );
+    boost::ignore_unused_variable_warning( ptWhere );
 #endif
 }
 
