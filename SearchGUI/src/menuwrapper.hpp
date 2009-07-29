@@ -1,6 +1,7 @@
 #ifndef MENUWRAPPER_HPP
 #define MENUWRAPPER_HPP
 
+#ifdef WIN32
 class CMenuWrapper
 {
 public:
@@ -24,5 +25,7 @@ private:
 
     HMENU m_hMenu;
 };
+#endif
+
 
 #endif // MENUWRAPPER_HPP

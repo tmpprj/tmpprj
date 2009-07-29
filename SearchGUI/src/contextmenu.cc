@@ -75,6 +75,8 @@ void CContextMenu::Show( QPoint ptWhere, QString strFileName )
 #endif
 }
 
+#ifdef WIN32
+
 bool CContextMenu::GetUIObjectOfFile( const QString& strFileName, CComWrapper<IContextMenu>& CM )
 {
     if( NULL == m_DesktopFolder.Get() || NULL == m_Malloc.Get() )
@@ -127,6 +129,8 @@ bool CContextMenu::GetUIObjectOfFile( const QString& strFileName, CComWrapper<IC
     }
     return true;
 }
+#endif
+
 void CContextMenu::InvokeDefault( QString strFileName )
 {
 #ifdef WIN32

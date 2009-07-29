@@ -12,7 +12,7 @@ CPatternCounter::CPatternCounter( MultiPatternSearcher& searcher, bool bCaseSens
 bool CPatternCounter::OnChunk( const QString& strChunk )
 {
     QByteArray array = StringToCommon( strChunk, m_bCaseSensitive );
-    OnChunkIsRaw( array );
+    return OnChunkIsRaw( array );
 }
 
 bool CPatternCounter::OnChunkIsRaw( const QByteArray& array )
