@@ -1,6 +1,6 @@
 #include "searchfacade.h"
 #include "filesearcher.h"
-#include "log.hpp"
+#include "log.h"
 
 CSearchFacade::CSearchFacade()
 {

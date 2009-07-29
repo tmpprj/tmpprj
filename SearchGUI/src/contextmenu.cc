@@ -5,7 +5,7 @@
 #include <boost/concept_check.hpp>
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
-#include <log.hpp>
+#include <log.h>
 #include <menuwrapper.hpp>
 
 #define SCRATCH_QCM_FIRST 1

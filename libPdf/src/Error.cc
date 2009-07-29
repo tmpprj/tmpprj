@@ -17,7 +17,7 @@
 #include <stdarg.h>
 #include "GlobalParams.h"
 #include "Error.h"
-#include "log.hpp"
+#include "log.h"
 
 void CDECL error(int pos, char *msg, ...) {
     va_list args;

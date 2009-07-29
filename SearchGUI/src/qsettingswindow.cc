@@ -6,7 +6,7 @@
 #include "qsettingswindow.h"
 #include "settings.h"
 #include "plaintextextractor.h"
-#include "log.hpp"
+#include "log.h"
 #include "searchgui_conf.h"
 #include "guicommon.h"
 
@@ -59,7 +59,6 @@ void QSettingsWindow::SaveSettings()
         QString strParser = pParserCombo->currentText();
 
         SearchGUI::Conf().mapExtensions.Value()[ strExt ] = strParser; 
-        CUserLog() << qPrintable( strExt ) << ": " << qPrintable( strParser ) << std::endl;
     }
 }
 

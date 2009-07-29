@@ -3,7 +3,7 @@
 #include "mswordtextextractor.h"
 #include "pdftextextractor.h"
 
-#include <log.hpp>
+#include <log.h>
 #include <common.h>
 #include <boost/foreach.hpp>
 #include <exceptions.h>

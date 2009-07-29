@@ -6,7 +6,7 @@
 #include "txttextextractor.h"
 #include "charsetdetector.h"
 #include "search_conf.h"
-#include "log.hpp"
+#include "log.h"
 
 bool CTxtTextExtractor::DetectCharset( const char* pData, size_t nSize, bool& bCharsetDetected )
 {

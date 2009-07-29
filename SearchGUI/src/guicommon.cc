@@ -2,7 +2,7 @@
 
 #include <macro.h>
 #include <boost/foreach.hpp>
-#include <log.hpp>
+#include <log.h>
 
 QString FormatExtension( const QString& strExt )
 {

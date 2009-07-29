@@ -8,7 +8,7 @@
 #include "searchgui_conf.h"
 #include "guicommon.h"
 
-#include <log.hpp>
+#include <log.h>
 #include <macro.h>
 
 using namespace std;

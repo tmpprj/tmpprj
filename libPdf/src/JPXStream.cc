@@ -17,7 +17,7 @@
 #include "Error.h"
 #include "JArithmeticDecoder.h"
 #include "JPXStream.h"
-#include <log.hpp>
+#include <log.h>
 
 //~ to do:
 //  - precincts

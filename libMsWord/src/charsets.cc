@@ -13,7 +13,7 @@
 #include "catdoc.h"
 #include <QFile>
 #include <QTextStream>
-#include <log.hpp>
+#include <log.h>
 #include <QStringList>
 #include <boost/concept_check.hpp>
 

@@ -10,7 +10,7 @@
 #include "strftime.h"
 #endif
 #include <boost/concept_check.hpp>
-#include "log.hpp"
+#include "log.h"
 #include <macro.h>
 #include <map>
 

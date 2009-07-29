@@ -5,7 +5,7 @@
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <mt_queue.hpp>
-#include <log.hpp>
+#include <log.h>
 
 template< typename DataType >
 class CDataHandler: private boost::noncopyable

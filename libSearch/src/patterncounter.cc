@@ -1,6 +1,6 @@
 #include "patterncounter.h"
 #include "libsearch_common.h"
-#include <log.hpp>
+#include <log.h>
 
 CPatternCounter::CPatternCounter( MultiPatternSearcher& searcher, bool bCaseSensitive, int nOverlap )
     : m_searcher( searcher ),

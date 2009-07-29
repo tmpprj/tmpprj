@@ -1,5 +1,5 @@
 #include "libsearch_common.h"
-#include <log.hpp>
+#include <log.h>
 
 QByteArray StringToCommon( const QString& str, bool bCaseSensitive )
 {

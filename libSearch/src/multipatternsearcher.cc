@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 #include <sstream>
-#include <log.hpp>
+#include <log.h>
 
 #define mm          8191
 

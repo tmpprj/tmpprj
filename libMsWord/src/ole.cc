@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include "log.hpp"
+#include "log.h"
 #include <boost/concept_check.hpp>
 #include "catdoc.h"
 

@@ -4,7 +4,7 @@
 #include "txttextextractor.h"
 #include "search_conf.h"
 
-#include <log.hpp>
+#include <log.h>
 #include <exceptions.h>
 #include <boost/concept_check.hpp>
 

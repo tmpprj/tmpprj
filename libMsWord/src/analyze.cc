@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "catdoc.h"
-#include "log.hpp"
+#include "log.h"
 #include <boost/concept_check.hpp>
 
 

@@ -1,6 +1,6 @@
 #include "filesearcher.h"
 
-#include <log.hpp>
+#include <log.h>
 #include <globwrap.h>
 #include <iostream>
 #include <QDir>
