@@ -4,6 +4,7 @@
 #include <qsearchfacade.h>
 #include <QMainWindow>
 #include <QMovie>
+#include <QSystemTrayIcon>
 
 #include "ui_searchwindow.h"
 
@@ -19,12 +20,15 @@ class QSearchWindow : public QMainWindow, private Ui::SearchWindowBase
     QTime m_SearchTimerStart;
     time_t m_tTimeElapsed;
     size_t m_stFilesProcessed, m_stFilesMatched;
+    QSystemTrayIcon m_TrayIcon;
 
 public:
     QSearchWindow(QWidget *parent = 0);
     ~QSearchWindow();
 
 private Q_SLOTS:
+    void minimazeToTray();
+    void maximazeFromTray(QSystemTrayIcon::ActivationReason reason);
     void browse();
     void find();
     void stop();
@@ -42,6 +46,7 @@ private Q_SLOTS:
 private:
     void setupProgressAnimation();
     void setupControls();
+    void setupTrayIcon();
     void connectSearcher();
     void connectWidgets();
     void startStatusUpdateTimer();
