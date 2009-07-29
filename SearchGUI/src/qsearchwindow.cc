@@ -21,6 +21,7 @@ QSearchWindow::QSearchWindow(QWidget *parent)
 
     setupProgressAnimation();
     setupControls();
+    setupTrayIcon();
     connectSearcher();
     connectWidgets();
     showDefaultStatus();
@@ -63,6 +64,12 @@ void QSearchWindow::setupControls()
     lineMaxFileSize->setValidator( pValidatorMax );
 }
 
+void QSearchWindow::setupTrayIcon()
+{
+    m_TrayIcon.setIcon( QIcon(":/icons/icon1.gif") );
+    connect( &m_TrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT( maximazeFromTray(QSystemTrayIcon::ActivationReason ) ) ); 
+}
+
 void QSearchWindow::connectSearcher()
 {
     connect( &m_search, SIGNAL( fileProcessing( const QString& ) ), 
@@ -78,6 +85,7 @@ void QSearchWindow::connectSearcher()
 void QSearchWindow::connectWidgets()
 {
     connect( findButton, SIGNAL( clicked() ), this, SLOT( find() ) );
+    connect( hideButton, SIGNAL( clicked() ), this, SLOT( minimazeToTray() ) );
     connect( stopButton, SIGNAL( clicked() ), this, SLOT( stop() ) );
     connect( browseButton, SIGNAL( clicked() ), this, SLOT( browse() ) );
     connect( settingsButton, SIGNAL( clicked() ), this, SLOT( showSettings() ) );
@@ -169,6 +177,18 @@ void QSearchWindow::searchDone()
 void QSearchWindow::searchError( const QString& strFilename, const QString& strError )
 {
     filesTable->AddFile( QDir::toNativeSeparators( strFilename ), strError, Qt::red );
+}
+
+void QSearchWindow::minimazeToTray()
+{
+    m_TrayIcon.show();
+    hide();
+}
+
+void QSearchWindow::maximazeFromTray(QSystemTrayIcon::ActivationReason reason)
+{
+    show();
+    m_TrayIcon.hide();
 }
 
 void QSearchWindow::find()

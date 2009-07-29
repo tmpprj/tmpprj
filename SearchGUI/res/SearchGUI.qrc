@@ -2,4 +2,7 @@
     <qresource prefix="/animation" >
         <file>progress.gif</file>
     </qresource>
+    <qresource prefix="/icons" >
+        <file>icon1.gif</file>
+    </qresource>
 </RCC>
