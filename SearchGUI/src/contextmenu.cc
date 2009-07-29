@@ -14,6 +14,7 @@
 #ifdef WIN32
 CComWrapper<IContextMenu2> g_Pcm2;
 CComWrapper<IContextMenu3> g_Pcm3;
+WNDPROC g_OldWndProc;
 boost::mutex g_mtx;
 #endif
 
@@ -47,15 +48,15 @@ void CContextMenu::Show( QPoint ptWhere, QString strFileName )
     CM.Get()->QueryInterface( IID_IContextMenu3, (void**)g_Pcm3.Set() );
 
     // subclass window to handle menurelated messages in CShellContextMenu
-    WNDPROC OldWndProc;
+
     if( NULL != g_Pcm2.Get() || NULL != g_Pcm3.Get() )
-        OldWndProc = (WNDPROC)::SetWindowLongPtr( m_WinId, GWLP_WNDPROC, (LONG_PTR)HookWndProc );
+        g_OldWndProc = (WNDPROC)::SetWindowLongPtr( m_WinId, GWLP_WNDPROC, (LONG_PTR)HookWndProc );
     else
-        OldWndProc = NULL;
+        g_OldWndProc = NULL;
 
     int Cmd = TrackPopupMenuEx( Menu.Get(), TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD, ptWhere.x(), ptWhere.y(), m_WinId, 0 );
-    if(OldWndProc) // unsubclass
-        ::SetWindowLongPtr( m_WinId, GWLP_WNDPROC, (LONG_PTR) OldWndProc );
+    if( g_OldWndProc ) // unsubclass
+        ::SetWindowLongPtr( m_WinId, GWLP_WNDPROC, (LONG_PTR) g_OldWndProc );
 
     if (Cmd < 100 && Cmd != 0)
     {
@@ -179,7 +180,7 @@ LRESULT CALLBACK CContextMenu::HookWndProc(HWND hWnd, UINT message, WPARAM wPara
     else if( g_Pcm2.Get() )
         if( SUCCEEDED( g_Pcm2.Get()->HandleMenuMsg( message, wParam, lParam ) ) )
             return 0;
-    return ::CallWindowProc((WNDPROC)GetProp( hWnd, TEXT ("OldWndProc")), hWnd, message, wParam, lParam );
+    return ::CallWindowProc( g_OldWndProc, hWnd, message, wParam, lParam );
 }
 #endif
 
