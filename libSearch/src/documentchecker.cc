@@ -52,7 +52,7 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
         if( counter.SomePatterns() )
         {
             ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
-            CLog( debug ) << "Processing file " << qPrintable( strFileName ) <<
+            CLog( Debug ) << "Processing file " << qPrintable( strFileName ) <<
                     " with parser " << pExtractor->GetName();
 
             boost::signals2::scoped_connection scoped_conn1, scoped_conn2;
@@ -64,9 +64,9 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
             pExtractor->Extract( strFileName, SearchConf().nFileChunkSize.Value() );
         }
         else
-            CLog( debug ) << "Processing file " << qPrintable( strFileName ) << " - empty patterns";
+            CLog( Debug ) << "Processing file " << qPrintable( strFileName ) << " - empty patterns";
 
-        CLog( debug ) << "Matched ok: " << counter.MatchedOk() << 
+        CLog( Debug ) << "Matched ok: " << counter.MatchedOk() << 
             dec << " time elapsed: " << timer.elapsed() << " ms" << std::endl;
 
         if( counter.MatchedOk() )
@@ -75,19 +75,19 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
     catch( CUserLevelError& e )
     {
         SigError()( strFileName, e.whatQ() );
-        CLog( error ) << "CDocumentChecker::WorkerFunc: " << e.what();
+        CLog( Error ) << "CDocumentChecker::WorkerFunc: " << e.what();
     }
     catch( std::exception& e )
     {
-        CLog( error ) << "CDocumentChecker::WorkerFunc: (" << qPrintable(strFileName) << "): " << e.what();
+        CLog( Error ) << "CDocumentChecker::WorkerFunc: (" << qPrintable(strFileName) << "): " << e.what();
     }
     catch( boost::thread_interrupted& )
     {
-        CLog( error ) << "CDocumentChecker::WorkerFunc: interrupted";
+        CLog( Error ) << "CDocumentChecker::WorkerFunc: interrupted";
         throw;
     }
     catch( ... )
     {
-        CLog( error ) << "CDocumentChecker::WorkerFunc: (" << qPrintable(strFileName) << "): unknown error";
+        CLog( Error ) << "CDocumentChecker::WorkerFunc: (" << qPrintable(strFileName) << "): unknown error";
     }
 }

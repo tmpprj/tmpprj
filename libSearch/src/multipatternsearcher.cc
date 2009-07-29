@@ -90,7 +90,7 @@ void MultiPatternSearcher::LoadPatterns( const PatternsContainer& vPatterns )
         
     if( m_vPatternInfo.size() == 0 )
     {
-        CLog(debug) << "There are no valuable patterns";
+        CLog(Debug) << "There are no valuable patterns";
         return;
     }
     

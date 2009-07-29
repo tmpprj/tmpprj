@@ -82,7 +82,7 @@ bool CContextMenu::GetUIObjectOfFile( const QString& strFileName, CComWrapper<IC
 {
     if( NULL == m_DesktopFolder.Get() || NULL == m_Malloc.Get() )
     {
-        CLog( debug ) << "CContextMenu::GetUIObjectOfFile: not initialized";
+        CLog( Debug ) << "CContextMenu::GetUIObjectOfFile: not initialized";
         return false;
     }
 
@@ -100,7 +100,7 @@ bool CContextMenu::GetUIObjectOfFile( const QString& strFileName, CComWrapper<IC
     DWORD Result = m_DesktopFolder.Get()->ParseDisplayName( m_WinId, 0, Path, &Eaten, &ParentPidl, 0);
     if( Result != NOERROR )
     {
-        CLog( debug ) << "CContextMenu::GetUIObjectOfFile: Invalid file name: " << strFileName << " error = " << Result;
+        CLog( Debug ) << "CContextMenu::GetUIObjectOfFile: Invalid file name: " << strFileName << " error = " << Result;
         return false;
     }
 
@@ -111,7 +111,7 @@ bool CContextMenu::GetUIObjectOfFile( const QString& strFileName, CComWrapper<IC
     m_Malloc.Get()->Free( ParentPidl );
     if( NULL == ParentFolder.Get() )
     {
-        CLog( debug ) << "CContextMenu::GetUIObjectOfFile: Invalid file name: " << strFileName;
+        CLog( Debug ) << "CContextMenu::GetUIObjectOfFile: Invalid file name: " << strFileName;
         return false;
     }
 
@@ -125,7 +125,7 @@ bool CContextMenu::GetUIObjectOfFile( const QString& strFileName, CComWrapper<IC
     m_Malloc.Get()->Free( Pidl );
     if( !CM.Get() )
     {
-        CLog( debug ) << "CContextMenu::GetUIObjectOfFile: Unable to get context menu interface";
+        CLog( Debug ) << "CContextMenu::GetUIObjectOfFile: Unable to get context menu interface";
         return false;
     }
     return true;

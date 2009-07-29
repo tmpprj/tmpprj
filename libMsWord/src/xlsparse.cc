@@ -81,7 +81,7 @@ void do_table( FILE *input )
                     itemsread=catdoc_read( rec,4,1,input );
                     //build_year=getshort(( unsigned char* )rec+2,0 );
                     //build_rel=getshort(( unsigned char* )rec,0 );
-                    CLog(debug) << "ver=" << std::hex << getshort( (unsigned char*)rec,0 );
+                    CLog(Debug) << "ver=" << std::hex << getshort( (unsigned char*)rec,0 );
                     unsigned short usVer = getshort( (unsigned char*)rec,0 );
                     if( 0x600 == usVer )
                     //CLog() << debug << "y = " << hex << build_year << " r = " << build_rel;
@@ -122,7 +122,7 @@ void do_table( FILE *input )
             }
             else
             {
-                CLog(debug) << ": Invalid BOF record";
+                CLog(Debug) << ": Invalid BOF record";
                 return;
             }
         }
@@ -134,7 +134,7 @@ void do_table( FILE *input )
 
     if ( catdoc_eof( input ) )
     {
-        CLog(debug) << ": No BOF record found";
+        CLog(Debug) << ": No BOF record found";
         throw std::runtime_error( "ExtractXls: incorrect file format" );
     }
     while( itemsread )
@@ -458,10 +458,10 @@ bool process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
         unsigned char *src=( unsigned char * )rec;
         if ( !saved_reference )
         {
-            CLog(debug) << "String record without preceeding string formula";
+            CLog(Debug) << "String record without preceeding string formula";
             break;
         }
-        CLog(debug) << "String";
+        CLog(Debug) << "String";
         bool bEndFlag;
         *saved_reference=( unsigned char* )copy_unicode_string( &src, bEndFlag );
         if( !bEndFlag )
@@ -472,7 +472,7 @@ bool process_item( int rectype, int reclen, char *rec, std::vector<unsigned int>
     {
         if ( rowptr )
         {
-            CLog(debug) << "BOF when current sheet is not flushed";
+            CLog(Debug) << "BOF when current sheet is not flushed";
             free_sheet();
         }
         break;
@@ -868,7 +868,7 @@ char *isDateFormat( int format_code )
     index = formatTable[format_code];
     if ( IsFormatIdxUsed( index ) )
     {
-        //CLog(debug) << "Format " << index << " is redefined";
+        //CLog(Debug) << "Format " << index << " is redefined";
         /* this format is something user-defined --- not a standard built-in date*/
         return NULL;
     }
@@ -1004,7 +1004,7 @@ bool parse_sst( char *sstbuf,int bufsize )
     for ( i=0,parsedString=sst,curString=( unsigned char* )sstbuf+8;
             i<sstsize && curString<barrier; i++,parsedString++ )
     {
-        //CLog(debug) << "Parse sst";
+        //CLog(Debug) << "Parse sst";
         /* 		fprintf(stderr,"copying %d string\n",i); */
         bool bEndFlag;
         *parsedString = ( unsigned char* )copy_unicode_string( &curString, bEndFlag );

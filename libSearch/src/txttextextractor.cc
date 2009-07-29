@@ -18,7 +18,7 @@ bool CTxtTextExtractor::DetectCharset( const char* pData, size_t nSize, bool& bC
     CharDet.DataEnd();
 
     std::string strCharset = CharDet.GetCharset();
-    CLog( debug ) << "Charset detected: " << strCharset;
+    CLog( Debug ) << "Charset detected: " << strCharset;
 
     if( strCharset.empty() || NULL == ( m_pTextCodec = QTextCodec::codecForName( strCharset.c_str() ) ) )
         m_pTextCodec = QTextCodec::codecForLocale();
@@ -27,7 +27,7 @@ bool CTxtTextExtractor::DetectCharset( const char* pData, size_t nSize, bool& bC
 
     if( NULL == m_pTextCodec )
     {
-        CLog( error ) << "Cant get codec";
+        CLog( Error ) << "Cant get codec";
         return false;
     }
 
@@ -68,20 +68,20 @@ void CTxtTextExtractor::Extract( const QString& strFileName, size_t stChunkSize 
 
         if( bCharsetDetected )
         {
-            CLog( debug ) << "Call SigChunk";
+            CLog( Debug ) << "Call SigChunk";
             QString strChunk = m_pTextCodec->toUnicode( QByteArray( (const char*)&vChunk[0], stBytesRead ) );
             bContinueSearch = !*SigChunk()( strChunk );
         }
         else
         {
-            CLog( debug ) << "Call SigChunkIsRaw";
+            CLog( Debug ) << "Call SigChunkIsRaw";
             QByteArray array( ( const char* )&vChunk[ 0 ], stBytesRead );
             bContinueSearch = !*SigChunkIsRaw()( array );
         }
 
         if( !bContinueSearch )
         {
-            CLog( debug ) << "STOP Searching";
+            CLog( Debug ) << "STOP Searching";
             break;
         }
     }

@@ -3,22 +3,35 @@
 
 std::auto_ptr< std::ofstream > CLog::m_ptrLogFile;
 
+char GetLevelChar( LogLevel level )
+{
+    switch( level )
+    {
+        case Debug:
+            return 'D';
+        case Error:
+            return 'E';
+    }
+    return ' ';
+}
 
-CLog::CLog( LogLevelManip_t m, bool bMultiString )
-: m_bMultiString( bMultiString )
+
+CLog::CLog( LogLevel level, bool bMultiString )
+: m_level( level ),
+  m_bMultiString( bMultiString )
 {
     GetLock().lock();
 
     if( GetFile().tellp() > CommonConf().nMaxLogSize.Value() )
         TruncateFile();
 
-    GetFile() << QTime::currentTime().toString( "HH:mm:ss:zzz" ).toStdString() << " ["<< m( *this ) << "]: ";
+    GetFile() << QTime::currentTime().toString( "HH:mm:ss:zzz" ).toStdString() << " ["<< GetLevelChar( level ) << "]: ";
 }
 
 CLog::~CLog()
 {
     if( !m_bMultiString )
-        GetFile() << std::endl;
+        AddNewLine();
     
     GetLock().unlock();
 }
@@ -35,6 +48,15 @@ void CLog::TruncateFile()
 {
     m_ptrLogFile = std::auto_ptr< std::ofstream >( 
             new std::ofstream( "system.log", std::ios_base::out ) );
+}
+
+void CLog::AddNewLine()
+{
+#ifdef BUILD_RELEASE
+    if( m_level == Debug )
+        return;
+#endif
+    GetFile() << std::endl;
 }
 
 boost::recursive_mutex& CLog::GetLock()
@@ -54,15 +76,3 @@ CLog& CLog::operator<<( Manip_t m )
     m( GetFile() );
     return *this;
 }
-
-
-char debug( CLog& )
-{
-    return 'D';
-}
-
-char error( CLog& )
-{
-    return 'E';
-}
-

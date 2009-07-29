@@ -53,7 +53,7 @@ ITextExtractor* CTextExtractorFactory::GetExtractor( const QString& strFileName 
 
 bool CTextExtractorFactory::RegisterName( const QString& strName, ITextExtractor* pTextExtractor )
 {
-    CLog(debug) << "CTextExtractorFactory::RegisterName: " << strName << " registred";
+    CLog(Debug) << "CTextExtractorFactory::RegisterName: " << strName << " registred";
     MapNameExtractor_t::iterator p = m_mapNameExtractor.find( strName );
 
     if( p != m_mapNameExtractor.end() )
@@ -65,7 +65,7 @@ bool CTextExtractorFactory::RegisterName( const QString& strName, ITextExtractor
 
 bool CTextExtractorFactory::RegisterExtension( const QString& strExtension, const QString& strName )
 {
-    CLog(debug) << "CTextExtractorFactory::RegisterExtension: " << strExtension << ":" << strName << " registred";
+    CLog(Debug) << "CTextExtractorFactory::RegisterExtension: " << strExtension << ":" << strName << " registred";
     if( m_mapNameExtractor.count( strName ) == 0 )
         return false;
 
