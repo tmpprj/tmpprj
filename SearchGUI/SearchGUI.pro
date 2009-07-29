@@ -23,7 +23,7 @@ HEADERS += ./src/qsearchwindow.h \
     ./src/searchgui_conf.h \
     ./src/contextmenu.h \
     src/menuwrapper.hpp \
-    src/comwrapper.hpp
+    src/comwrapper.hpp \
     ./src/qcomboboxext.h
 FORMS += ./src/searchwindow.ui \
     ./src/settingswindow.ui
