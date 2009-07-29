@@ -67,7 +67,8 @@ void QSearchWindow::setupControls()
 void QSearchWindow::setupTrayIcon()
 {
     m_TrayIcon.setIcon( QIcon(":/icons/icon1.gif") );
-    connect( &m_TrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT( maximazeFromTray(QSystemTrayIcon::ActivationReason ) ) ); 
+    connect( &m_TrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT( maximazeFromTray( ) ) ); 
+    connect( &m_TrayIcon, SIGNAL(messageClicked()), this, SLOT( maximazeFromTray( ) ) ); 
 }
 
 void QSearchWindow::connectSearcher()
@@ -108,12 +109,12 @@ void QSearchWindow::showDefaultStatus()
             " sec.   Files processed: " + QString::number( m_stFilesProcessed ) +
             ".   Files matched: " + QString::number( m_stFilesMatched );
 
-    statusBar()->showMessage( strStatus );
+    setStatus( strStatus );
 }
 
 void QSearchWindow::showSearchStatus( const QString& strFilename )
 {
-    statusBar()->showMessage( "Searching: " + strFilename );
+    setStatus( "Searching: " + strFilename );
 }
 
 void QSearchWindow::saveCurrentUIItems()
@@ -127,6 +128,12 @@ void QSearchWindow::closeEvent( QCloseEvent* )
 {
     // disconnect all searcher signals to not receive signal after form closed
     disconnect( &m_search, 0, 0, 0 );
+}
+
+void QSearchWindow::setStatus( const QString& strStatus )
+{
+    statusBar()->showMessage( strStatus );
+    m_TrayIcon.setToolTip( strStatus );
 }
 
 void QSearchWindow::browse()
@@ -172,6 +179,7 @@ void QSearchWindow::searchDone()
     m_progressMovie.stop();
     m_strCurrentFile.clear();
     m_tTimeElapsed = m_SearchTimerStart.elapsed();
+    m_TrayIcon.showMessage( "Notification message", "Search done!" );
 }
 
 void QSearchWindow::searchError( const QString& strFilename, const QString& strError )
@@ -185,7 +193,7 @@ void QSearchWindow::minimazeToTray()
     hide();
 }
 
-void QSearchWindow::maximazeFromTray(QSystemTrayIcon::ActivationReason reason)
+void QSearchWindow::maximazeFromTray()
 {
     show();
     m_TrayIcon.hide();

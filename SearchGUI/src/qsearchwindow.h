@@ -28,7 +28,7 @@ public:
 
 private Q_SLOTS:
     void minimazeToTray();
-    void maximazeFromTray(QSystemTrayIcon::ActivationReason reason);
+    void maximazeFromTray();
     void browse();
     void find();
     void stop();
@@ -54,6 +54,7 @@ private:
     void showSearchStatus( const QString& strFilename );
     void saveCurrentUIItems();
     void closeEvent( QCloseEvent* );
+    void setStatus( const QString& strStatus );
 };
 
 #endif
