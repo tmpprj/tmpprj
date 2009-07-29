@@ -49,13 +49,13 @@ void CContextMenu::Show( QPoint ptWhere, QString strFileName )
     // subclass window to handle menurelated messages in CShellContextMenu
     WNDPROC OldWndProc;
     if( NULL != g_Pcm2.Get() || NULL != g_Pcm3.Get() )
-        OldWndProc = (WNDPROC)::SetWindowLongPtr( m_WinId, GWL_WNDPROC, (DWORD)HookWndProc );
+        OldWndProc = (WNDPROC)::SetWindowLongPtr( m_WinId, GWLP_WNDPROC, (LONG_PTR)HookWndProc );
     else
         OldWndProc = NULL;
 
     int Cmd = TrackPopupMenuEx( Menu.Get(), TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD, ptWhere.x(), ptWhere.y(), m_WinId, 0 );
     if(OldWndProc) // unsubclass
-        ::SetWindowLongPtr( m_WinId, GWL_WNDPROC, (DWORD) OldWndProc );
+        ::SetWindowLongPtr( m_WinId, GWLP_WNDPROC, (LONG_PTR) OldWndProc );
 
     if (Cmd < 100 && Cmd != 0)
     {
