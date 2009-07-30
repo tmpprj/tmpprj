@@ -5,7 +5,7 @@
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <mt_queue.hpp>
-#include <log.hpp>
+#include <log.h>
 
 template< typename DataType >
 class CDataHandler: private boost::noncopyable
@@ -95,15 +95,15 @@ private:
         }
         catch( boost::thread_interrupted& )
         {
-            CLog(debug) << "DataHandler::ThreadFunc: thread closed";
+            CLog(Debug) << "DataHandler::ThreadFunc: thread closed";
         }
         catch( std::exception& e )
         {
-            CLog(error) << "DataHandler::ThreadFunc error: " << e.what();
+            CLog(Error) << "DataHandler::ThreadFunc error: " << e.what();
         }
         catch( ... )
         {
-            CLog(error) << "DataHandler::ThreadFunc: unknown error";
+            CLog(Error) << "DataHandler::ThreadFunc: unknown error";
         }
     }
 

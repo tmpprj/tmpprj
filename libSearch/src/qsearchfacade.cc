@@ -1,6 +1,6 @@
 #include "qsearchfacade.h"
 
-#include <log.hpp>
+#include <log.h>
 #include <QThread>
 
 QSearchFacade::QSearchFacade( QObject* parent )

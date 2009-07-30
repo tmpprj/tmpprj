@@ -17,7 +17,7 @@
 #include <stdarg.h>
 #include "GlobalParams.h"
 #include "Error.h"
-#include "log.hpp"
+#include "log.h"
 
 void CDECL error(int pos, char *msg, ...) {
     va_list args;
@@ -26,13 +26,13 @@ void CDECL error(int pos, char *msg, ...) {
     if (globalParams.get() && globalParams->getErrQuiet()) {
         return;
     }
-    CLog(debug,true) << "libPdf::error: ";
+    CLog(Debug,true) << "libPdf::error: ";
     if (pos >= 0)
-        CLog(debug,true) << "(" << pos << "):";
+        CLog(Debug,true) << "(" << pos << "):";
 
     char buf[1024];
     va_start(args, msg);
     vsnprintf(buf, sizeof(buf), msg, args);
     va_end(args);
-    CLog(debug) << buf;
+    CLog(Debug) << buf;
 }

@@ -1,6 +1,6 @@
 #include "filesearcher.h"
 
-#include <log.hpp>
+#include <log.h>
 #include <globwrap.h>
 #include <iostream>
 #include <QDir>
@@ -30,7 +30,7 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
             }
             else if( 0 != stMaxFileSize && ( listFiles[ i ].size() > stMaxFileSize*1024 || listFiles[ i ].size() < stMinFileSize*1024 ) )
             {
-                CLog(debug) << "CFileSearcher::Search: file " << qPrintable( listFiles[i].fileName() ) << " is filtered by size: " << listFiles[ i ].size() << " bytes";
+                CLog(Debug) << "CFileSearcher::Search: file " << qPrintable( listFiles[i].fileName() ) << " is filtered by size: " << listFiles[ i ].size() << " bytes";
                 continue;
             }
             else

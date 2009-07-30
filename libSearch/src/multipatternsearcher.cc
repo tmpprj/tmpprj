@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 #include <sstream>
-#include <log.hpp>
+#include <log.h>
 
 #define mm          8191
 
@@ -90,7 +90,7 @@ void MultiPatternSearcher::LoadPatterns( const PatternsContainer& vPatterns )
         
     if( m_vPatternInfo.size() == 0 )
     {
-        CLog(debug) << "There are no valuable patterns";
+        CLog(Debug) << "There are no valuable patterns";
         return;
     }
     

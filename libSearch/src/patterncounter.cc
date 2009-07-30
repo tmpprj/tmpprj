@@ -1,6 +1,6 @@
 #include "patterncounter.h"
 #include "libsearch_common.h"
-#include <log.hpp>
+#include <log.h>
 
 CPatternCounter::CPatternCounter( MultiPatternSearcher& searcher, bool bCaseSensitive, int nOverlap )
     : m_searcher( searcher ),
@@ -25,8 +25,8 @@ bool CPatternCounter::OnChunkIsRaw( const QByteArray& array )
 
     m_foundPatterns.insert( chunkPatterns.begin(), chunkPatterns.end() );
     
-    CLog( debug ) << "Chunk patterns: " << chunkPatterns.size();
-    CLog( debug ) << "Found patterns: " << m_foundPatterns.size();
+    CLog( Debug ) << "Chunk patterns: " << chunkPatterns.size();
+    CLog( Debug ) << "Found patterns: " << m_foundPatterns.size();
 
     m_PreBlock = array;
 

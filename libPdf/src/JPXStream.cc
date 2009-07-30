@@ -17,7 +17,7 @@
 #include "Error.h"
 #include "JArithmeticDecoder.h"
 #include "JPXStream.h"
-#include <log.hpp>
+#include <log.h>
 
 //~ to do:
 //  - precincts
@@ -1225,7 +1225,7 @@ GBool JPXStream::readCodestream(Guint len) {
         case 0x5e:			// RGN - region of interest
             cover(25);
 #if 1 //~ ROI is unimplemented
-            CLog(debug) << "RGN";
+            CLog(Debug) << "RGN";
             for (i = 0; i < segLen - 2; ++i) {
                 if (str->getChar() == EOF) {
                     error(getPos(), "Error in JPX PPM marker segment");
@@ -1246,7 +1246,7 @@ GBool JPXStream::readCodestream(Guint len) {
         case 0x5f:			// POC - progression order change
             cover(26);
 #if 1 //~ progression order changes are unimplemented
-            CLog(debug) << "POC";
+            CLog(Debug) << "POC";
             for (i = 0; i < segLen - 2; ++i) {
                 if (str->getChar() == EOF) {
                     error(getPos(), "Error in JPX PPM marker segment");
@@ -1274,7 +1274,7 @@ GBool JPXStream::readCodestream(Guint len) {
         case 0x60:			// PPM - packed packet headers, main header
             cover(27);
 #if 1 //~ packed packet headers are unimplemented
-            CLog(debug) << "PPM";
+            CLog(Debug) << "PPM";
             for (i = 0; i < segLen - 2; ++i) {
                 if (str->getChar() == EOF) {
                     error(getPos(), "Error in JPX PPM marker segment");
@@ -1653,7 +1653,7 @@ GBool JPXStream::readTilePart() {
         case 0x5e:			// RGN - region of interest
             cover(38);
 #if 1 //~ ROI is unimplemented
-            CLog(debug) << "RGN";
+            CLog(Debug) << "RGN";
             for (i = 0; i < segLen - 2; ++i) {
                 if (str->getChar() == EOF) {
                     error(getPos(), "Error in JPX PPM marker segment");
@@ -1674,7 +1674,7 @@ GBool JPXStream::readTilePart() {
         case 0x5f:			// POC - progression order change
             cover(39);
 #if 1 //~ progression order changes are unimplemented
-            CLog(debug) << "POC";
+            CLog(Debug) << "POC";
             for (i = 0; i < segLen - 2; ++i) {
                 if (str->getChar() == EOF) {
                     error(getPos(), "Error in JPX PPM marker segment");
@@ -1702,7 +1702,7 @@ GBool JPXStream::readTilePart() {
         case 0x61:			// PPT - packed packet headers, tile-part hdr
             cover(40);
 #if 1 //~ packed packet headers are unimplemented
-            CLog(debug) << "PPT";
+            CLog(Debug) << "PPT";
             for (i = 0; i < segLen - 2; ++i) {
                 if (str->getChar() == EOF) {
                     error(getPos(), "Error in JPX PPT marker segment");

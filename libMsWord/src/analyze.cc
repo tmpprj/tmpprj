@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "catdoc.h"
-#include "log.hpp"
+#include "log.h"
 #include <boost/concept_check.hpp>
 
 
@@ -38,7 +38,7 @@ int analyze_format( FILE *f )
     buffer[4]=0;
     if ( strncmp(( const char* )buffer,write_sign,2 )==0 )
     {
-        CLog(debug) << "[Windows Write file. Some garbage expected]";
+        CLog(Debug) << "[Windows Write file. Some garbage expected]";
         get_unicode_char=get_8bit_char;
         return process_file( f,LONG_MAX );
     }
@@ -75,14 +75,14 @@ int analyze_format( FILE *f )
         }
         else
         {
-            CLog(debug) << "Broken OLE file. Try using -b switch";
+            CLog(Debug) << "Broken OLE file. Try using -b switch";
             return 1;
         }
     }
     else
     {
         set_std_func();
-        CLog(debug) << "Not ms format";
+        CLog(Debug) << "Not ms format";
         return 0;
     }
 
@@ -127,7 +127,7 @@ int parse_word_header( unsigned char * buffer,FILE *f,int offset,long curpos )
 //	}
     if ( flags & fComplex )
     {
-        CLog(debug) << "[This was fast-saved " << (( flags & 0xF0 )>>4 ) << " times. Some information is lost]\n";
+        CLog(Debug) << "[This was fast-saved " << (( flags & 0xF0 )>>4 ) << " times. Some information is lost]\n";
         /*		ret_code=69;*/
     }
 //	if (verbose) {
@@ -159,7 +159,7 @@ int parse_word_header( unsigned char * buffer,FILE *f,int offset,long curpos )
 //	}
     if ( flags & fEncrypted )
     {
-        CLog(debug) << "[File is encrypted. Encryption key = " << getlong( buffer,14 ) << "]\n";
+        CLog(Debug) << "[File is encrypted. Encryption key = " << getlong( buffer,14 ) << "]\n";
         return 69;
     }
 //	if (verbose) {
@@ -183,7 +183,7 @@ int parse_word_header( unsigned char * buffer,FILE *f,int offset,long curpos )
         catdoc_read( buf, 1, 1, f );
         if ( catdoc_eof( f ) )
         {
-            CLog(debug) << "File ended before textstart. Probably it is broken. Try -b switch\n";
+            CLog(Debug) << "File ended before textstart. Probably it is broken. Try -b switch\n";
             return 1;
         }
     }

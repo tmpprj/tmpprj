@@ -1,5 +1,6 @@
 TEMPLATE      = subdirs
 CONFIG += ordered
+QMAKE_CXXFLAGS_RELEASE = sdfasdf
 SUBDIRS       = \
     libCommon\
     libCommon/tst/unit_tests \
@@ -15,5 +16,3 @@ SUBDIRS       = \
     libSearch/tst/SearchFacadeTest \
     libSearch/tst/MultiPatternSearcherTest \
     SearchGUI
-
-          

@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include <xls.h>
 #include <ppt.h>
-#include <log.hpp>
+#include <log.h>
 #include <exceptions.h>
 
 int signature_check = 1;

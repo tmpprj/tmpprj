@@ -1,6 +1,6 @@
 #include "searchfacade.h"
 #include "filesearcher.h"
-#include "log.hpp"
+#include "log.h"
 
 CSearchFacade::CSearchFacade()
 {
@@ -27,7 +27,7 @@ CSearchFacade::~CSearchFacade()
 
 void CSearchFacade::Start( const SearchOptions& options )
 {
-    CLog(debug) << "CSearchFacade::Start: pattern count - " << options.listPatterns.size();
+    CLog(Debug) << "CSearchFacade::Start: pattern count - " << options.listPatterns.size();
     
     m_sigStart();
     m_checker.SetSearchParameters( options.listPatterns, options.bCaseSensitive );

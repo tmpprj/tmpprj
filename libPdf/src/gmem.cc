@@ -196,14 +196,14 @@ void gfree(void *p) {
             trl = (unsigned long *)((char *)hdr + gMemHdrSize + size);
 
             if (*trl != gMemDeadVal)
-                CLog(debug) << "Overwrite past end of block";
+                CLog(Debug) << "Overwrite past end of block";
 
             for (clr = (unsigned long *)hdr; clr <= trl; ++clr) {
                 *clr = gMemDeadVal;
             }
             free(hdr);
         } else {
-            CLog(debug) << "Attempted to free bad address";
+            CLog(Debug) << "Attempted to free bad address";
         }
     }
 #else
