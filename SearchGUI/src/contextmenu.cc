@@ -85,6 +85,7 @@ bool CContextMenu::GetUIObjectOfFile( const QString& strFileName, CComWrapper<IC
         CLog( Debug ) << "CContextMenu::GetUIObjectOfFile: not initialized";
         return false;
     }
+    boost::unique_lock<boost::mutex> lock( g_mtx );
 
     wchar_t Path[MAX_PATH], FileName[MAX_PATH];
     ::memset( Path, 0, sizeof(Path) );
@@ -170,7 +171,6 @@ void CContextMenu::InvokeDefault( QString strFileName )
 
 LRESULT CALLBACK CContextMenu::HookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    boost::unique_lock<boost::mutex> lock( g_mtx );
     if( g_Pcm3.Get() )
     {
         LRESULT lres;
