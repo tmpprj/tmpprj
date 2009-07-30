@@ -28,7 +28,7 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     startStatusUpdateTimer();
 
     reloadSettings();
-    CLog(debug) << "GUI THREAD: " << QThread::currentThreadId();
+    CLog(Debug) << "GUI THREAD: " << QThread::currentThreadId();
 }
 
 QSearchWindow::~QSearchWindow()
@@ -153,14 +153,14 @@ void QSearchWindow::browse()
 
 void QSearchWindow::fileProcessing( const QString& strFilename )
 {
-    CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename );
+    CLog(Debug) << __FUNCTION__ << ": " << qPrintable( strFilename );
     m_strCurrentFile = strFilename;
     ++m_stFilesProcessed;
 }
 
 void QSearchWindow::fileMatched( const QString& strFilename )
 {
-    CLog(debug) << __FUNCTION__ << ": " << qPrintable( strFilename );
+    CLog(Debug) << __FUNCTION__ << ": " << qPrintable( strFilename );
 
     filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
     
@@ -169,13 +169,13 @@ void QSearchWindow::fileMatched( const QString& strFilename )
 
 void QSearchWindow::searchStart()
 {
-    CLog( debug ) << __FUNCTION__;
+    CLog( Debug ) << __FUNCTION__;
     m_progressMovie.start();
 }
 
 void QSearchWindow::searchDone()
 {
-    CLog( debug ) << __FUNCTION__;
+    CLog( Debug ) << __FUNCTION__;
     m_progressMovie.stop();
     m_strCurrentFile.clear();
     m_tTimeElapsed = m_SearchTimerStart.elapsed();
@@ -212,8 +212,8 @@ void QSearchWindow::find()
     bool bRecursive = ( recursiveCheckBox->checkState() == Qt::Checked );
     QString strPath = directoryComboBox->GetCurrentText();
 
-    CLog( debug ) << "Masks : " << qPrintable( strMasks );
-    CLog( debug ) << "Text : " << qPrintable( strText );
+    CLog( Debug ) << "Masks : " << qPrintable( strMasks );
+    CLog( Debug ) << "Text : " << qPrintable( strText );
 
     QStringList listPatterns;
     ParsePatterns( strText, listPatterns );
