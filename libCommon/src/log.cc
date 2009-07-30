@@ -25,6 +25,10 @@ CLog::CLog( LogLevel level, bool bMultiString )
     if( GetFile().tellp() > CommonConf().nMaxLogSize.Value() )
         TruncateFile();
 
+#ifdef BUILD_RELEASE
+    if( m_level == Debug )
+        return;
+#endif
     GetFile() << QTime::currentTime().toString( "HH:mm:ss:zzz" ).toStdString() << " ["<< GetLevelChar( level ) << "]: ";
 }
 
