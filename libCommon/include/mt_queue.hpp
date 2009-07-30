@@ -32,7 +32,7 @@ class mt_queue
         {
             boost::this_thread::interruption_point();
             m_mtxAccess.lock();
-            if( ( int )m_queue.size() < m_nMaxSize )
+            if( ( int )m_queue.size() < m_nMaxSize || m_nMaxSize == -1 )
                 return;                 // Return while access mutex locked - save current transaction
             m_mtxAccess.unlock();
 

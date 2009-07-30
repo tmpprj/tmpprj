@@ -2,6 +2,7 @@
 #define _QSEARCHWINDOW_H
 
 #include <qsearchfacade.h>
+#include <mt_queue.hpp>
 #include <QMainWindow>
 #include <QMovie>
 #include <QSystemTrayIcon>
@@ -21,6 +22,14 @@ class QSearchWindow : public QMainWindow, private Ui::SearchWindowBase
     time_t m_tTimeElapsed;
     size_t m_stFilesProcessed, m_stFilesMatched;
     QSystemTrayIcon m_TrayIcon;
+    
+    struct SearchInfo 
+    {
+        QString strFilename;
+        QString strStatus;
+    };
+    
+    mt_queue< SearchInfo > m_results;
 
 public:
     QSearchWindow(QWidget *parent = 0);

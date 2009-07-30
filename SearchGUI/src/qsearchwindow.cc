@@ -16,6 +16,7 @@ using namespace std;
 QSearchWindow::QSearchWindow(QWidget *parent)
     : QMainWindow(parent)
     , m_tTimeElapsed(0)
+    , m_results( -1 )
 {
     setupUi( this );
 
@@ -166,7 +167,8 @@ void QSearchWindow::fileMatched( const QString& strFilename )
 {
     CLog(Debug) << __FUNCTION__ << ": " << qPrintable( strFilename );
 
-    filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
+    SearchInfo info = { QDir::toNativeSeparators( strFilename ), "FOUND" };
+    m_results.push( info );
     
     ++m_stFilesMatched;
 }
@@ -183,6 +185,7 @@ void QSearchWindow::searchDone()
     m_progressMovie.stop();
     m_strCurrentFile.clear();
     m_tTimeElapsed = m_SearchTimerStart.elapsed();
+    m_results.clear();
     m_TrayIcon.showMessage( "Notification message", "Search done!" );
 }
 
@@ -194,7 +197,6 @@ void QSearchWindow::searchError( const QString& strFilename, const QString& strE
 void QSearchWindow::validateInputData()
 {
     if( masksComboBox->GetCurrentText().isEmpty() 
-        || textComboBox->GetCurrentText().isEmpty() 
         || directoryComboBox->GetCurrentText().isEmpty() )
     {
         findButton->setEnabled( false );
@@ -293,5 +295,15 @@ void QSearchWindow::updateTimer()
         showDefaultStatus();
     else
         showSearchStatus( m_strCurrentFile ); 
+
+    for( int i = 0; i < 10; i++ )
+    {
+        if( m_results.size() == 0 )
+            break;
+
+        SearchInfo info = m_results.front();
+        filesTable->AddFile( info.strFilename, info.strStatus );
+        m_results.pop();
+    }
 }
 

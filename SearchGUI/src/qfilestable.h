@@ -14,13 +14,15 @@ public:
     void ClearList();
 
 protected:
-
     virtual void contextMenuEvent( QContextMenuEvent * e );
     virtual void mouseDoubleClickEvent( QMouseEvent * e );
     virtual void keyPressEvent( QKeyEvent * e );
 
-private:
+private Q_SLOTS:
+    void headersGeometryChanged();
 
+private:
+    QString GetItemFullPath( QTableWidgetItem* pItem );
     void mouseMoveEvent( QMouseEvent *event );
 
     CContextMenu m_CtxMenu;
