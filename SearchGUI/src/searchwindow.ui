@@ -43,7 +43,7 @@
        <enum>QFrame::Raised</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page">
        <property name="geometry">
@@ -189,7 +189,7 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>-50</y>
+         <y>-65</y>
          <width>711</width>
          <height>130</height>
         </rect>

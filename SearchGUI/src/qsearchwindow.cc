@@ -58,6 +58,10 @@ void QSearchWindow::setupControls()
     directoryComboBox->setInsertPolicy( QComboBox::NoInsert );
     directoryComboBox->SetDefaultElement( QDir::currentPath() );
 
+    connect( masksComboBox, SIGNAL( editTextChanged(QString) ), this, SLOT(validateInputData()) );
+    connect( textComboBox, SIGNAL( editTextChanged(QString) ), this, SLOT(validateInputData()) );
+    connect( directoryComboBox, SIGNAL( editTextChanged(QString) ), this, SLOT(validateInputData()) );
+
     QValidator* pValidatorMin = new QIntValidator( 0, 999999999LL, this );
     lineMinFileSize->setValidator( pValidatorMin );
     QValidator* pValidatorMax = new QIntValidator( 1, 999999999LL, this );
@@ -185,6 +189,18 @@ void QSearchWindow::searchDone()
 void QSearchWindow::searchError( const QString& strFilename, const QString& strError )
 {
     filesTable->AddFile( QDir::toNativeSeparators( strFilename ), strError, Qt::red );
+}
+
+void QSearchWindow::validateInputData()
+{
+    if( masksComboBox->GetCurrentText().isEmpty() 
+        || textComboBox->GetCurrentText().isEmpty() 
+        || directoryComboBox->GetCurrentText().isEmpty() )
+    {
+        findButton->setEnabled( false );
+    }
+    else
+        findButton->setEnabled( true );
 }
 
 void QSearchWindow::minimazeToTray()
