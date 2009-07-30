@@ -9,6 +9,7 @@ class QComboBoxExt : public QComboBox
 
     QPalette m_palDefault, m_palTooltip;
     QString m_strDefault;
+    QString m_strHiddenText;
 
     void CheckEmptyText();
     void focusInEvent( QFocusEvent * event );
@@ -24,6 +25,9 @@ public:
     void SetDefaultElement( const QString& strDefault );
 
     QString GetCurrentText();
+
+public Q_SLOTS:
+    void setDisabled( bool disable );
 
 private Q_SLOTS:
     void textChanged();

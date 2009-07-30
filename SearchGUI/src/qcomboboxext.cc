@@ -86,6 +86,19 @@ void QComboBoxExt::textChanged()
         setPalette( m_palDefault );
 }
 
+void QComboBoxExt::setDisabled( bool disable )
+{
+    if( disable )
+    {
+        m_strHiddenText = currentText();
+        setEditText( "" );
+    }
+    else
+        setEditText( m_strHiddenText );
+
+    QComboBox::setDisabled( disable );
+}
+
 void QComboBoxExt::CheckEmptyText()
 {
     if( toolTip().isEmpty() )
