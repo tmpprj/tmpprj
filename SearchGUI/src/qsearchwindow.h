@@ -27,6 +27,7 @@ public:
     ~QSearchWindow();
 
 private Q_SLOTS:
+    void validateInputData();
     void minimazeToTray();
     void maximazeFromTray();
     void browse();
