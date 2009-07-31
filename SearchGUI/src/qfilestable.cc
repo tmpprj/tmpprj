@@ -2,14 +2,17 @@
 #include "qfilestable.h"
 
 QFilesTable::QFilesTable( QWidget *parent )
-    : QTableWidget( 0, 2, parent )
+    : QTableWidget( 0, 3, parent )
     , m_CtxMenu( winId() )
 {
     QStringList labels;
-    labels << tr( "File Name" ) << tr( "Status" );
+    labels << tr( "FileName" ) << tr( "Folder" ) << tr( "Status" );
     setHorizontalHeaderLabels( labels );
 
     horizontalHeader()->setResizeMode( 0, QHeaderView::Stretch );
+    horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch );
+
+    connect( horizontalHeader(), SIGNAL( geometriesChanged() ), this, SLOT( headersGeometryChanged() ) );
 
     verticalHeader()->hide();
     setShowGrid( true );
@@ -17,9 +20,20 @@ QFilesTable::QFilesTable( QWidget *parent )
 
 void QFilesTable::AddFile( const QString& filename, const QString& status, const QColor& statusColor )
 {
-    QTableWidgetItem *fileNameItem = new QTableWidgetItem( filename );
-    fileNameItem->setFlags(Qt::ItemIsEnabled);
-    fileNameItem->setToolTip( filename );
+    QString filenameFmtUnix = QDir::fromNativeSeparators( filename );
+    int nIndex = filenameFmtUnix.lastIndexOf( '/' );
+    QString strFile = filename.mid( nIndex + 1 );
+    QString strPath = filename.left( nIndex + 1 );
+    
+    QDir file( filename );
+
+    QTableWidgetItem *fileNameItem = new QTableWidgetItem( strFile );
+    fileNameItem->setFlags( Qt::ItemIsEnabled | Qt::ItemIsEditable );
+    fileNameItem->setToolTip( strFile );
+
+    QTableWidgetItem *pathNameItem = new QTableWidgetItem( strPath );
+    pathNameItem->setFlags(Qt::ItemIsEnabled);
+    pathNameItem->setToolTip( strPath );
 
     QTableWidgetItem *statusItem = new QTableWidgetItem( status );
     statusItem->setFlags(Qt::ItemIsEnabled);
@@ -31,7 +45,8 @@ void QFilesTable::AddFile( const QString& filename, const QString& status, const
     int row = rowCount();
     insertRow(row);
     setItem( row, 0, fileNameItem );
-    setItem( row, 1, statusItem );
+    setItem( row, 1, pathNameItem );
+    setItem( row, 2, statusItem );
 }
 
 void QFilesTable::ClearList()
@@ -43,15 +58,17 @@ void QFilesTable::ClearList()
 void QFilesTable::contextMenuEvent( QContextMenuEvent * e )
 {
     QTableWidgetItem* pItem;
-    if( NULL != ( pItem = itemAt( e->pos() ) ) && 0 == pItem->column() )
-        m_CtxMenu.Show( e->globalPos(), pItem->text() );
+    if( NULL != ( pItem = itemAt( e->pos() ) ) && 2 == pItem->column() )
+        m_CtxMenu.Show( e->globalPos(), GetItemFullPath( pItem ) );
+    QTableWidget::contextMenuEvent( e );
 }
 
 void QFilesTable::mouseDoubleClickEvent( QMouseEvent * e )
 {
     QTableWidgetItem* pItem;
-    if( NULL != ( pItem = itemAt( e->pos() ) ) && 0 == pItem->column() )
-        m_CtxMenu.InvokeDefault( pItem->text() );
+    if( NULL != ( pItem = itemAt( e->pos() ) ) && 2 == pItem->column() )
+        m_CtxMenu.InvokeDefault( GetItemFullPath( pItem ) );
+    QTableWidget::mouseDoubleClickEvent( e );
 }
 
 void QFilesTable::keyPressEvent( QKeyEvent * e )
@@ -59,20 +76,36 @@ void QFilesTable::keyPressEvent( QKeyEvent * e )
     if( e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return )
     {
         QTableWidgetItem* pItem = currentItem();
-        if( NULL != pItem )
-            m_CtxMenu.InvokeDefault( pItem->text() );
+        if( NULL != pItem && 2 == pItem->column() )
+            m_CtxMenu.InvokeDefault( GetItemFullPath( pItem ) );
     }
     QTableWidget::keyPressEvent(e);
 }
 
+void QFilesTable::headersGeometryChanged()
+{
+    horizontalHeader()->setResizeMode( 0, QHeaderView::Interactive );
+    horizontalHeader()->setResizeMode( 1, QHeaderView::Interactive );
+    horizontalHeader()->setResizeMode( 2, QHeaderView::Stretch );
+}
+
+QString QFilesTable::GetItemFullPath( QTableWidgetItem* pItem )
+{
+    if( pItem->column() == 0 )
+        return item( pItem->row(), 1 )->text() + pItem->text();
+    else if( pItem->column() == 1 )
+        return item( pItem->row(), 1 )->text();
+
+    return "";
+}
 
 void QFilesTable::mouseMoveEvent( QMouseEvent *event )
 {
     if( !currentItem() )
-        return;
+        return QTableWidget::mouseMoveEvent( event );
 
     if( !( event->buttons() & Qt::LeftButton ) )
-        return;
+        return QTableWidget::mouseMoveEvent( event );
     
     QDrag *drag = new QDrag( this );
     QMimeData *mimeData = new QMimeData;
@@ -88,5 +121,6 @@ void QFilesTable::mouseMoveEvent( QMouseEvent *event )
     
     drag->setMimeData( mimeData );
     drag->start( Qt::CopyAction );
+    return QTableWidget::mouseMoveEvent( event );
 }
 
