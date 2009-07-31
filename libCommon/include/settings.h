@@ -45,7 +45,7 @@ public:
 
         if( !Validator.empty() && !Validator( m_value ) )
         {
-            CLog( Debug ) << "ConfParam::ConfParam: " << strKey << " value is incorrect, setting default";
+            CLog( Error ) << "ConfParam::ConfParam: " << strKey << " value is incorrect, setting default";
             m_value = strDefault.value<T>();
         }
     }
