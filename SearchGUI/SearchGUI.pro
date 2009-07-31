@@ -4,7 +4,7 @@ TEMPLATE = app
 POST_TARGETDEPS += ../lib/libChardet.a \
     ../lib/libCommon.a \
     ../lib/libMsWord.a \
-    ../lib/libPdf.a
+    ../lib/libPdf.a 
 CONFIG += no_keywords
 SOURCES += ./src/main.cc \
     ./src/qsearchwindow.cc \
@@ -14,7 +14,11 @@ SOURCES += ./src/main.cc \
     ./src/guicommon.cc \
     ./src/searchgui_conf.cc \
     ./src/contextmenu.cc \
-    ./src/qcomboboxext.cc
+    ./src/qcomboboxext.cc \
+    ../CustomWidgets/src/qrollframe.cc 
+#     ../CustomWidgets/src/qrollframeplugin.cc \
+#     ../CustomWidgets/src/qrollframefactory.cc \
+#     ../CustomWidgets/src/qrollframeextension.cc
 HEADERS += ./src/qsearchwindow.h \
     ./src/qsettingswindow.h \
     ./src/qfilestable.h \
@@ -24,7 +28,8 @@ HEADERS += ./src/qsearchwindow.h \
     ./src/contextmenu.h \
     src/menuwrapper.hpp \
     src/comwrapper.hpp \
-    ./src/qcomboboxext.h
+    ./src/qcomboboxext.h\
+    ../CustomWidgets/include/qrollframe.h
 FORMS += ./src/searchwindow.ui \
     ./src/settingswindow.ui
 DEPENDPATH += ./include \
@@ -40,7 +45,8 @@ INCLUDEPATH += ../external/boost \
     ../libCommon/include \
     ../libChardet/include \
     ../libMsWord/include \
-    ../libSearch/include
+    ../libSearch/include \
+    ../CustomWidgets/include 
 LIBS += -L../ \
     -L../lib \
     -L../external/boost/stage/lib \
@@ -52,5 +58,6 @@ LIBS += -L../ \
     -lPdf \
     -lboost_thread-mt \
     -lboost_system-mt \
-    -Wl,-Bdynamic
+    -Wl,-Bdynamic 
+
 DEFINES += REVISION=\"\\\"$$quote( $$system( git tag -l ) )\\\"\"

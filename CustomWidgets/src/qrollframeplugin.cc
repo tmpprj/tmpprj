@@ -8,9 +8,9 @@
 #include <QIcon>
 #include <QtPlugin>
 
-#include "include/qrollframefactory.h"
-#include "include/qrollframeplugin.h"
-#include "include/qrollframe.h"
+#include "qrollframefactory.h"
+#include "qrollframeplugin.h"
+#include "qrollframe.h"
 #include <QtPlugin>
 #include <QMessageBox>
 

@@ -4,7 +4,7 @@
 QT += core
 TARGET = CustomWidgets
 TEMPLATE = lib
-CONFIG += designer plugin shared staticlib
+CONFIG += designer plugin shared 
 SOURCES += src/qrollframe.cc \
     src/qrollframeplugin.cc \
     src/qrollframefactory.cc \
@@ -13,3 +13,4 @@ HEADERS += include/qrollframe.h \
     include/qrollframeplugin.h \
     include/qrollframefactory.h \
     include/qrollframeextension.h
+INCLUDEPATH += ./include/
