@@ -15,12 +15,8 @@ CDocumentChecker::CDocumentChecker()
 
 void CDocumentChecker::SetSearchParameters( const QStringList& listPatterns, bool bCaseSensitive )
 {
-    m_bCaseSensitive = bCaseSensitive;
-
-    PatternsContainer patterns;
-    ConvertListToPatterns( listPatterns, m_bCaseSensitive, patterns );
-
-    m_searcher.LoadPatterns( patterns );
+    m_ptrCounter = std::auto_ptr< CPatternCounter >( 
+            new CPatternCounter( listPatterns, bCaseSensitive, SearchConf().nChunkOverlap.Value() ) );
 }
 
 boost::signals2::signal1< void, const QString& >& CDocumentChecker::SigFileProcessing()
@@ -33,12 +29,6 @@ boost::signals2::signal1< void, const QString& >& CDocumentChecker::SigFileMatch
     return m_sigFileMatched;
 }
 
-int Func( const QString& str )
-{
-    boost::ignore_unused_variable_warning( str );
-    return 123;
-}
-
 void CDocumentChecker::WorkerFunc( const QString& strFileName )
 {
     try
@@ -48,8 +38,8 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
         QTime timer;
         timer.start();
 
-        CPatternCounter counter( m_searcher, m_bCaseSensitive, SearchConf().nChunkOverlap.Value() );
-        if( counter.SomePatterns() )
+        m_ptrCounter->ClearResult();
+        if( m_ptrCounter->SomePatterns() )
         {
             ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( strFileName );
             CLog( Debug ) << "Processing file " << qPrintable( strFileName ) <<
@@ -57,19 +47,19 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
 
             boost::signals2::scoped_connection scoped_conn1, scoped_conn2;
             scoped_conn1 = pExtractor->SigChunk().connect(
-                    boost::bind( &CPatternCounter::OnChunk, &counter, _1 ) );
+                    boost::bind( &CPatternCounter::OnChunk, m_ptrCounter.get(), _1 ) );
             scoped_conn2 = pExtractor->SigChunkIsRaw().connect(
-                    boost::bind( &CPatternCounter::OnChunkIsRaw, &counter, _1 ) );
+                    boost::bind( &CPatternCounter::OnChunkIsRaw, m_ptrCounter.get(), _1 ) );
 
             pExtractor->Extract( strFileName, SearchConf().nFileChunkSize.Value() );
         }
         else
             CLog( Debug ) << "Processing file " << qPrintable( strFileName ) << " - empty patterns";
 
-        CLog( Debug ) << "Matched ok: " << counter.MatchedOk() << 
+        CLog( Debug ) << "Matched ok: " << m_ptrCounter->MatchedOk() << 
             dec << " time elapsed: " << timer.elapsed() << " ms" << std::endl;
 
-        if( counter.MatchedOk() )
+        if( m_ptrCounter->MatchedOk() )
             m_sigFileMatched( strFileName );
     }
     catch( CUserLevelError& e )

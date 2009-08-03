@@ -4,6 +4,7 @@
 #include "datahandler.hpp"
 #include "multipatternsearcher.h"
 #include "plaintextextractor.h"
+#include "patterncounter.h"
 
 #include <QString>
 #include <QStringList>
@@ -20,8 +21,7 @@ public:
 private:
     virtual void WorkerFunc( const QString& strFileName );
 
-    MultiPatternSearcher m_searcher;
-    bool m_bCaseSensitive;
+    std::auto_ptr< CPatternCounter > m_ptrCounter;
     boost::signals2::signal1< void, const QString& > m_sigFileProcessing;
     boost::signals2::signal1< void, const QString& > m_sigFileMatched;
 };
