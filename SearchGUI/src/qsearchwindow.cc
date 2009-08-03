@@ -186,7 +186,7 @@ void QSearchWindow::searchDone()
     m_strCurrentFile.clear();
     m_tTimeElapsed = m_SearchTimerStart.elapsed();
     m_results.clear();
-    m_TrayIcon.showMessage( "Notification message", "Search done!" );
+    m_TrayIcon.showMessage( "Search done!", QString::number( m_stFilesMatched ) + " files matched." );
 }
 
 void QSearchWindow::searchError( const QString& strFilename, const QString& strError )
