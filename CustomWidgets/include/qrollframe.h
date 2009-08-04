@@ -9,14 +9,26 @@
 class QRollFrame : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY( QString ButtonText READ ButtonText WRITE setButtonText )
 
     QStackedWidget m_stack;
     QPushButton m_button;
 
 public:
+
     QRollFrame( QWidget* parent = 0 );
 
     QWidget* widget( int index );
+
+    QString ButtonText()
+    {
+        return m_button.text(); 
+    }
+
+    void setButtonText( QString strText )
+    { 
+        m_button.setText( strText );
+    }
 
 public Q_SLOTS:
     
