@@ -2,35 +2,53 @@
 #include "libsearch_common.h"
 #include <log.h>
 
-CPatternCounter::CPatternCounter( MultiPatternSearcher& searcher, bool bCaseSensitive, int nOverlap )
-    : m_searcher( searcher ),
-      m_bCaseSensitive( bCaseSensitive ),
-      m_nOverlap( nOverlap )
+CPatternCounter::CPatternCounter( const QStringList& listPatterns, bool bCaseSensitive, int nOverlap )
+: m_bCaseSensitive( bCaseSensitive ),
+  m_nOverlap( nOverlap )
 {
+    PatternsContainer patterns;
+    ConvertListToPatterns( listPatterns, m_bCaseSensitive, false, patterns );
+    m_searcher.LoadPatterns( patterns );
+    
+    PatternsContainer patternsRaw;
+    ConvertListToPatterns( listPatterns, m_bCaseSensitive, true, patternsRaw );
+    m_searcherRaw.LoadPatterns( patternsRaw );
 }
 
-bool CPatternCounter::OnChunk( const QString& strChunk )
+void CPatternCounter::ClearResult()
 {
-    QByteArray array = StringToCommon( strChunk, m_bCaseSensitive );
-    return OnChunkIsRaw( array );
+    m_foundPatterns.clear();
+    m_PreChunk.clear();
 }
 
-bool CPatternCounter::OnChunkIsRaw( const QByteArray& array )
+bool CPatternCounter::CheckPatterns( MultiPatternSearcher& searcher, const QByteArray& array )
 {
-    const QByteArray arraySearch = m_PreBlock + array;
-    std::string strData = std::string( arraySearch.data(), arraySearch.size() );
+    std::string strData = std::string( array.data(), array.size() );
     
     PatternMatchContainer chunkPatterns;
-    m_searcher.FindPatterns( strData, chunkPatterns );
+    searcher.FindPatterns( strData, chunkPatterns );
 
     m_foundPatterns.insert( chunkPatterns.begin(), chunkPatterns.end() );
     
     CLog( Debug ) << "Chunk patterns: " << chunkPatterns.size();
     CLog( Debug ) << "Found patterns: " << m_foundPatterns.size();
 
-    m_PreBlock = array;
+    return ( m_foundPatterns.size() < searcher.GetPatternCount() );
+}
 
-    return ( m_foundPatterns.size() < m_searcher.GetPatternCount() );
+bool CPatternCounter::OnChunk( const QString& strChunk )
+{
+    QByteArray array = StringToCommon( m_PreChunk + strChunk, m_bCaseSensitive );
+    bool ret = CheckPatterns( m_searcher, array );
+    m_PreChunk = strChunk;
+
+    return ret;
+}
+
+bool CPatternCounter::OnChunkIsRaw( const QByteArray& array )
+{
+    QString strChunk( array );
+    return OnChunk( strChunk );
 }
 
 bool CPatternCounter::MatchedOk()

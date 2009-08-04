@@ -4,7 +4,7 @@
 #include <QStringList>
 #include "multipatternsearcher.h"
 
-QByteArray StringToCommon( const QString& str, bool bCaseSensitive );
-void ConvertListToPatterns( const QStringList& listPatterns, bool bCaseSensitive, PatternsContainer& patterns );
+QByteArray StringToCommon( const QString& str, bool bCaseSensitive, bool bRaw = false );
+void ConvertListToPatterns( const QStringList& listPatterns, bool bCaseSensitive, bool bRaw, PatternsContainer& patterns );
 
 #endif

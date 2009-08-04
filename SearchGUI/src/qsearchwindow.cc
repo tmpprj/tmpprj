@@ -102,7 +102,7 @@ void QSearchWindow::startStatusUpdateTimer()
     QTimer* timer = new QTimer( this );
     connect( timer, SIGNAL( timeout() ), this, SLOT( updateTimer() ) );
 
-    timer->setInterval( 100 );
+    timer->setInterval( 10 );
     timer->start();
 }
 
@@ -185,7 +185,7 @@ void QSearchWindow::searchDone()
     m_progressMovie.stop();
     m_strCurrentFile.clear();
     m_tTimeElapsed = m_SearchTimerStart.elapsed();
-    m_results.clear();
+//    m_results.clear();
     m_TrayIcon.showMessage( "Search done!", QString::number( m_stFilesMatched ) + " files matched." );
 }
 

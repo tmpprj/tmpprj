@@ -164,7 +164,7 @@ int MultiPatternSearcher::AlgorithmMonkey( unsigned char* text, int start, int e
                     if( lpPatternLengths[ pat_index ] <= j ) 
                         if( nUpdateId != lpPatternInfo[ pat_index ].nUpdateId )
                         {
-                            matches.insert( lpPatternInfo[ pat_index ].strPattern );
+                            matches.insert( pat_index );
                             lpPatternInfo[ pat_index ].nUpdateId = nUpdateId;
                         }
                 }
@@ -220,7 +220,7 @@ int MultiPatternSearcher::AlgorithmShort( unsigned char* text, int start, int en
             if( lpPatternLengths[ pat_index ] <= j ) 
                 if( nUpdateId != lpPatternInfo[ pat_index ].nUpdateId )
                 {
-                    matches.insert( lpPatternInfo[ pat_index ].strPattern );
+                    matches.insert( pat_index );
 
                     lpPatternInfo[ pat_index ].nUpdateId = nUpdateId;
                 }

@@ -15,7 +15,7 @@
 #define HASH_MASK   15
 
 typedef std::vector< std::string > PatternsContainer;
-typedef std::set< std::string > PatternMatchContainer;
+typedef std::set< int > PatternMatchContainer;
 
 struct PatternInfo
 {
