@@ -249,6 +249,7 @@ void QSearchWindow::find()
 
 void QSearchWindow::stop()
 {
+    m_results.clear();
     m_search.GetSearcher().Stop();
 }
 
