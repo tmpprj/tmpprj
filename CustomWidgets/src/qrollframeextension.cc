@@ -1,5 +1,5 @@
-#include "include/qrollframeextension.h"
-#include "include/qrollframe.h"
+#include "qrollframeextension.h"
+#include "qrollframe.h"
 #include <QMessageBox>
 
 QRollFrameExtension::QRollFrameExtension( QRollFrame *widget, QObject *parent)

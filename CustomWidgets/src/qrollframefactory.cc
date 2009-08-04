@@ -1,6 +1,6 @@
-#include "include/qrollframefactory.h"
-#include "include/qrollframeextension.h"
-#include "include/qrollframe.h"
+#include "qrollframefactory.h"
+#include "qrollframeextension.h"
+#include "qrollframe.h"
 
 QRollFrameFactory::QRollFrameFactory(QExtensionManager *parent)
     : QExtensionFactory(parent)
