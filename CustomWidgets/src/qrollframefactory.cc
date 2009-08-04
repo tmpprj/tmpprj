@@ -10,9 +10,12 @@ QObject *QRollFrameFactory::createExtension(QObject *object, const QString &iid,
 {
     QRollFrame *widget = qobject_cast<QRollFrame*>(object);
 
-    if (widget && (iid == Q_TYPEID(QDesignerContainerExtension))) {
+    if( widget && ( iid == Q_TYPEID(QDesignerContainerExtension) ) ) 
+    {
         return new QRollFrameExtension(widget, parent);
-    } else {
+    }
+    else 
+    {
          return 0;
     }
 }
