@@ -126,7 +126,7 @@ bool CContextMenu::GetUIObjectOfFile( const QString& strFileName, CComWrapper<IC
     m_Malloc.Get()->Free( Pidl );
     if( !CM.Get() )
     {
-        CLog( Debug ) << "CContextMenu::GetUIObjectOfFile: Unable to get context menu interface";
+        CLog( Debug ) << "CContextMenu::GetUIObjectOfFile: Unable to get context menu interface for " << strFileName;
         return false;
     }
     return true;
