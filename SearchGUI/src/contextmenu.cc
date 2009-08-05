@@ -38,7 +38,8 @@ void CContextMenu::Show( QPoint ptWhere, QString strFileName )
 #ifdef WIN32
     // Get the IContextMenu for the file.
     CComWrapper<IContextMenu> CM;
-    GetUIObjectOfFile( strFileName, CM );
+    if( !GetUIObjectOfFile( strFileName, CM ) )
+        return;
 
     CMenuWrapper Menu( CreatePopupMenu() );
     DWORD Flags = CMF_EXPLORE; //CMF_NORMAL?
@@ -140,7 +141,7 @@ void CContextMenu::InvokeDefault( QString strFileName )
     wchar_t Path[MAX_PATH];
     ::memset( Path, 0, sizeof(Path) );
     strFileName.toWCharArray(Path);
-    if( SUCCEEDED( GetUIObjectOfFile( strFileName, Pcm ) ) )
+    if( GetUIObjectOfFile( strFileName, Pcm ) )
     {
         CMenuWrapper Menu( CreatePopupMenu() );
         if( Menu.Get() )
