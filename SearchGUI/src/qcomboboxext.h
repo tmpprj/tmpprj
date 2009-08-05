@@ -14,10 +14,10 @@ class QComboBoxExt : public QComboBox
     void CheckEmptyText();
     void focusInEvent( QFocusEvent * event );
     void focusOutEvent( QFocusEvent * event );
-    void PushTextToList( const QString& str );
 
 public:
     QComboBoxExt( QWidget* parent = 0 );
+    void PushTextToList( const QString& str );
     void PushCurrentToList();
     QStringList GetElements();
     QStringList GetFullElements();

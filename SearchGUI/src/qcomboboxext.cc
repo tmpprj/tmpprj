@@ -18,10 +18,15 @@ void QComboBoxExt::PushTextToList( const QString& str )
         return;
     
     QStringList list = GetElements();
-    if( list.count( str ) > 0 )
+    int iIdx = list.indexOf( str );
+    if( -1 != iIdx )
+    {
+        setCurrentIndex( iIdx );
         return;
+    }
 
     insertItem( 0, str );
+    setCurrentIndex( 0 );
 }
 
 void QComboBoxExt::PushCurrentToList()

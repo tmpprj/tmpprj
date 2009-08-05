@@ -149,11 +149,9 @@ void QSearchWindow::browse()
 
     QString directory = QFileDialog::getExistingDirectory( this, tr( "Find Files" ), strBrowseDir, 
             QFileDialog::DontUseNativeDialog | QFileDialog::ShowDirsOnly );
+
     if( !directory.isEmpty() ) 
-    {
-        directoryComboBox->insertItem( 0, directory );
-        directoryComboBox->setCurrentIndex( 0 );
-    }
+        directoryComboBox->PushTextToList( directory );
 }
 
 void QSearchWindow::fileProcessing( const QString& strFilename )
