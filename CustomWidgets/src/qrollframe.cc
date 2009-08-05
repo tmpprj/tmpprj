@@ -14,8 +14,6 @@ QRollFrame::QRollFrame( QWidget* parent )
     setLayout( layout );
 
     connect( &m_button, SIGNAL(clicked()), this, SLOT(buttonPushed()) );
-
-    m_stack.hide();
 }
 
 void QRollFrame::buttonPushed()

@@ -25,14 +25,18 @@ int QRollFrameExtension::currentIndex() const
 
 void QRollFrameExtension::insertWidget(int index, QWidget *widget)
 {
+    Q_UNUSED( index );
+    Q_UNUSED( widget );
 }
 
 void QRollFrameExtension::remove(int index)
 {
+    Q_UNUSED( index );
 }
 
 void QRollFrameExtension::setCurrentIndex(int index)
 {
+    Q_UNUSED( index );
 }
 
 QWidget* QRollFrameExtension::widget(int index) const

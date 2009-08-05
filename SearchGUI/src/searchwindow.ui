@@ -170,6 +170,9 @@
       <property name="ButtonText">
        <string>Settings</string>
       </property>
+      <property name="Opened">
+       <bool>false</bool>
+      </property>
       <widget class="QWidget" name="page_3">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
