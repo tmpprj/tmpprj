@@ -22,6 +22,8 @@ public:
 
 private:
 
+    std::pair<QString, QString> ParsePath( QString strPath );
+
 #ifdef WIN32
     bool GetUIObjectOfFile( const QString& strFileName, CComWrapper<IContextMenu>& CM );
     static LRESULT CALLBACK HookWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);

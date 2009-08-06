@@ -33,6 +33,16 @@ CContextMenu::~CContextMenu()
 #endif
 }
 
+std::pair<QString, QString> CContextMenu::ParsePath( QString strPath )
+{
+    std::pair<QString, QString> pairRes;
+    int iEndPos = strPath.endsWith( QDir::separator() )? strPath.size()-2 : strPath.size()-1;
+    int iPos = strPath.lastIndexOf( QDir::separator(), iEndPos );
+    pairRes.first = strPath.mid( iPos+1, iEndPos-iPos );
+    pairRes.second = strPath.left( iPos+1 );
+    return pairRes;
+}
+
 void CContextMenu::Show( QPoint ptWhere, QString strFileName )
 {
 #ifdef WIN32
@@ -91,9 +101,9 @@ bool CContextMenu::GetUIObjectOfFile( const QString& strFileName, CComWrapper<IC
     wchar_t Path[MAX_PATH], FileName[MAX_PATH];
     ::memset( Path, 0, sizeof(Path) );
     ::memset( FileName, 0, sizeof(FileName) );
-    QFileInfo pathInfo( strFileName );
-    QDir::toNativeSeparators( pathInfo.fileName() ).toWCharArray( FileName );
-    QDir::toNativeSeparators( pathInfo.absolutePath() ).toWCharArray( Path );
+    std::pair< QString, QString > pairPath = ParsePath( QDir::toNativeSeparators( strFileName ) );
+    pairPath.second.toWCharArray( FileName );
+    pairPath.first.toWCharArray( Path );
 
     // Get a pidl for the folder the file
     // is located in.
