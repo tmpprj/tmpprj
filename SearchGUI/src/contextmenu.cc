@@ -69,7 +69,7 @@ void CContextMenu::Show( QPoint ptWhere, QString strFileName )
     if( g_OldWndProc ) // unsubclass
         ::SetWindowLongPtr( m_WinId, GWLP_WNDPROC, (LONG_PTR) g_OldWndProc );
 
-    if (Cmd < 100 && Cmd != 0)
+    if( Cmd != -1 )
     {
         CMINVOKECOMMANDINFO info = { 0 };
         info.cbSize = sizeof(info);
@@ -102,8 +102,8 @@ bool CContextMenu::GetUIObjectOfFile( const QString& strFileName, CComWrapper<IC
     ::memset( Path, 0, sizeof(Path) );
     ::memset( FileName, 0, sizeof(FileName) );
     std::pair< QString, QString > pairPath = ParsePath( QDir::toNativeSeparators( strFileName ) );
-    pairPath.second.toWCharArray( FileName );
-    pairPath.first.toWCharArray( Path );
+    pairPath.first.toWCharArray( FileName );
+    pairPath.second.toWCharArray( Path );
 
     // Get a pidl for the folder the file
     // is located in.
