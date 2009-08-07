@@ -5,15 +5,17 @@
 #include "multipatternsearcher.h"
 #include "plaintextextractor.h"
 #include "patterncounter.h"
+#include "searchoptions.h"
 
 #include <QString>
 #include <QStringList>
+
 
 class CDocumentChecker : public CDataHandler< QString >
 {
 public:
     CDocumentChecker();
-    void SetSearchParameters( const QStringList& listPatterns, bool bCaseSensitive );
+    void SetSearchParameters( const SearchOptions& );
 
     boost::signals2::signal1< void, const QString& >& SigFileProcessing();
     boost::signals2::signal1< void, const QString& >& SigFileMatched();
@@ -24,6 +26,7 @@ private:
     std::auto_ptr< CPatternCounter > m_ptrCounter;
     boost::signals2::signal1< void, const QString& > m_sigFileProcessing;
     boost::signals2::signal1< void, const QString& > m_sigFileMatched;
+    SearchOptions m_Options;
 };
 
 #endif

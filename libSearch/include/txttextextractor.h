@@ -15,10 +15,11 @@ public:
         m_strName = "Plain Text Document Parser";
     }
 
-    bool DetectCharset( const char* pData, size_t nSize, bool& bCharsetDetected );
-    virtual void Extract( const QString& strFileName, size_t stChunkSize );
+    virtual void Extract( const QString& strFileName, size_t stChunkSize, const SearchOptions& options );
 
 private:
+
+    bool DetectCharset( const char* pData, size_t nSize, bool& bCharsetDetected );
 
     boost::shared_ptr<QFile> m_pFile;
 

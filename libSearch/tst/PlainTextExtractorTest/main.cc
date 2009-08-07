@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     ITextExtractor* pExtractor = TextExtractorFactory::Instance().GetExtractor( argv[1] );
     pExtractor->SigChunk().connect( OnData );
 
-    pExtractor->Extract( argv[1], 10000 );
+    SearchOptions options = { argv[ 1 ], QStringList( argv[ 2 ] ), QStringList( "*" ) , false, true, 0, 0, true };
+    pExtractor->Extract( argv[1], 10000, options );
     return 0;
 }

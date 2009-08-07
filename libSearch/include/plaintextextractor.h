@@ -9,6 +9,8 @@
 #include <singleton.hpp>
 #include <mt_queue.hpp>
 #include <datahandler.hpp>
+#include <searchoptions.h>
+
 
 class ITextExtractor: public boost::noncopyable
 {
@@ -16,7 +18,7 @@ public:
 
     virtual ~ITextExtractor(){}
 
-    virtual void Extract( const QString& strFileName, size_t stChunkSize ) = 0;
+    virtual void Extract( const QString& strFileName, size_t stChunkSize, const SearchOptions& options ) = 0;
 
     boost::signals2::signal1< bool, const QByteArray& >& SigChunkIsRaw()
     {

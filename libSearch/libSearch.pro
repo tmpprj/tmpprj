@@ -33,7 +33,8 @@ HEADERS += ./include/searchfacade.h \
     src/libsearch_common.h \
     include/documentchecker.h \
     include/patterncounter.h \
-    src/search_conf.h
+    src/search_conf.h \
+    include/searchoptions.h
 DEPENDPATH += ./include \
     ../libCommon/include \
     ../libChardet/include \

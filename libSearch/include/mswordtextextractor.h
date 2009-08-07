@@ -9,7 +9,7 @@ public:
 
     CMsWordTextExtractor();
 
-    virtual void Extract( const QString& strFileName, size_t stChunkSize );
+    virtual void Extract( const QString& strFileName, size_t stChunkSize, const SearchOptions& options );
 
 protected:
 
@@ -22,7 +22,7 @@ public:
 
     CXlsTextExtractor();
 
-    virtual void Extract( const QString& strFileName, size_t stChunkSize );
+    virtual void Extract( const QString& strFileName, size_t stChunkSize, const SearchOptions& options );
 
 };
 
@@ -32,7 +32,7 @@ public:
 
     CPptTextExtractor();
 
-    virtual void Extract( const QString& strFileName, size_t stChunkSize );
+    virtual void Extract( const QString& strFileName, size_t stChunkSize, const SearchOptions& options );
 
 };
 #endif // CMSWORDTEXTEXTRACTOR_H

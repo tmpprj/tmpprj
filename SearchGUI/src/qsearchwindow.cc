@@ -237,7 +237,7 @@ void QSearchWindow::find()
     QStringList listMasks;
     ParseMasks( strMasks, listMasks );
 
-    SearchOptions options = { strPath, listPatterns, listMasks, bCaseSensitive, bRecursive, groupFileSize->isChecked() ? lineMinFileSize->text().toULongLong() : 0, groupFileSize->isChecked() ? lineMaxFileSize->text().toULongLong() : 0 };
+    SearchOptions options = { strPath, listPatterns, listMasks, bCaseSensitive, bRecursive, groupFileSize->isChecked() ? lineMinFileSize->text().toULongLong() : 0, groupFileSize->isChecked() ? lineMaxFileSize->text().toULongLong() : 0, charsetCheckBox->isChecked() };
 
     m_search.GetSearcher().Start( options );
     m_SearchTimerStart = QTime::currentTime();
@@ -285,6 +285,10 @@ void QSearchWindow::saveSettings()
     SearchGUI::Conf().listMasks.Value() = masksComboBox->GetFullElements();
     SearchGUI::Conf().listSearches.Value() = textComboBox->GetFullElements();
     SearchGUI::Conf().listSearchPaths.Value() = directoryComboBox->GetFullElements();
+    SearchGUI::Conf().bFileSizeLimits.Value() = groupFileSize->isChecked();
+    SearchGUI::Conf().ullMinFileSize.Value() = lineMinFileSize->text().toULongLong();
+    SearchGUI::Conf().ullMaxFileSize.Value() = lineMaxFileSize->text().toULongLong();
+    SearchGUI::Conf().bFileSizeLimits.Value() = groupFileSize->isChecked();
 }
 
 void QSearchWindow::updateTimer()

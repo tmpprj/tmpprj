@@ -9,18 +9,7 @@
 #include "filesearcher.h"
 #include "multipatternsearcher.h"
 #include "documentchecker.h"
-
-struct SearchOptions
-{
-    QString strPath;
-    QStringList listPatterns;
-    QStringList listMasks;
-    bool bCaseSensitive;
-    bool bRecursive;
-    size_t stMinFileSize;
-    size_t stMaxFileSize;
-};
-
+#include "searchoptions.h"
 
 class CSearchFacade : public boost::noncopyable
 {

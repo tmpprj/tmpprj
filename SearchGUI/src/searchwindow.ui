@@ -206,6 +206,16 @@
              </widget>
             </item>
             <item>
+             <widget class="QCheckBox" name="charsetCheckBox">
+              <property name="text">
+               <string>Automatic character set detection</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QRadioButton" name="radioSearchText">
               <property name="text">
                <string>Search text within files</string>
