@@ -85,8 +85,8 @@ void QFilesTable::keyPressEvent( QKeyEvent * e )
 void QFilesTable::headersGeometryChanged()
 {
     horizontalHeader()->setResizeMode( 0, QHeaderView::Interactive );
-    horizontalHeader()->setResizeMode( 1, QHeaderView::Interactive );
-    horizontalHeader()->setResizeMode( 2, QHeaderView::Stretch );
+    horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch);
+    horizontalHeader()->setResizeMode( 2, QHeaderView::Interactive );
 }
 
 QString QFilesTable::GetItemFullPath( QTableWidgetItem* pItem )
