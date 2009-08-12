@@ -16,9 +16,6 @@ SOURCES += ./src/main.cc \
     ./src/contextmenu.cc \
     ./src/qcomboboxext.cc \
     ../CustomWidgets/src/qrollframe.cc 
-#     ../CustomWidgets/src/qrollframeplugin.cc \
-#     ../CustomWidgets/src/qrollframefactory.cc \
-#     ../CustomWidgets/src/qrollframeextension.cc
 HEADERS += ./src/qsearchwindow.h \
     ./src/qsettingswindow.h \
     ./src/qfilestable.h \
