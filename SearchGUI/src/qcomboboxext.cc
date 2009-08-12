@@ -59,9 +59,7 @@ void QComboBoxExt::SetFullElements( const QStringList& list )
     else
     {
         for( int i = 1; i < list.size(); i++ )
-            addItem( list[ i ] );
-
-        setEditText( list[ 0 ] );
+            PushTextToList( list[ i ] );
     }
     CheckEmptyText();
 }
