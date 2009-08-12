@@ -47,8 +47,12 @@ public:
             m_pThread->interrupt();
             m_pThread->join();
             m_pThread.reset();
-            m_Queue.clear();
-            m_sigQueueEmpty();
+            //Do not send signal if queue is already empty
+            if( !m_Queue.empty() )
+            {
+                m_Queue.clear();
+                m_sigQueueEmpty();
+            }
         }
     }
 
