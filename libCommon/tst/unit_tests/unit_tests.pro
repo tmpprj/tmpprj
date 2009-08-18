@@ -13,6 +13,7 @@ CONFIG   -= app_bundle
 DEPENDPATH += ../../include ../../../libCommon/include
 INCLUDEPATH += ../../../external/boost ../../../external/UnitTest++/src ../../include ../../../libCommon/include
 TEMPLATE = app
+linux {
 LIBS +=     -L../ \
             -L../../../lib \
             -L../../../external/boost/stage/lib \
@@ -23,7 +24,14 @@ LIBS +=     -L../ \
             -lboost_system-mt \
             -lUnitTest++ \
             -Wl,-Bdynamic 
-
+}
+win32 {
+QMAKE_LIBDIR += ../../../external/boost/stage/lib ../../../lib ../../../external/UnitTest++
+LIBS +=     Common.lib \
+            libboost_thread.lib \
+            libboost_system.lib \
+            UnitTest++.lib
+}
 
 SOURCES += test.cc \
            mt_queue_test.cc

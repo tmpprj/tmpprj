@@ -4,10 +4,18 @@
 TARGET = Search
 DESTDIR = ../lib
 TEMPLATE = lib
+linux {
 POST_TARGETDEPS += ../lib/libChardet.a \
     ../lib/libCommon.a \
     ../lib/libMsWord.a \
     ../lib/libPdf.a
+}
+win32 {
+POST_TARGETDEPS += ../lib/Chardet.lib \
+    ../lib/Common.lib \
+    ../lib/MsWord.lib \
+    ../lib/Pdf.lib
+}
 CONFIG += no_keywords staticlib
 SOURCES += src/filesearcher.cc \
     src/searchfacade.cc \

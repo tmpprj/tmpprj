@@ -647,7 +647,7 @@ GDir::~GDir() {
 }
 
 GDirEntry *GDir::getNextEntry() {
-    GDirEntry *e;
+    GDirEntry *e = NULL;
 
 #if defined(WIN32)
 //  if (hnd) {

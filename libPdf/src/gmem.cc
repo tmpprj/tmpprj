@@ -12,7 +12,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <limits.h>
-#include <stdexcept>
+
 #include "gmem.h"
 
 #ifdef DEBUG_MEM
@@ -48,7 +48,7 @@ static int gMemInUse = 0;
 
 #endif /* DEBUG_MEM */
 
-void *gmalloc(int size) /*tmpprj GMEM_EXCEP */{
+void *gmalloc(int size)throw(...) {
 #ifdef DEBUG_MEM
     int size1;
     char *mem;
@@ -97,7 +97,7 @@ void *gmalloc(int size) /*tmpprj GMEM_EXCEP */{
 #endif
 }
 
-void *grealloc(void *p, int size) GMEM_EXCEP {
+void *grealloc(void *p, int size)throw(...){
 #ifdef DEBUG_MEM
     GMemHdr *hdr;
     void *q;
@@ -140,7 +140,7 @@ void *grealloc(void *p, int size) GMEM_EXCEP {
 #endif
 }
 
-void *gmallocn(int nObjs, int objSize) GMEM_EXCEP {
+void *gmallocn(int nObjs, int objSize)throw(...){
     int n;
 
     if (nObjs == 0) {
@@ -153,7 +153,7 @@ void *gmallocn(int nObjs, int objSize) GMEM_EXCEP {
     return gmalloc(n);
 }
 
-void *greallocn(void *p, int nObjs, int objSize) GMEM_EXCEP {
+void *greallocn(void *p, int nObjs, int objSize)throw(...){
     int n;
 
     if (nObjs == 0) {

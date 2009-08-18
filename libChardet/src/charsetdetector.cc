@@ -8,7 +8,7 @@ CCharsetDetector::~CCharsetDetector()
 
 bool CCharsetDetector::Done() const
 {
-    return mDone;
+    return 0 != mDone;
 }
 
 std::string CCharsetDetector::GetCharset()

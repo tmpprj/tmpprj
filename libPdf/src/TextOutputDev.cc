@@ -3879,7 +3879,7 @@ TextOutputDev::TextOutputDev(char *fileName, GBool physLayoutA,
             outputStream = stdout;
 #ifdef WIN32
             // keep DOS from munging the end-of-line characters
-            setmode(fileno(stdout), O_BINARY);
+            _setmode(_fileno(stdout), O_BINARY);
 #endif
         } else if ((outputStream = fopen(fileName, append ? "ab" : "wb"))) {
             needClose = gTrue;

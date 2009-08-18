@@ -8,13 +8,13 @@ QT       -= gui
 TARGET = XlsExtractorTest
 CONFIG   += console
 CONFIG   -= app_bundle
-QMAKE_CXXFLAGS_DEBUG += -O0
 POST_TARGETDEPS += ../../../lib/libMsWord.a
 DEPENDPATH += ../../include
 INCLUDEPATH += ../../include ../../../external/boost
 RESOURCES += ../../../libMsWord/charsets.qrc
 TEMPLATE = app
 linux {
+QMAKE_CXXFLAGS_DEBUG += -O0
 LIBS +=     -L../ \
             -L../../../lib \
             -L../../../external/boost/stage/lib \
