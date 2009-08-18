@@ -48,7 +48,7 @@ static int gMemInUse = 0;
 
 #endif /* DEBUG_MEM */
 
-void *gmalloc(int size) GMEM_EXCEP {
+void *gmalloc(int size) /*tmpprj GMEM_EXCEP */{
 #ifdef DEBUG_MEM
     int size1;
     char *mem;

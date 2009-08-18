@@ -44,6 +44,7 @@ INCLUDEPATH += ../external/boost \
     ../libMsWord/include \
     ../libSearch/include \
     ../CustomWidgets/include 
+linux {
 LIBS += -L../ \
     -L../lib \
     -L../external/boost/stage/lib \
@@ -56,5 +57,15 @@ LIBS += -L../ \
     -lboost_thread-mt \
     -lboost_system-mt \
     -Wl,-Bdynamic 
-
+}
+win32 {
+QMAKE_LIBDIR += ../external/boost/stage/lib ../lib
+LIBS +=     Search.lib \
+            Common.lib \
+            MsWord.lib \
+            Chardet.lib \
+            Pdf.lib \
+            libboost_thread.lib \
+            libboost_system.lib
+}
 DEFINES += REVISION=\"\\\"$$quote( $$system( git tag -l ) )\\\"\"

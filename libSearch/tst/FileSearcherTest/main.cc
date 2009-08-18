@@ -1,6 +1,5 @@
 #include <iostream>
 #include <QDebug>
-#include <unistd.h>
 #include <QTextCodec>
 #include <boost/thread.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>

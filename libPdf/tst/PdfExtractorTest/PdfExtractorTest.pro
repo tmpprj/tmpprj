@@ -15,6 +15,7 @@ DEPENDPATH += ../../include
 INCLUDEPATH += ../../include ../../../external/boost
 RESOURCES += ../../../libMsWord/charsets.qrc
 TEMPLATE = app
+linux {
 LIBS +=     -L../ \
             -L../../../lib \
             -L../../../external/boost/stage/lib \
@@ -24,5 +25,12 @@ LIBS +=     -L../ \
             -lboost_thread-mt \
             -lboost_system-mt \
             -Wl,-Bdynamic
-
+}
+win32 {
+QMAKE_LIBDIR += ../../../external/boost/stage/lib ../../../lib
+LIBS +=     Pdf.lib \
+            Common.lib \
+            libboost_thread.lib \
+            libboost_system.lib
+}
 SOURCES += main.cpp

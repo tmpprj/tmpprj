@@ -3,13 +3,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <ctype.h>
 #include <stdexcept>
 #include <xls.h>
 #include <ppt.h>
 #include <log.h>
 #include <exceptions.h>
+#include <boost/shared_array.hpp>
+
+#ifdef WIN32
+#define strcasecmp _stricmp
+#endif
 
 int signature_check = 1;
 int forced_charset = 0; /* Flag which disallow rtf parser override charset*/
@@ -30,11 +34,11 @@ namespace MsWord
         set_std_func();
 
 #ifdef WIN32
-        wchar_t filename[strFileName.size()*4+1];
-        size_t stCount = strFileName.toWCharArray( filename );
+        boost::shared_array<wchar_t> filename( new wchar_t[strFileName.size()*4+1] );
+        size_t stCount = strFileName.toWCharArray( filename.get() );
         filename[stCount] = 0;
         if( stCount > 0 )
-            f = _wfopen( filename, L"rb");
+            f = _wfopen( filename.get(), L"rb");
 #else
         f = fopen( strFileName.toUtf8().constData(),"rb");
 #endif
@@ -56,11 +60,11 @@ namespace MsWord
 
         set_std_func();
 #ifdef WIN32
-        wchar_t filename[strFileName.size()*4+1];
-        size_t stCount = strFileName.toWCharArray( filename );
+        boost::shared_array<wchar_t> filename( new wchar_t[strFileName.size()*4+1] );
+        size_t stCount = strFileName.toWCharArray( filename.get() );
         filename[stCount] = 0;
         if( stCount > 0 )
-            f = _wfopen( filename, L"rb");
+            f = _wfopen( filename.get(), L"rb");
 #else
         f = fopen( strFileName.toUtf8().constData(),"rb");
 #endif
@@ -103,11 +107,11 @@ namespace MsWord
         FILE *f = NULL, *new_file, *ole_file;
 
 #ifdef WIN32
-        wchar_t filename[strFileName.size()*4+1];
-        size_t stCount = strFileName.toWCharArray( filename );
+        boost::shared_array<wchar_t> filename( new wchar_t[strFileName.size()*4+1] );
+        size_t stCount = strFileName.toWCharArray( filename.get() );
         filename[stCount] = 0;
         if( stCount > 0 )
-            f = _wfopen( filename, L"rb");
+            f = _wfopen( filename.get(), L"rb");
 #else
         f = fopen( strFileName.toUtf8().constData(),"rb");
 #endif

@@ -45,3 +45,5 @@ INCLUDEPATH += ../external/boost \
     ../libChardet/include \
     ../libMsWord/include \
     ../libPdf/include
+DEFINES += _CRT_SECURE_NO_WARNINGS
+

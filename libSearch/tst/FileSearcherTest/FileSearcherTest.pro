@@ -8,6 +8,7 @@ CONFIG   -= app_bundle
 DEPENDPATH += ../../include ../../../libCommon/include
 INCLUDEPATH += ../../../external/boost ../../include ../../../libCommon/include
 TEMPLATE = app
+linux {
 LIBS +=     -L../ \
             -L../../../lib \
             -L../../../external/boost/stage/lib \
@@ -17,6 +18,14 @@ LIBS +=     -L../ \
             -lboost_thread-mt \
             -lboost_system-mt \
             -Wl,-Bdynamic 
+}
+win32 {
+QMAKE_LIBDIR += ../../../external/boost/stage/lib ../../../lib
+LIBS +=     Search.lib \
+            Common.lib \
+            libboost_thread.lib \
+            libboost_system.lib
+}
 
 
 SOURCES += main.cc

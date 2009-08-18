@@ -1,6 +1,5 @@
 #include <iostream>
 #include <QDebug>
-#include <unistd.h>
 #include <QTextCodec>
 
 #include "searchfacade.h"

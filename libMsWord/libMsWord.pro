@@ -36,3 +36,4 @@ HEADERS += include/mswordextractor.h \
     include/langinfo.h \
     include/catdoc.h
 RESOURCES += charsets.qrc
+DEFINES += _CRT_SECURE_NO_WARNINGS

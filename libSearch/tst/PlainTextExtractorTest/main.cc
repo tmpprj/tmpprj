@@ -1,7 +1,6 @@
 #include <iostream>
 #include "plaintextextractor.h"
 #include <QDebug>
-#include <unistd.h>
 #include <QTextCodec>
 
 
