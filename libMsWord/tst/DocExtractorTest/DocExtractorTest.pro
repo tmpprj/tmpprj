@@ -10,24 +10,29 @@ TARGET = DocExtractorTest
 CONFIG   += console
 CONFIG   -= app_bundle
 
+win32 {
+POST_TARGETDEPS += ../../../lib/MsWord.lib
+}
+unix {
 POST_TARGETDEPS += ../../../lib/libMsWord.a
+}
+
 DEPENDPATH += ../../include
 INCLUDEPATH += ../../include ../../../external/boost
 RESOURCES += ../../../libMsWord/charsets.qrc
 TEMPLATE = app
-linux {
-LIBS +=     -L../ \
-            -L../../../lib \
-            -L../../../external/boost/stage/lib \
-            -Wl,-Bstatic \
+
+QMAKE_LIBDIR += ../../../external/boost/stage/lib ../../../lib
+unix {
+LIBS +=     -Wl,-Bstatic \
             -lMsWord \
             -lCommon \
             -lboost_thread-mt \
             -lboost_system-mt \
             -Wl,-Bdynamic
 }
+
 win32 {
-QMAKE_LIBDIR += ../../../external/boost/stage/lib ../../../lib
 LIBS +=     MsWord.lib \
             Common.lib \
             libboost_thread.lib \

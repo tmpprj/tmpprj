@@ -1,10 +1,14 @@
 TARGET = SearchGUI
 DESTDIR = ../bin
 TEMPLATE = app
-POST_TARGETDEPS += ../lib/libChardet.a \
-    ../lib/libCommon.a \
-    ../lib/libMsWord.a \
-    ../lib/libPdf.a 
+
+unix {
+POST_TARGETDEPS += ../lib/libChardet.a ../lib/libCommon.a ../lib/libMsWord.a ../lib/libPdf.a 
+}
+win32 {
+POST_TARGETDEPS += ../lib/Chardet.lib ../lib/Common.lib ../lib/MsWord.lib ../lib/Pdf.lib 
+}
+
 CONFIG += no_keywords
 SOURCES += ./src/main.cc \
     ./src/qsearchwindow.cc \
@@ -44,11 +48,10 @@ INCLUDEPATH += ../external/boost \
     ../libMsWord/include \
     ../libSearch/include \
     ../CustomWidgets/include 
-linux {
-LIBS += -L../ \
-    -L../lib \
-    -L../external/boost/stage/lib \
-    -Wl,-Bstatic \
+
+QMAKE_LIBDIR += ../external/boost/stage/lib ../lib
+unix {
+LIBS +=-Wl,-Bstatic \
     -lSearch \
     -lChardet \
     -lMsWord \
@@ -58,8 +61,8 @@ LIBS += -L../ \
     -lboost_system-mt \
     -Wl,-Bdynamic 
 }
+
 win32 {
-QMAKE_LIBDIR += ../external/boost/stage/lib ../lib
 LIBS +=     Search.lib \
             Common.lib \
             MsWord.lib \

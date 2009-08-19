@@ -7,18 +7,23 @@
 QT       -= gui
 
 TARGET = unit_tests
+
+unix {
 POST_TARGETDEPS += ../../../lib/libCommon.a
+}
+win32 {
+POST_TARGETDEPS += ../../../lib/Common.lib
+}
+
 CONFIG   += console
 CONFIG   -= app_bundle
 DEPENDPATH += ../../include ../../../libCommon/include
 INCLUDEPATH += ../../../external/boost ../../../external/UnitTest++/src ../../include ../../../libCommon/include
 TEMPLATE = app
-linux {
-LIBS +=     -L../ \
-            -L../../../lib \
-            -L../../../external/boost/stage/lib \
-            -L../../../external/UnitTest++ \
-            -Wl,-Bstatic \
+
+QMAKE_LIBDIR += ../../../external/boost/stage/lib ../../../lib ../../../external/UnitTest++
+unix {
+LIBS +=     -Wl,-Bstatic \
             -lCommon \
             -lboost_thread-mt \
             -lboost_system-mt \
@@ -26,7 +31,6 @@ LIBS +=     -L../ \
             -Wl,-Bdynamic 
 }
 win32 {
-QMAKE_LIBDIR += ../../../external/boost/stage/lib ../../../lib ../../../external/UnitTest++
 LIBS +=     Common.lib \
             libboost_thread.lib \
             libboost_system.lib \

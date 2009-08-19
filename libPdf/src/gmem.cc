@@ -48,7 +48,7 @@ static int gMemInUse = 0;
 
 #endif /* DEBUG_MEM */
 
-void *gmalloc(int size)throw(...) {
+void *gmalloc(int size)EXSPEC {
 #ifdef DEBUG_MEM
     int size1;
     char *mem;
@@ -97,7 +97,7 @@ void *gmalloc(int size)throw(...) {
 #endif
 }
 
-void *grealloc(void *p, int size)throw(...){
+void *grealloc(void *p, int size)EXSPEC{
 #ifdef DEBUG_MEM
     GMemHdr *hdr;
     void *q;
@@ -140,7 +140,7 @@ void *grealloc(void *p, int size)throw(...){
 #endif
 }
 
-void *gmallocn(int nObjs, int objSize)throw(...){
+void *gmallocn(int nObjs, int objSize)EXSPEC{
     int n;
 
     if (nObjs == 0) {
@@ -153,7 +153,7 @@ void *gmallocn(int nObjs, int objSize)throw(...){
     return gmalloc(n);
 }
 
-void *greallocn(void *p, int nObjs, int objSize)throw(...){
+void *greallocn(void *p, int nObjs, int objSize)EXSPEC{
     int n;
 
     if (nObjs == 0) {

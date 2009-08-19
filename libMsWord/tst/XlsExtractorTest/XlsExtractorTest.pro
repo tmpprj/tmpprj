@@ -8,17 +8,23 @@ QT       -= gui
 TARGET = XlsExtractorTest
 CONFIG   += console
 CONFIG   -= app_bundle
+
+unix {
 POST_TARGETDEPS += ../../../lib/libMsWord.a
+}
+win32 {
+POST_TARGETDEPS += ../../../lib/MsWord.lib
+}
+
 DEPENDPATH += ../../include
 INCLUDEPATH += ../../include ../../../external/boost
 RESOURCES += ../../../libMsWord/charsets.qrc
 TEMPLATE = app
-linux {
+
+QMAKE_LIBDIR += ../../../external/boost/stage/lib ../../../lib
+unix {
 QMAKE_CXXFLAGS_DEBUG += -O0
-LIBS +=     -L../ \
-            -L../../../lib \
-            -L../../../external/boost/stage/lib \
-            -Wl,-Bstatic \
+LIBS +=     -Wl,-Bstatic \
             -lMsWord \
             -lCommon \
             -lboost_thread-mt \
@@ -26,7 +32,6 @@ LIBS +=     -L../ \
             -Wl,-Bdynamic
 }
 win32 {
-QMAKE_LIBDIR += ../../../external/boost/stage/lib ../../../lib
 LIBS +=     MsWord.lib \
             Common.lib \
             libboost_thread.lib \

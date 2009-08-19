@@ -29,6 +29,13 @@ public:
 
 #endif // USE_EXCEPTIONS
 
+
+#ifndef __GNUG__
+#define EXSPEC throw(...)
+#else
+#define EXSPEC 
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -38,13 +45,14 @@ extern "C" {
      * returns NULL.
      */
 	
-	extern void *gmalloc(int size)throw(...);
+	extern void *gmalloc(int size)EXSPEC;
+    
 
     /*
      * Same as realloc, but prints error message and exits if realloc()
      * returns NULL.  If <p> is NULL, calls malloc instead of realloc().
      */
-    extern void *grealloc(void *p, int size)throw(...);
+    extern void *grealloc(void *p, int size)EXSPEC;
 
     /*
      * These are similar to gmalloc and grealloc, but take an object count
@@ -52,8 +60,8 @@ extern "C" {
      * bytes, but there is an additional error check that the total size
      * doesn't overflow an int.
      */
-    extern void *gmallocn(int nObjs, int objSize)throw(...);
-    extern void *greallocn(void *p, int nObjs, int objSize)throw(...);
+    extern void *gmallocn(int nObjs, int objSize)EXSPEC;
+    extern void *greallocn(void *p, int nObjs, int objSize)EXSPEC;
 
     /*
      * Same as free, but checks for and ignores NULL pointers.

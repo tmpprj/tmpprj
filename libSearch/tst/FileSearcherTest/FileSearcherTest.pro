@@ -2,25 +2,31 @@ QT       -= gui
 
 TARGET = FileSearcherTest
 DESTDIR = ../../../bin
+
+win32 {
+POST_TARGETDEPS += ../../../lib/Search.lib ../../../lib/Common.lib 
+}
+unix {
 POST_TARGETDEPS += ../../../lib/libSearch.a ../../../lib/libCommon.a 
+}
+
 CONFIG   += console
 CONFIG   -= app_bundle
 DEPENDPATH += ../../include ../../../libCommon/include
 INCLUDEPATH += ../../../external/boost ../../include ../../../libCommon/include
 TEMPLATE = app
-linux {
-LIBS +=     -L../ \
-            -L../../../lib \
-            -L../../../external/boost/stage/lib \
-            -Wl,-Bstatic \
+
+QMAKE_LIBDIR += ../../../external/boost/stage/lib ../../../lib
+unix {
+LIBS +=     -Wl,-Bstatic \
             -lSearch \
             -lCommon \
             -lboost_thread-mt \
             -lboost_system-mt \
             -Wl,-Bdynamic 
 }
+
 win32 {
-QMAKE_LIBDIR += ../../../external/boost/stage/lib ../../../lib
 LIBS +=     Search.lib \
             Common.lib \
             libboost_thread.lib \

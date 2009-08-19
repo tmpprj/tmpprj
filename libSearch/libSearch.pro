@@ -4,7 +4,8 @@
 TARGET = Search
 DESTDIR = ../lib
 TEMPLATE = lib
-linux {
+
+unix {
 POST_TARGETDEPS += ../lib/libChardet.a \
     ../lib/libCommon.a \
     ../lib/libMsWord.a \
@@ -16,6 +17,7 @@ POST_TARGETDEPS += ../lib/Chardet.lib \
     ../lib/MsWord.lib \
     ../lib/Pdf.lib
 }
+
 CONFIG += no_keywords staticlib
 SOURCES += src/filesearcher.cc \
     src/searchfacade.cc \

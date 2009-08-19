@@ -9,16 +9,22 @@ TARGET = PptExtractorTest
 CONFIG   += console
 CONFIG   -= app_bundle
 QMAKE_CXXFLAGS_DEBUG += -O0
+
+unix {
 POST_TARGETDEPS += ../../../lib/libMsWord.a
+}
+win32 {
+POST_TARGETDEPS += ../../../lib/MsWord.lib
+}
+
 DEPENDPATH += ../../include
 INCLUDEPATH += ../../include ../../../external/boost
 RESOURCES += ../../../libMsWord/charsets.qrc
 TEMPLATE = app
-linux {
-LIBS +=     -L../ \
-            -L../../../lib \
-            -L../../../external/boost/stage/lib \
-            -Wl,-Bstatic \
+
+QMAKE_LIBDIR += ../../../external/boost/stage/lib ../../../lib
+unix {
+LIBS +=     -Wl,-Bstatic \
             -lMsWord \
             -lCommon \
             -lboost_thread-mt \
@@ -26,7 +32,6 @@ LIBS +=     -L../ \
             -Wl,-Bdynamic
 }
 win32 {
-QMAKE_LIBDIR += ../../../external/boost/stage/lib ../../../lib
 LIBS +=     MsWord.lib \
             Common.lib \
             libboost_thread.lib \

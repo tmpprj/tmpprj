@@ -6,7 +6,14 @@ TARGET = Pdf
 TEMPLATE = lib
 CONFIG += staticlib
 DESTDIR = ../lib
+
+unix {
 POST_TARGETDEPS += ../lib/libCommon.a
+}
+win32 {
+POST_TARGETDEPS += ../lib/Common.lib
+}
+
 DEPENDPATH += ./include \
     ../libCommon/include
 INCLUDEPATH += ./include \
