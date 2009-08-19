@@ -1,7 +1,6 @@
 #include "filesearcher.h"
 
 #include <log.h>
-#include <globwrap.h>
 #include <iostream>
 #include <QDir>
 #include <QThread>
