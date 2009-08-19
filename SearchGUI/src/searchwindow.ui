@@ -361,6 +361,13 @@
     <item>
      <layout class="QHBoxLayout">
       <item>
+       <widget class="QPushButton" name="aboutButton">
+        <property name="text">
+         <string>About</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
