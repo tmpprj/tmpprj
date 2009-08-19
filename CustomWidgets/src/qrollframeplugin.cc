@@ -11,8 +11,6 @@
 #include "qrollframefactory.h"
 #include "qrollframeplugin.h"
 #include "qrollframe.h"
-#include <QtPlugin>
-#include <QMessageBox>
 
 QRollFramePlugin::QRollFramePlugin()
 {
@@ -86,11 +84,10 @@ void QRollFramePlugin::initialize(QDesignerFormEditorInterface *formEditor)
         return;
 
     QExtensionManager *manager = formEditor->extensionManager();
-////! [5] //! [6]
     QExtensionFactory *factory = new QRollFrameFactory(manager);
-//
+
     Q_ASSERT(manager != 0);
-    manager->registerExtensions(factory, Q_TYPEID(QDesignerContainerExtension));
+    manager->registerExtensions( factory, Q_TYPEID(QDesignerContainerExtension) );
 
     m_bInitialized = true;
 }

@@ -14,6 +14,11 @@ namespace SearchGUI
         ConfParam< QStringList > listMasks;
         ConfParam< QStringList > listSearches;
         ConfParam< QStringList > listSearchPaths;
+        ConfParam< bool > bFileSizeLimits;
+        ConfParam< unsigned long long > ullMinFileSize;
+        ConfParam< unsigned long long > ullMaxFileSize;
+        ConfParam< bool > bCharsetDetect;
+
 
         Params();
     };

@@ -13,6 +13,10 @@
 #include <boost/function.hpp>
 #include "ole.h"
 
+#ifdef WIN32
+#define strdup _strdup
+#endif
+
 
 #ifndef SOURCE_CHARSET
 #define SOURCE_CHARSET "cp1252"

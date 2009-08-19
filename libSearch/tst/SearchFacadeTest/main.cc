@@ -1,6 +1,5 @@
 #include <iostream>
 #include <QDebug>
-#include <unistd.h>
 #include <QTextCodec>
 
 #include "searchfacade.h"
@@ -40,7 +39,7 @@ int main(int argc, char *argv[])
     TextExtractorFactory::Instance().RegisterExtension( ".pdf", "Portable Document Format Parser" );
 
     CSearchFacade searcher;
-    SearchOptions options = { argv[ 1 ], QStringList( argv[ 2 ] ), QStringList( "*" ) , false, true, 0, 0 };
+    SearchOptions options = { argv[ 1 ], QStringList( argv[ 2 ] ), QStringList( "*" ) , false, true, 0, 0, true };
 
     searcher.SigFileMatched().connect( FileMatched );
     searcher.SigSearchDone().connect( SearchDone );

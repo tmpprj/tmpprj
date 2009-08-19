@@ -3,9 +3,10 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 #include "catdoc.h"
-#include <unistd.h>
 #include <QString>
 #include <QFile>
+
+
 
 
 /************************************************************************/

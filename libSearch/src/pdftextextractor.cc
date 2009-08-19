@@ -24,8 +24,9 @@ bool CPdfTextExtractor::WriterFunc( QString& strBuf, unsigned int* data, size_t 
     return true;
 }
 
-void CPdfTextExtractor::Extract( const QString& strFileName, size_t stChunkSize )
+void CPdfTextExtractor::Extract( const QString& strFileName, size_t stChunkSize, const SearchOptions& options )
 {
+    boost::ignore_unused_variable_warning( options );
     QString strBuf;
     Pdf::Extract( boost::bind( &CPdfTextExtractor::WriterFunc, this, boost::ref(strBuf), _1, _2, stChunkSize ), strFileName );
     SigChunk()( strBuf );

@@ -4,10 +4,20 @@
 TARGET = Search
 DESTDIR = ../lib
 TEMPLATE = lib
+
+unix {
 POST_TARGETDEPS += ../lib/libChardet.a \
     ../lib/libCommon.a \
     ../lib/libMsWord.a \
     ../lib/libPdf.a
+}
+win32 {
+POST_TARGETDEPS += ../lib/Chardet.lib \
+    ../lib/Common.lib \
+    ../lib/MsWord.lib \
+    ../lib/Pdf.lib
+}
+
 CONFIG += no_keywords staticlib
 SOURCES += src/filesearcher.cc \
     src/searchfacade.cc \
@@ -33,7 +43,8 @@ HEADERS += ./include/searchfacade.h \
     src/libsearch_common.h \
     include/documentchecker.h \
     include/patterncounter.h \
-    src/search_conf.h
+    src/search_conf.h \
+    include/searchoptions.h
 DEPENDPATH += ./include \
     ../libCommon/include \
     ../libChardet/include \
@@ -44,3 +55,5 @@ INCLUDEPATH += ../external/boost \
     ../libChardet/include \
     ../libMsWord/include \
     ../libPdf/include
+DEFINES += _CRT_SECURE_NO_WARNINGS
+

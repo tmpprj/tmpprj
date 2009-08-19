@@ -27,6 +27,5 @@ public:
 private:
     QRollFrame *myWidget;
 };
-//! [0]
 
 #endif

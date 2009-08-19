@@ -58,7 +58,7 @@ void QFilesTable::ClearList()
 void QFilesTable::contextMenuEvent( QContextMenuEvent * e )
 {
     QTableWidgetItem* pItem;
-    if( NULL != ( pItem = itemAt( e->pos() ) ) && 2 == pItem->column() )
+    if( NULL != ( pItem = itemAt( e->pos() ) ) && 2 != pItem->column() )
         m_CtxMenu.Show( e->globalPos(), GetItemFullPath( pItem ) );
     QTableWidget::contextMenuEvent( e );
 }
@@ -66,7 +66,7 @@ void QFilesTable::contextMenuEvent( QContextMenuEvent * e )
 void QFilesTable::mouseDoubleClickEvent( QMouseEvent * e )
 {
     QTableWidgetItem* pItem;
-    if( NULL != ( pItem = itemAt( e->pos() ) ) && 2 == pItem->column() )
+    if( NULL != ( pItem = itemAt( e->pos() ) ) && 2 != pItem->column() )
         m_CtxMenu.InvokeDefault( GetItemFullPath( pItem ) );
     QTableWidget::mouseDoubleClickEvent( e );
 }
@@ -76,7 +76,7 @@ void QFilesTable::keyPressEvent( QKeyEvent * e )
     if( e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return )
     {
         QTableWidgetItem* pItem = currentItem();
-        if( NULL != pItem && 2 == pItem->column() )
+        if( NULL != pItem && 2 != pItem->column() )
             m_CtxMenu.InvokeDefault( GetItemFullPath( pItem ) );
     }
     QTableWidget::keyPressEvent(e);
@@ -85,8 +85,8 @@ void QFilesTable::keyPressEvent( QKeyEvent * e )
 void QFilesTable::headersGeometryChanged()
 {
     horizontalHeader()->setResizeMode( 0, QHeaderView::Interactive );
-    horizontalHeader()->setResizeMode( 1, QHeaderView::Interactive );
-    horizontalHeader()->setResizeMode( 2, QHeaderView::Stretch );
+    horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch);
+    horizontalHeader()->setResizeMode( 2, QHeaderView::Interactive );
 }
 
 QString QFilesTable::GetItemFullPath( QTableWidgetItem* pItem )

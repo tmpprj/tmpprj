@@ -18,13 +18,14 @@ QRollFrame::QRollFrame( QWidget* parent )
 
 void QRollFrame::buttonPushed()
 {
-    QMessageBox::warning(NULL, "test", "buttonPushed" );
-//    m_stack.widget(0)->hide();
+    if( m_stack.isVisible() )
+        m_stack.hide();
+    else
+        m_stack.show();
 }
 
 void QRollFrame::addPage(QWidget *page)
 {
-//    QMessageBox::warning( NULL, "test", "count=" + QString::number( m_stack.count() ) + " index=" + QString::number( m_stack.currentIndex() ) );
     page->setParent(&m_stack);
     m_stack.insertWidget(0, page );
 }

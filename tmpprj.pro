@@ -15,4 +15,5 @@ SUBDIRS       = \
     libSearch/tst/PlainTextExtractorTest \
     libSearch/tst/SearchFacadeTest \
     libSearch/tst/MultiPatternSearcherTest \
+    libSearch/tst/FileSearcherTest \
     SearchGUI

@@ -7,10 +7,10 @@
 #include <boost/concept_check.hpp>
 
 
-char ole_sign[]={0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A,0xE1,0};
-char rtf_sign[]="{\\rtf";
-char old_word_sign[]={0xdb,0xa5,0};
-char write_sign[]={0x31,0xBE,0};
+unsigned char ole_sign[]={0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A,0xE1,0};
+unsigned char rtf_sign[]="{\\rtf";
+unsigned char old_word_sign[]={0xdb,0xa5,0};
+unsigned char write_sign[]={0x31,0xBE,0};
 int verbose=0;
 /*********************************************************************
  * Determines format of input file and calls parse_word_header or
@@ -36,23 +36,23 @@ int analyze_format( FILE *f )
     }
     catdoc_read( buffer,4,1,f );
     buffer[4]=0;
-    if ( strncmp(( const char* )buffer,write_sign,2 )==0 )
+    if ( strncmp( (const char*)buffer, (const char*)write_sign, 2 )==0 )
     {
         CLog(Debug) << "[Windows Write file. Some garbage expected]";
         get_unicode_char=get_8bit_char;
         return process_file( f,LONG_MAX );
     }
-    else if ( strncmp(( const char* )buffer,rtf_sign,4 )==0 )
+    else if ( strncmp(( const char* )buffer, (const char*)rtf_sign, 4 )==0 )
     {
         return parse_rtf( f );
     }
-    else if ( strncmp(( const char* )buffer,old_word_sign,2 )==0 )
+    else if ( strncmp(( const char* )buffer, (const char*)old_word_sign, 2 )==0 )
     {
         fread( buffer+4,1,124,f );
         return parse_word_header( buffer,f,128,0 );
     }
     fread( buffer+4,1,4,f );
-    if ( strncmp(( const char* )buffer,ole_sign,8 )==0 )
+    if ( strncmp(( const char* )buffer, (const char*)ole_sign, 8 )==0 )
     {
         if (( new_file=ole_init( f, buffer, 8 ) ) != NULL )
         {

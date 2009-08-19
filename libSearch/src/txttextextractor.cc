@@ -34,7 +34,7 @@ bool CTxtTextExtractor::DetectCharset( const char* pData, size_t nSize, bool& bC
     return true;
 }
 
-void CTxtTextExtractor::Extract( const QString& strFileName, size_t stChunkSize )
+void CTxtTextExtractor::Extract( const QString& strFileName, size_t stChunkSize, const SearchOptions& options )
 {
     std::string strLine;
     m_pFile = boost::shared_ptr<QFile>( new QFile(strFileName) );
@@ -59,7 +59,7 @@ void CTxtTextExtractor::Extract( const QString& strFileName, size_t stChunkSize 
 
         if( bFirstRead )
         {
-            if( !DetectCharset( &vChunk[ 0 ], stBytesRead, bCharsetDetected ) )
+            if( options.bCharsetDetect && !DetectCharset( &vChunk[ 0 ], stBytesRead, bCharsetDetected ) )
                 break;
             bFirstRead = false;
         }

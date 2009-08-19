@@ -1,10 +1,14 @@
 TARGET = SearchGUI
 DESTDIR = ../bin
 TEMPLATE = app
-POST_TARGETDEPS += ../lib/libChardet.a \
-    ../lib/libCommon.a \
-    ../lib/libMsWord.a \
-    ../lib/libPdf.a 
+
+unix {
+POST_TARGETDEPS += ../lib/libChardet.a ../lib/libCommon.a ../lib/libMsWord.a ../lib/libPdf.a 
+}
+win32 {
+POST_TARGETDEPS += ../lib/Chardet.lib ../lib/Common.lib ../lib/MsWord.lib ../lib/Pdf.lib 
+}
+
 CONFIG += no_keywords
 SOURCES += ./src/main.cc \
     ./src/qsearchwindow.cc \
@@ -16,9 +20,6 @@ SOURCES += ./src/main.cc \
     ./src/contextmenu.cc \
     ./src/qcomboboxext.cc \
     ../CustomWidgets/src/qrollframe.cc 
-#     ../CustomWidgets/src/qrollframeplugin.cc \
-#     ../CustomWidgets/src/qrollframefactory.cc \
-#     ../CustomWidgets/src/qrollframeextension.cc
 HEADERS += ./src/qsearchwindow.h \
     ./src/qsettingswindow.h \
     ./src/qfilestable.h \
@@ -47,10 +48,10 @@ INCLUDEPATH += ../external/boost \
     ../libMsWord/include \
     ../libSearch/include \
     ../CustomWidgets/include 
-LIBS += -L../ \
-    -L../lib \
-    -L../external/boost/stage/lib \
-    -Wl,-Bstatic \
+
+QMAKE_LIBDIR += ../external/boost/stage/lib ../lib
+unix {
+LIBS +=-Wl,-Bstatic \
     -lSearch \
     -lChardet \
     -lMsWord \
@@ -59,5 +60,15 @@ LIBS += -L../ \
     -lboost_thread-mt \
     -lboost_system-mt \
     -Wl,-Bdynamic 
+}
 
+win32 {
+LIBS +=     Search.lib \
+            Common.lib \
+            MsWord.lib \
+            Chardet.lib \
+            Pdf.lib \
+            libboost_thread.lib \
+            libboost_system.lib
+}
 DEFINES += REVISION=\"\\\"$$quote( $$system( git tag -l ) )\\\"\"

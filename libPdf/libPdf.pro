@@ -6,7 +6,14 @@ TARGET = Pdf
 TEMPLATE = lib
 CONFIG += staticlib
 DESTDIR = ../lib
+
+unix {
 POST_TARGETDEPS += ../lib/libCommon.a
+}
+win32 {
+POST_TARGETDEPS += ../lib/Common.lib
+}
+
 DEPENDPATH += ./include \
     ../libCommon/include
 INCLUDEPATH += ./include \
@@ -132,3 +139,4 @@ HEADERS += include/XRef.h \
     include/aconf.h \
     include/about-text.h \
     include/pdfextractor.h
+DEFINES += _CRT_SECURE_NO_WARNINGS

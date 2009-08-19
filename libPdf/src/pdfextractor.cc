@@ -14,6 +14,7 @@
 #include "UnicodeMap.h"
 #include "Error.h"
 #include <exceptions.h>
+#include <boost/shared_array.hpp>
 
 namespace Pdf
 {
@@ -42,9 +43,9 @@ void Extract( boost::function<bool (unsigned int*, size_t)> Writer, const QStrin
 
 #ifdef WIN32
         boost::ignore_unused_variable_warning( fileName );
-        wchar_t filename[strFileName.size()*4+1];
-        size_t stCount = strFileName.toWCharArray( filename );
-        pDoc = std::auto_ptr<PDFDoc>( new PDFDoc(filename, stCount, NULL, NULL, NULL) );
+        boost::shared_array<wchar_t> filename( new wchar_t[strFileName.size()*4+1] );
+        size_t stCount = strFileName.toWCharArray( filename.get() );
+        pDoc = std::auto_ptr<PDFDoc>( new PDFDoc(filename.get(), stCount, NULL, NULL, NULL) );
 #else
         pDoc = std::auto_ptr<PDFDoc>( new PDFDoc(fileName, NULL, NULL) );
 #endif

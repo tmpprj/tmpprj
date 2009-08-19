@@ -383,7 +383,8 @@ int parse_rtf( FILE *f )
     }
     if ( bufptr>=0 )
     {
-        if( add_to_buffer( &bufptr,'\n' ) && add_to_buffer( &bufptr,0 ) && output_paragraph( buffer ) );
+        if( add_to_buffer( &bufptr,'\n' ) && add_to_buffer( &bufptr,0 ) )
+            output_paragraph( buffer );
     }
     free( groups );
     return 0;

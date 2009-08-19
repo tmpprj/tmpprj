@@ -28,7 +28,11 @@ namespace SearchGUI
           bRecursive( "searchgui/recursive", true ),
           listMasks( "searchgui/masks", "*" ),
           listSearches( "searchgui/searches" ),
-          listSearchPaths( "searchgui/paths", QDir::currentPath() )
+          listSearchPaths( "searchgui/paths", QDir::currentPath() ),
+          bFileSizeLimits( "searchgui/filesizelimits", false ),
+          ullMinFileSize( "searchgui/minfilesize", 0, BoundsValidator<unsigned long long>( 0, 10240000 ) ),
+          ullMaxFileSize( "searchgui/maxfilesize", 102400, BoundsValidator<unsigned long long>( 0, 10240000 ) ),
+          bCharsetDetect( "searchgui/charsetdetect", true )
     {
     }
 

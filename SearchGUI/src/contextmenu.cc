@@ -33,12 +33,23 @@ CContextMenu::~CContextMenu()
 #endif
 }
 
+std::pair<QString, QString> CContextMenu::ParsePath( QString strPath )
+{
+    std::pair<QString, QString> pairRes;
+    int iEndPos = strPath.endsWith( QDir::separator() )? strPath.size()-2 : strPath.size()-1;
+    int iPos = strPath.lastIndexOf( QDir::separator(), iEndPos );
+    pairRes.first = strPath.mid( iPos+1, iEndPos-iPos );
+    pairRes.second = strPath.left( iPos+1 );
+    return pairRes;
+}
+
 void CContextMenu::Show( QPoint ptWhere, QString strFileName )
 {
 #ifdef WIN32
     // Get the IContextMenu for the file.
     CComWrapper<IContextMenu> CM;
-    GetUIObjectOfFile( strFileName, CM );
+    if( !GetUIObjectOfFile( strFileName, CM ) )
+        return;
 
     CMenuWrapper Menu( CreatePopupMenu() );
     DWORD Flags = CMF_EXPLORE; //CMF_NORMAL?
@@ -58,7 +69,7 @@ void CContextMenu::Show( QPoint ptWhere, QString strFileName )
     if( g_OldWndProc ) // unsubclass
         ::SetWindowLongPtr( m_WinId, GWLP_WNDPROC, (LONG_PTR) g_OldWndProc );
 
-    if (Cmd < 100 && Cmd != 0)
+    if( Cmd != -1 )
     {
         CMINVOKECOMMANDINFO info = { 0 };
         info.cbSize = sizeof(info);
@@ -90,9 +101,9 @@ bool CContextMenu::GetUIObjectOfFile( const QString& strFileName, CComWrapper<IC
     wchar_t Path[MAX_PATH], FileName[MAX_PATH];
     ::memset( Path, 0, sizeof(Path) );
     ::memset( FileName, 0, sizeof(FileName) );
-    QFileInfo pathInfo( strFileName );
-    QDir::toNativeSeparators( pathInfo.fileName() ).toWCharArray( FileName );
-    QDir::toNativeSeparators( pathInfo.absolutePath() ).toWCharArray( Path );
+    std::pair< QString, QString > pairPath = ParsePath( QDir::toNativeSeparators( strFileName ) );
+    pairPath.first.toWCharArray( FileName );
+    pairPath.second.toWCharArray( Path );
 
     // Get a pidl for the folder the file
     // is located in.
@@ -126,7 +137,7 @@ bool CContextMenu::GetUIObjectOfFile( const QString& strFileName, CComWrapper<IC
     m_Malloc.Get()->Free( Pidl );
     if( !CM.Get() )
     {
-        CLog( Debug ) << "CContextMenu::GetUIObjectOfFile: Unable to get context menu interface";
+        CLog( Debug ) << "CContextMenu::GetUIObjectOfFile: Unable to get context menu interface for " << strFileName;
         return false;
     }
     return true;
@@ -140,7 +151,7 @@ void CContextMenu::InvokeDefault( QString strFileName )
     wchar_t Path[MAX_PATH];
     ::memset( Path, 0, sizeof(Path) );
     strFileName.toWCharArray(Path);
-    if( SUCCEEDED( GetUIObjectOfFile( strFileName, Pcm ) ) )
+    if( GetUIObjectOfFile( strFileName, Pcm ) )
     {
         CMenuWrapper Menu( CreatePopupMenu() );
         if( Menu.Get() )

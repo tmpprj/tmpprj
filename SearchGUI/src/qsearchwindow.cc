@@ -149,11 +149,9 @@ void QSearchWindow::browse()
 
     QString directory = QFileDialog::getExistingDirectory( this, tr( "Find Files" ), strBrowseDir, 
             QFileDialog::DontUseNativeDialog | QFileDialog::ShowDirsOnly );
+
     if( !directory.isEmpty() ) 
-    {
-        directoryComboBox->insertItem( 0, directory );
-        directoryComboBox->setCurrentIndex( 0 );
-    }
+        directoryComboBox->PushTextToList( directory );
 }
 
 void QSearchWindow::fileProcessing( const QString& strFilename )
@@ -186,7 +184,7 @@ void QSearchWindow::searchDone()
     m_strCurrentFile.clear();
     m_tTimeElapsed = m_SearchTimerStart.elapsed();
 //    m_results.clear();
-    m_TrayIcon.showMessage( "Notification message", "Search done!" );
+    m_TrayIcon.showMessage( "Search done!", QString::number( m_stFilesMatched ) + " files matched." );
 }
 
 void QSearchWindow::searchError( const QString& strFilename, const QString& strError )
@@ -239,7 +237,7 @@ void QSearchWindow::find()
     QStringList listMasks;
     ParseMasks( strMasks, listMasks );
 
-    SearchOptions options = { strPath, listPatterns, listMasks, bCaseSensitive, bRecursive, groupFileSize->isChecked() ? lineMinFileSize->text().toULongLong() : 0, groupFileSize->isChecked() ? lineMaxFileSize->text().toULongLong() : 0 };
+    SearchOptions options = { strPath, listPatterns, listMasks, bCaseSensitive, bRecursive, groupFileSize->isChecked() ? lineMinFileSize->text().toULongLong() : 0, groupFileSize->isChecked() ? lineMaxFileSize->text().toULongLong() : 0, charsetCheckBox->isChecked() };
 
     m_search.GetSearcher().Start( options );
     m_SearchTimerStart = QTime::currentTime();
@@ -278,6 +276,11 @@ void QSearchWindow::reloadSettings()
     textComboBox->SetFullElements( SearchGUI::Conf().listSearches.Value() );
     directoryComboBox->SetFullElements( SearchGUI::Conf().listSearchPaths.Value() );
 
+    groupFileSize->setChecked( SearchGUI::Conf().bFileSizeLimits.Value() );
+    lineMinFileSize->setText( QString::number( SearchGUI::Conf().ullMinFileSize.Value() ) );
+    lineMaxFileSize->setText( QString::number( SearchGUI::Conf().ullMaxFileSize.Value() ) );
+    charsetCheckBox->setChecked( SearchGUI::Conf().bCharsetDetect.Value() );
+
     reloadExtensions();
 }
 
@@ -288,6 +291,10 @@ void QSearchWindow::saveSettings()
     SearchGUI::Conf().listMasks.Value() = masksComboBox->GetFullElements();
     SearchGUI::Conf().listSearches.Value() = textComboBox->GetFullElements();
     SearchGUI::Conf().listSearchPaths.Value() = directoryComboBox->GetFullElements();
+    SearchGUI::Conf().bFileSizeLimits.Value() = groupFileSize->isChecked();
+    SearchGUI::Conf().ullMinFileSize.Value() = lineMinFileSize->text().toULongLong();
+    SearchGUI::Conf().ullMaxFileSize.Value() = lineMaxFileSize->text().toULongLong();
+    SearchGUI::Conf().bCharsetDetect.Value() = charsetCheckBox->isChecked();
 }
 
 void QSearchWindow::updateTimer()

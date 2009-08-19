@@ -13,10 +13,12 @@ CDocumentChecker::CDocumentChecker()
 {
 }
 
-void CDocumentChecker::SetSearchParameters( const QStringList& listPatterns, bool bCaseSensitive )
+void CDocumentChecker::SetSearchParameters( const SearchOptions& options )
 {
+    m_Options = options;
+
     m_ptrCounter = std::auto_ptr< CPatternCounter >( 
-            new CPatternCounter( listPatterns, bCaseSensitive, SearchConf().nChunkOverlap.Value() ) );
+            new CPatternCounter( options.listPatterns, options.bCaseSensitive, SearchConf().nChunkOverlap.Value() ) );
 }
 
 boost::signals2::signal1< void, const QString& >& CDocumentChecker::SigFileProcessing()
@@ -51,7 +53,7 @@ void CDocumentChecker::WorkerFunc( const QString& strFileName )
             scoped_conn2 = pExtractor->SigChunkIsRaw().connect(
                     boost::bind( &CPatternCounter::OnChunkIsRaw, m_ptrCounter.get(), _1 ) );
 
-            pExtractor->Extract( strFileName, SearchConf().nFileChunkSize.Value() );
+            pExtractor->Extract( strFileName, SearchConf().nFileChunkSize.Value(), m_Options );
         }
         else
             CLog( Debug ) << "Processing file " << qPrintable( strFileName ) << " - empty patterns";

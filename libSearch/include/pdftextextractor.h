@@ -9,7 +9,7 @@ public:
 
     CPdfTextExtractor();
 
-    virtual void Extract( const QString& strFileName, size_t stChunkSize );
+    virtual void Extract( const QString& strFileName, size_t stChunkSize, const SearchOptions& options );
 
 protected:
 

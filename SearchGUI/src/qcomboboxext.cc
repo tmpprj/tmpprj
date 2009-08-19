@@ -18,10 +18,15 @@ void QComboBoxExt::PushTextToList( const QString& str )
         return;
     
     QStringList list = GetElements();
-    if( list.count( str ) > 0 )
+    int iIdx = list.indexOf( str );
+    if( -1 != iIdx )
+    {
+        setCurrentIndex( iIdx );
         return;
+    }
 
     insertItem( 0, str );
+    setCurrentIndex( 0 );
 }
 
 void QComboBoxExt::PushCurrentToList()
@@ -54,9 +59,7 @@ void QComboBoxExt::SetFullElements( const QStringList& list )
     else
     {
         for( int i = 1; i < list.size(); i++ )
-            addItem( list[ i ] );
-
-        setEditText( list[ 0 ] );
+            PushTextToList( list[ i ] );
     }
     CheckEmptyText();
 }

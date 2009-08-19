@@ -6,7 +6,14 @@ TARGET = MsWord
 DESTDIR = ../lib
 TEMPLATE = lib
 CONFIG += staticlib
+
+unix {
 POST_TARGETDEPS += ../lib/libCommon.a
+}
+win32 {
+POST_TARGETDEPS += ../lib/Common.lib
+}
+
 DEPENDPATH += ./include \
     ../libCommon/include
 INCLUDEPATH += ./include \
@@ -36,3 +43,4 @@ HEADERS += include/mswordextractor.h \
     include/langinfo.h \
     include/catdoc.h
 RESOURCES += charsets.qrc
+DEFINES += _CRT_SECURE_NO_WARNINGS

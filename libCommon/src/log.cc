@@ -22,7 +22,7 @@ CLog::CLog( LogLevel level, bool bMultiString )
 {
     GetLock().lock();
 
-    if( GetFile().tellp() > CommonConf().nMaxLogSize.Value() )
+    if( (uint)GetFile().tellp() > CommonConf().nMaxLogSize.Value() )
         TruncateFile();
 
 #ifdef BUILD_RELEASE
