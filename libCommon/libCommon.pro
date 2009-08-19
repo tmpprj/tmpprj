@@ -5,13 +5,11 @@ TARGET = Common
 DESTDIR = ../lib
 TEMPLATE = lib
 CONFIG += staticlib
-SOURCES += src/globwrap.cc \
-           src/log.cc \
+SOURCES += src/log.cc \
            src/settings.cc \
            src/common.cc \
            src/common_conf.cc
-HEADERS += include/globwrap.h \
-           include/log.h \
+HEADERS += include/log.h \
            include/mt_queue.hpp \
            include/singleton.hpp \
            include/settings.h \
