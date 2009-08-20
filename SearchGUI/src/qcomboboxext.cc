@@ -60,6 +60,7 @@ void QComboBoxExt::SetFullElements( const QStringList& list )
     {
         for( int i = 1; i < list.size(); i++ )
             PushTextToList( list[ i ] );
+        setEditText( list[ 0 ] ); 
     }
     CheckEmptyText();
 }

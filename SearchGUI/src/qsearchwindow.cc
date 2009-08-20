@@ -15,8 +15,8 @@ using namespace std;
 
 QSearchWindow::QSearchWindow(QWidget *parent)
     : QMainWindow(parent)
-    , m_tTimeElapsed(0)
-    , m_results( -1 )
+    , m_tTimeElapsed( 0 )
+    , m_status( SS_READY )
 {
     setupUi( this );
 
@@ -25,7 +25,7 @@ QSearchWindow::QSearchWindow(QWidget *parent)
     setupTrayIcon();
     connectSearcher();
     connectWidgets();
-    showDefaultStatus();
+    showReadyStatus();
     startStatusUpdateTimer();
 
     reloadSettings();
@@ -79,13 +79,13 @@ void QSearchWindow::setupTrayIcon()
 void QSearchWindow::connectSearcher()
 {
     connect( &m_search, SIGNAL( fileProcessing( const QString& ) ), 
-            this, SLOT( fileProcessing( const QString& ) ), Qt::QueuedConnection );
+            this, SLOT( fileProcessing( const QString& ) ), Qt::BlockingQueuedConnection );
     connect( &m_search, SIGNAL( fileMatched( const QString& ) ), 
-            this, SLOT( fileMatched( const QString& ) ), Qt::QueuedConnection );
-    connect( &m_search, SIGNAL( searchStart() ), this, SLOT( searchStart() ), Qt::QueuedConnection );
-    connect( &m_search, SIGNAL( searchDone() ), this, SLOT( searchDone() ), Qt::QueuedConnection );
+            this, SLOT( fileMatched( const QString& ) ), Qt::BlockingQueuedConnection );
+    connect( &m_search, SIGNAL( searchStart() ), this, SLOT( searchStart() ), Qt::BlockingQueuedConnection );
+    connect( &m_search, SIGNAL( searchDone() ), this, SLOT( searchDone() ), Qt::BlockingQueuedConnection );
     connect( &m_search, SIGNAL( error( const QString&, const QString& ) ),
-            this, SLOT( searchError( const QString&, const QString& ) ), Qt::QueuedConnection );
+            this, SLOT( searchError( const QString&, const QString& ) ), Qt::BlockingQueuedConnection );
 }
 
 void QSearchWindow::connectWidgets()
@@ -106,15 +106,25 @@ void QSearchWindow::startStatusUpdateTimer()
     timer->start();
 }
 
-void QSearchWindow::showDefaultStatus()
+void QSearchWindow::showStatus( const QString& strState )
 {
-    QString strStatus = "Status: Ready";
+    QString strStatus = "Status: " + strState;
     if( !m_SearchTimerStart.isNull() && 0 != m_tTimeElapsed )
         strStatus += ".   Time elapsed: " + QString::number( m_tTimeElapsed/1000 ) + 
             " sec.   Files processed: " + QString::number( m_stFilesProcessed ) +
             ".   Files matched: " + QString::number( m_stFilesMatched );
 
     setStatus( strStatus );
+}
+
+void QSearchWindow::showReadyStatus()
+{
+    showStatus( "Ready" );
+}
+
+void QSearchWindow::showToManyFilesStatus()
+{
+    showStatus( "Too many files matched" );
 }
 
 void QSearchWindow::showSearchStatus( const QString& strFilename )
@@ -165,8 +175,13 @@ void QSearchWindow::fileMatched( const QString& strFilename )
 {
     CLog(Debug) << __FUNCTION__ << ": " << qPrintable( strFilename );
 
-    SearchInfo info = { QDir::toNativeSeparators( strFilename ), "FOUND" };
-    m_results.push( info );
+    if( filesTable->rowCount() >= SearchGUI::Conf().nMaxFiles.Value() )
+    {
+        m_status = SS_TOOMANYFILES;
+        stop();
+    }
+
+    filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
     
     ++m_stFilesMatched;
 }
@@ -175,6 +190,7 @@ void QSearchWindow::searchStart()
 {
     CLog( Debug ) << __FUNCTION__;
     m_progressMovie.start();
+    m_status = SS_SEARCHING;
 }
 
 void QSearchWindow::searchDone()
@@ -183,8 +199,14 @@ void QSearchWindow::searchDone()
     m_progressMovie.stop();
     m_strCurrentFile.clear();
     m_tTimeElapsed = m_SearchTimerStart.elapsed();
-//    m_results.clear();
-    m_TrayIcon.showMessage( "Search done!", QString::number( m_stFilesMatched ) + " files matched." );
+
+    if( m_status == SS_SEARCHING )
+    {
+        m_TrayIcon.showMessage( "Search done!", QString::number( m_stFilesMatched ) + " files matched." );
+        m_status = SS_READY;
+    }
+    else if( m_status == SS_TOOMANYFILES )
+        m_TrayIcon.showMessage( "Search done!", "Too many files matched" );
 }
 
 void QSearchWindow::searchError( const QString& strFilename, const QString& strError )
@@ -237,9 +259,12 @@ void QSearchWindow::find()
     QStringList listMasks;
     ParseMasks( strMasks, listMasks );
 
-    SearchOptions options = { strPath, listPatterns, listMasks, bCaseSensitive, bRecursive, groupFileSize->isChecked() ? lineMinFileSize->text().toULongLong() : 0, groupFileSize->isChecked() ? lineMaxFileSize->text().toULongLong() : 0, charsetCheckBox->isChecked() };
+    SearchOptions options = { strPath, listPatterns, listMasks, bCaseSensitive, bRecursive, 
+        groupFileSize->isChecked() ? lineMinFileSize->text().toULongLong() : 0, 
+        groupFileSize->isChecked() ? lineMaxFileSize->text().toULongLong() : 0, 
+        charsetCheckBox->isChecked() };
 
-    m_search.GetSearcher().Start( options );
+    m_search.Start( options );
     m_SearchTimerStart = QTime::currentTime();
     m_stFilesProcessed = 0;
     m_stFilesMatched = 0;
@@ -247,8 +272,7 @@ void QSearchWindow::find()
 
 void QSearchWindow::stop()
 {
-    m_results.clear();
-    m_search.GetSearcher().Stop();
+    m_search.Stop();
 }
 
 void QSearchWindow::showSettings()
@@ -299,19 +323,17 @@ void QSearchWindow::saveSettings()
 
 void QSearchWindow::updateTimer()
 {
-    if( m_strCurrentFile.isEmpty() )
-        showDefaultStatus();
-    else
-        showSearchStatus( m_strCurrentFile ); 
-
-    for( int i = 0; i < 10; i++ )
+    switch( m_status )
     {
-        if( m_results.size() == 0 )
+        case SS_READY:
+            showReadyStatus();
             break;
-
-        SearchInfo info = m_results.front();
-        filesTable->AddFile( info.strFilename, info.strStatus );
-        m_results.pop();
+        case SS_SEARCHING:
+            showSearchStatus( m_strCurrentFile ); 
+            break;
+        case SS_TOOMANYFILES:
+            showToManyFilesStatus();
+            break;
     }
 }
 

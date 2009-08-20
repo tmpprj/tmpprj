@@ -83,10 +83,12 @@ public:
         return ret;
     }
 
-    const T front()
+    const T front( bool bErase = false )
     {
         waitWhileQueueEmpty();
         const T elem = m_queue.front();
+        if( bErase )
+            m_queue.pop();
         m_mtxAccess.unlock();
         
         return elem;

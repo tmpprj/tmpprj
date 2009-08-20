@@ -2,25 +2,40 @@
 #define QSEARCHFACADE_H
 
 #include "searchfacade.h"
-#include <QObject>
+#include <QThread>
 #include <boost/thread.hpp>
+#include <mt_queue.hpp>
 
-class QSearchFacade : public QObject
+class QSearchFacade : public QThread
 {
     Q_OBJECT
 
     CSearchFacade m_search;
     boost::mutex m_mtxSig;
+    bool m_active;
 
-    void OnFileFound( const QString& strFilename );
-    void OnFileProcessing( const QString& strFilename );
-    void OnFileMatched( const QString& strFilename );
+    struct SignalRec
+    {
+        int nFunc;
+        QString strFileName;
+        QString strError;
+    };
+
+    mt_queue< SignalRec > m_queue;
+
+    void run();
+
+    void OnFileFound( const QString& strFileName );
+    void OnFileProcessing( const QString& strFileName );
+    void OnFileMatched( const QString& strFileName );
     void OnSearchStart();
     void OnSearchDone();
     void OnError( const QString& strFileName, const QString& strError );
 public:
     QSearchFacade( QObject* parent = 0 );
-    CSearchFacade& GetSearcher();
+    ~QSearchFacade();
+    void Start( const SearchOptions& options );
+    void Stop();
 
 Q_SIGNALS:
     void fileFound( const QString& strFileName );

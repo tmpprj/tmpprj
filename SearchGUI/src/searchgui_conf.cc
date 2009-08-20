@@ -32,7 +32,8 @@ namespace SearchGUI
           bFileSizeLimits( "searchgui/filesizelimits", false ),
           ullMinFileSize( "searchgui/minfilesize", 0, BoundsValidator<unsigned long long>( 0, 10240000 ) ),
           ullMaxFileSize( "searchgui/maxfilesize", 102400, BoundsValidator<unsigned long long>( 0, 10240000 ) ),
-          bCharsetDetect( "searchgui/charsetdetect", true )
+          bCharsetDetect( "searchgui/charsetdetect", true ),
+          nMaxFiles( "searchgui/maxfilesnumber", 10000 )
     {
     }
 

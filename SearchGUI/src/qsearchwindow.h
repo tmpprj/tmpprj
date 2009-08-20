@@ -22,14 +22,9 @@ class QSearchWindow : public QMainWindow, private Ui::SearchWindowBase
     time_t m_tTimeElapsed;
     size_t m_stFilesProcessed, m_stFilesMatched;
     QSystemTrayIcon m_TrayIcon;
-    
-    struct SearchInfo 
-    {
-        QString strFilename;
-        QString strStatus;
-    };
-    
-    mt_queue< SearchInfo > m_results;
+
+    enum SearchStatus { SS_READY, SS_SEARCHING, SS_TOOMANYFILES };
+    SearchStatus m_status;
 
 public:
     QSearchWindow(QWidget *parent = 0);
@@ -60,7 +55,9 @@ private:
     void connectSearcher();
     void connectWidgets();
     void startStatusUpdateTimer();
-    void showDefaultStatus();
+    void showStatus( const QString& strState );
+    void showReadyStatus();
+    void showToManyFilesStatus();
     void showSearchStatus( const QString& strFilename );
     void saveCurrentUIItems();
     void closeEvent( QCloseEvent* );

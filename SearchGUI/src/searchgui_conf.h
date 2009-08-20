@@ -18,7 +18,7 @@ namespace SearchGUI
         ConfParam< unsigned long long > ullMinFileSize;
         ConfParam< unsigned long long > ullMaxFileSize;
         ConfParam< bool > bCharsetDetect;
-
+        ConfParam< int > nMaxFiles;
 
         Params();
     };
