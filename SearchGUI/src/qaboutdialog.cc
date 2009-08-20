@@ -1,4 +1,6 @@
 #include "qaboutdialog.h"
+#include "qregisterdialog.h"
+
 #ifdef WIN32
 #include "windows.h"
 #include "aspr_api.h"
@@ -24,6 +26,10 @@ QAboutDialog::QAboutDialog( QWidget *parent )
 
 }
 
+QAboutDialog::~QAboutDialog(void)
+{
+}
+
 void QAboutDialog::SetupRegisteredControls()
 {
     hwidEdit->hide();
@@ -35,6 +41,7 @@ void QAboutDialog::SetupRegisteredControls()
     daysleftCaptionLabel->hide();
     exleftLabel->hide();
     exleftCaptionLabel->hide();
+    registerButton->hide();
 }
 
 void QAboutDialog::SetupTrialControls()
@@ -50,6 +57,16 @@ void QAboutDialog::SetupTrialControls()
 
     exleftLabel->show();
     exleftLabel->setText( QString::number( m_stExLeft ) );
+
+    registerButton->show();
+    connect( registerButton, SIGNAL( clicked() ), this, SLOT( Register() ) );
+}
+
+void QAboutDialog::Register()
+{
+    QRegisterDialog* pRegister = new QRegisterDialog( this );
+    pRegister->setModal( true );
+    pRegister->show();
 }
 
 void QAboutDialog::LoadData()
@@ -79,6 +96,3 @@ void QAboutDialog::LoadData()
 #endif
 }
 
-QAboutDialog::~QAboutDialog(void)
-{
-}

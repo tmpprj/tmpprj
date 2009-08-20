@@ -22,6 +22,10 @@ public:
 
     QAboutDialog( QWidget *parent );
     ~QAboutDialog(void);
+
+private Q_SLOTS:
+
+    void Register();
 };
 
 #endif
