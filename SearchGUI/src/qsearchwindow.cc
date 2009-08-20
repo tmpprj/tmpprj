@@ -4,6 +4,7 @@
 #include "qsearchwindow.h"
 #include "qfilestable.h"
 #include "qsettingswindow.h"
+#include "qaboutdialog.h"
 #include "settings.h"
 #include "searchgui_conf.h"
 #include "guicommon.h"
@@ -95,6 +96,7 @@ void QSearchWindow::connectWidgets()
     connect( stopButton, SIGNAL( clicked() ), this, SLOT( stop() ) );
     connect( browseButton, SIGNAL( clicked() ), this, SLOT( browse() ) );
     connect( settingsButton, SIGNAL( clicked() ), this, SLOT( showSettings() ) );
+    connect( aboutButton, SIGNAL( clicked() ), this, SLOT( showAbout() ) );
 }
 
 void QSearchWindow::startStatusUpdateTimer()
@@ -282,6 +284,14 @@ void QSearchWindow::showSettings()
     pSettings->setModal( true );
     pSettings->show();
 }
+
+void QSearchWindow::showAbout()
+{
+    QAboutDialog* pAbout = new QAboutDialog( this );
+    pAbout->setModal( true );
+    pAbout->show();
+}
+
 
 void QSearchWindow::reloadExtensions()
 {
