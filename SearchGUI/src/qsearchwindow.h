@@ -38,6 +38,7 @@ private Q_SLOTS:
     void find();
     void stop();
     void showSettings();
+    void showAbout();
     void reloadExtensions();
     void reloadSettings();
     void saveSettings();
@@ -48,6 +49,7 @@ private Q_SLOTS:
     void searchStart();
     void searchDone();
     void searchError( const QString& strFilename, const QString& strError );
+
 private:
     void setupProgressAnimation();
     void setupControls();
