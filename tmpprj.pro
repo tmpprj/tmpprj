@@ -1,6 +1,6 @@
 TEMPLATE      = subdirs
 CONFIG += ordered
-QMAKE_CXXFLAGS_RELEASE = -Dsdfasdf
+QMAKE_CXXFLAGS_RELEASE = -DBUILD_RELEASE
 SUBDIRS       = \
     libCommon\
     libCommon/tst/unit_tests \
