@@ -1,5 +1,7 @@
 #include <QtGui>
 #include "qfilestable.h"
+#include <log.h>
+
 
 QFilesTable::QFilesTable( QWidget *parent )
     : QTableWidget( 0, 3, parent )
@@ -16,6 +18,12 @@ QFilesTable::QFilesTable( QWidget *parent )
 
     verticalHeader()->hide();
     setShowGrid( true );
+
+    setEditTriggers( QAbstractItemView::SelectedClicked );
+    
+    setSelectionMode( QAbstractItemView::SingleSelection );
+    setSelectionBehavior( QAbstractItemView::SelectItems );
+    setItemDelegate( new QTestDelegate( this ) );
 }
 
 void QFilesTable::AddFile( const QString& filename, const QString& status, const QColor& statusColor )
@@ -28,15 +36,15 @@ void QFilesTable::AddFile( const QString& filename, const QString& status, const
     QDir file( filename );
 
     QTableWidgetItem *fileNameItem = new QTableWidgetItem( strFile );
-    fileNameItem->setFlags( Qt::ItemIsEnabled | Qt::ItemIsEditable );
+    fileNameItem->setFlags( Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable );
     fileNameItem->setToolTip( strFile );
 
     QTableWidgetItem *pathNameItem = new QTableWidgetItem( strPath );
-    pathNameItem->setFlags(Qt::ItemIsEnabled);
+    pathNameItem->setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
     pathNameItem->setToolTip( strPath );
 
     QTableWidgetItem *statusItem = new QTableWidgetItem( status );
-    statusItem->setFlags(Qt::ItemIsEnabled);
+    statusItem->setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
     statusItem->setToolTip( status );
 
     if( statusColor.isValid() )
@@ -82,23 +90,6 @@ void QFilesTable::keyPressEvent( QKeyEvent * e )
     QTableWidget::keyPressEvent(e);
 }
 
-void QFilesTable::headersGeometryChanged()
-{
-    horizontalHeader()->setResizeMode( 0, QHeaderView::Interactive );
-    horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch);
-    horizontalHeader()->setResizeMode( 2, QHeaderView::Interactive );
-}
-
-QString QFilesTable::GetItemFullPath( QTableWidgetItem* pItem )
-{
-    if( pItem->column() == 0 )
-        return item( pItem->row(), 1 )->text() + pItem->text();
-    else if( pItem->column() == 1 )
-        return item( pItem->row(), 1 )->text();
-
-    return "";
-}
-
 void QFilesTable::mouseMoveEvent( QMouseEvent *event )
 {
     if( !currentItem() )
@@ -121,6 +112,38 @@ void QFilesTable::mouseMoveEvent( QMouseEvent *event )
     
     drag->setMimeData( mimeData );
     drag->start( Qt::CopyAction );
-    return QTableWidget::mouseMoveEvent( event );
+    
+    QTableWidget::mouseMoveEvent( event );
+}
+
+bool QFilesTable::edit( const QModelIndex & index, EditTrigger trigger, QEvent * event )
+{
+    CLog( Debug ) << "edit called: " << ( int )trigger << " coord: " << index.row() << ", " << index.column();
+    CLog( Debug ) << "Selection model: " << selectionModel()->isSelected( index );
+
+/*    if( trigger != QAbstractItemView::SelectedClicked )
+    {
+        m_edit.hide();
+        return QTableWidget::edit( index, trigger, event );
+    }
+*/
+    return QTableWidget::edit( index, trigger, event );
+}
+
+void QFilesTable::headersGeometryChanged()
+{
+    horizontalHeader()->setResizeMode( 0, QHeaderView::Interactive );
+    horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch);
+    horizontalHeader()->setResizeMode( 2, QHeaderView::Interactive );
+}
+
+QString QFilesTable::GetItemFullPath( QTableWidgetItem* pItem )
+{
+    if( pItem->column() == 0 )
+        return item( pItem->row(), 1 )->text() + pItem->text();
+    else if( pItem->column() == 1 )
+        return item( pItem->row(), 1 )->text();
+
+    return "";
 }
 
