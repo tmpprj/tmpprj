@@ -20,6 +20,7 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
+
     Ui::QRegisterDialog *m_ui;
 };
 

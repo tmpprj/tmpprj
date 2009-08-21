@@ -4,20 +4,19 @@
 #include <QDialog>
 
 #include "ui_aboutdialog.h"
+#include "qregisterdialog.h"
+#include "asprwrapper.h"
 
 class QAboutDialog: public QDialog, private Ui::AboutDialogBase
 {
     Q_OBJECT
 
-    QString m_strHardwareId;
-    QString m_strRegName;
-    bool m_bRegistered;
-    size_t m_stDaysTotal, m_stDaysLeft, m_stExTotal, m_stExLeft;
+    CAsprWrapper m_Aspr;
 
     void SetupRegisteredControls();
     void SetupTrialControls();
     void LoadData();
-
+    void RefreshData();
 public:
 
     QAboutDialog( QWidget *parent );

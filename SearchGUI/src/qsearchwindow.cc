@@ -47,6 +47,7 @@ void QSearchWindow::setupProgressAnimation()
 
 void QSearchWindow::setupControls()
 {
+    m_Aspr.CheckEnvelope();
     masksComboBox->setInsertPolicy( QComboBox::NoInsert );
     textComboBox->setInsertPolicy( QComboBox::NoInsert );
     
@@ -129,6 +130,11 @@ void QSearchWindow::showToManyFilesStatus()
     showStatus( "Too many files matched" );
 }
 
+void QSearchWindow::showTrialFileFoundStatus()
+{
+    showStatus( "Trial version is limited to 1 file in result set" );
+}
+
 void QSearchWindow::showSearchStatus( const QString& strFilename )
 {
     setStatus( "Searching: " + strFilename );
@@ -173,19 +179,48 @@ void QSearchWindow::fileProcessing( const QString& strFilename )
     ++m_stFilesProcessed;
 }
 
-void QSearchWindow::fileMatched( const QString& strFilename )
+
+#ifdef WIN32
+#pragma optimize("", off)
+#endif
+void QSearchWindow::AddFileToResultSet( const QString& strFilename )
 {
-    CLog(Debug) << __FUNCTION__ << ": " << qPrintable( strFilename );
+#ifdef WIN32
+    REG_CRYPT_BEGIN1
+#endif
 
     if( filesTable->rowCount() >= SearchGUI::Conf().nMaxFiles.Value() )
     {
-        m_status = SS_TOOMANYFILES;
+        m_status = SS_TRIALFILEFOUND;
         stop();
     }
 
     filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
-    
+
+#ifdef WIN32
+    REG_CRYPT_END1
+#endif
+
+}
+#ifdef WIN32
+#pragma optimize("", on)
+#endif
+
+void QSearchWindow::fileMatched( const QString& strFilename )
+{
+    CLog(Debug) << __FUNCTION__ << ": " << qPrintable( strFilename );
+
+    if( !m_Aspr.IsModeActive(1) )
+    {
+        filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
+        m_status = SS_TRIALFILEFOUND;
+        stop();
+    }
+
+    AddFileToResultSet( strFilename );
+
     ++m_stFilesMatched;
+
 }
 
 void QSearchWindow::searchStart()
@@ -208,7 +243,11 @@ void QSearchWindow::searchDone()
         m_status = SS_READY;
     }
     else if( m_status == SS_TOOMANYFILES )
-        m_TrayIcon.showMessage( "Search done!", "Too many files matched" );
+        m_TrayIcon.showMessage( "Search done!", "Too many files matched." );
+    else if( m_status == SS_TRIALFILEFOUND )
+    {
+        m_TrayIcon.showMessage( "Search done!", "Trial version is limited to 1 file in result set." );
+    }
 }
 
 void QSearchWindow::searchError( const QString& strFilename, const QString& strError )
@@ -241,6 +280,7 @@ void QSearchWindow::maximazeFromTray()
 
 void QSearchWindow::find()
 {
+    m_Aspr.CheckEnvelope();
     stop();
     saveCurrentUIItems();
    
@@ -274,11 +314,13 @@ void QSearchWindow::find()
 
 void QSearchWindow::stop()
 {
+    m_Aspr.CheckEnvelope();
     m_search.Stop();
 }
 
 void QSearchWindow::showSettings()
 {
+    m_Aspr.CheckEnvelope();
     QSettingsWindow* pSettings = new QSettingsWindow( this );
     connect( pSettings, SIGNAL( settingsChanged() ), this, SLOT( reloadExtensions() ) ); 
     pSettings->setModal( true );
@@ -287,6 +329,7 @@ void QSearchWindow::showSettings()
 
 void QSearchWindow::showAbout()
 {
+    m_Aspr.CheckEnvelope();
     QAboutDialog* pAbout = new QAboutDialog( this );
     pAbout->setModal( true );
     pAbout->show();
@@ -343,6 +386,9 @@ void QSearchWindow::updateTimer()
             break;
         case SS_TOOMANYFILES:
             showToManyFilesStatus();
+            break;
+        case SS_TRIALFILEFOUND:
+            showTrialFileFoundStatus();
             break;
     }
 }

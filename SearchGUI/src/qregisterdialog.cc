@@ -38,8 +38,14 @@ void QRegisterDialog::OnAccept()
 {
 #ifdef WIN32
  if( CheckKeyAndDecrypt( m_ui->keyEdit->text().toLatin1().data(), m_ui->nameEdit->text().toLatin1().data(), TRUE ) )
-     QMessageBox::information( this, "Succes", "Your product is now registered" );
+ {
+     done( QDialog::Accepted );
+     QMessageBox::information( this, "Success", "Your product is now registered" );
+ }
  else
+ {
+     done( QDialog::Rejected );
      QMessageBox::warning( this, "Error", "Incorrect key or name" );
+ }
 #endif
 }

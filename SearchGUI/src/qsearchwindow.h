@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include <QMovie>
 #include <QSystemTrayIcon>
+#include "asprwrapper.h"
 
 #include "ui_searchwindow.h"
 
@@ -22,8 +23,9 @@ class QSearchWindow : public QMainWindow, private Ui::SearchWindowBase
     time_t m_tTimeElapsed;
     size_t m_stFilesProcessed, m_stFilesMatched;
     QSystemTrayIcon m_TrayIcon;
+    CAsprWrapper m_Aspr;
 
-    enum SearchStatus { SS_READY, SS_SEARCHING, SS_TOOMANYFILES };
+    enum SearchStatus { SS_READY, SS_SEARCHING, SS_TOOMANYFILES, SS_TRIALFILEFOUND };
     SearchStatus m_status;
 
 public:
@@ -60,10 +62,12 @@ private:
     void showStatus( const QString& strState );
     void showReadyStatus();
     void showToManyFilesStatus();
+    void showTrialFileFoundStatus();
     void showSearchStatus( const QString& strFilename );
     void saveCurrentUIItems();
     void closeEvent( QCloseEvent* );
     void setStatus( const QString& strStatus );
+    void AddFileToResultSet( const QString& strFilename );
 };
 
 #endif

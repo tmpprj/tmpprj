@@ -21,7 +21,8 @@ SOURCES += ./src/main.cc \
     ./src/qcomboboxext.cc \
     ../CustomWidgets/src/qrollframe.cc \
     ./src/qaboutdialog.cc \
-    ./src/qregisterdialog.cc
+    ./src/qregisterdialog.cc \
+    ./src/asprwrapper.cc
 HEADERS += ./src/qsearchwindow.h \
     ./src/qsettingswindow.h \
     ./src/qfilestable.h \
@@ -34,7 +35,8 @@ HEADERS += ./src/qsearchwindow.h \
     ./src/qcomboboxext.h \
     ../CustomWidgets/include/qrollframe.h \
     ./src/qaboutdialog.h \
-    ./src/qregisterdialog.h
+    ./src/qregisterdialog.h \
+    ./src/asprwrapper.h
 FORMS += ./src/searchwindow.ui \
     ./src/settingswindow.ui \
     ./src/aboutdialog.ui \
