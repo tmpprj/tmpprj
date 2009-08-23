@@ -43,4 +43,8 @@ HEADERS += include/mswordextractor.h \
     include/langinfo.h \
     include/catdoc.h
 RESOURCES += charsets.qrc
+
+#for msvs 2005
+DEFINES += _CRT_SECURE_NO_DEPRECATE
+#for msvs 2008
 DEFINES += _CRT_SECURE_NO_WARNINGS

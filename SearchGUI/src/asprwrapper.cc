@@ -78,3 +78,11 @@ USER_POLYBUFFER
 #endif
 }
 
+bool CAsprWrapper::TryRegiter( const QString& strName, const QString& strKey )
+{
+#ifdef WIN32
+    return CheckKeyAndDecrypt( strKey.toLatin1().data(), strName.toLatin1().data(), TRUE );
+#else
+    return true;
+#endif
+}

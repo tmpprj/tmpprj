@@ -2,12 +2,6 @@
 #include "ui_qregisterdialog.h"
 #include <QMessageBox>
 
-#ifdef WIN32
-#include "windows.h"
-#include "aspr_api.h"
-#include "asprotect.h"
-#endif
-
 QRegisterDialog::QRegisterDialog(QWidget *parent) :
     QDialog(parent),
     m_ui(new Ui::QRegisterDialog)
@@ -36,16 +30,14 @@ void QRegisterDialog::changeEvent(QEvent *e)
 
 void QRegisterDialog::OnAccept()
 {
-#ifdef WIN32
- if( CheckKeyAndDecrypt( m_ui->keyEdit->text().toLatin1().data(), m_ui->nameEdit->text().toLatin1().data(), TRUE ) )
- {
-     done( QDialog::Accepted );
-     QMessageBox::information( this, "Success", "Your product is now registered" );
- }
- else
- {
-     done( QDialog::Rejected );
-     QMessageBox::warning( this, "Error", "Incorrect key or name" );
- }
-#endif
+    if( m_Aspr.TryRegiter( m_ui->keyEdit->text(), m_ui->nameEdit->text() ) )
+    {
+        done( QDialog::Accepted );
+        QMessageBox::information( this, "Success", "Your product is now registered" );
+    }
+    else
+    {
+        done( QDialog::Rejected );
+        QMessageBox::warning( this, "Error", "Incorrect key or name" );
+    }
 }

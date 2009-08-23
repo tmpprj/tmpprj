@@ -139,4 +139,8 @@ HEADERS += include/XRef.h \
     include/aconf.h \
     include/about-text.h \
     include/pdfextractor.h
+
+#for msvs 2005
+DEFINES += _CRT_SECURE_NO_DEPRECATE
+#for msvs 2008
 DEFINES += _CRT_SECURE_NO_WARNINGS

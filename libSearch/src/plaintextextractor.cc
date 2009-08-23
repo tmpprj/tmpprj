@@ -13,7 +13,7 @@
 CTextExtractorFactory::CTextExtractorFactory()
     : m_pDefaultExtractor( NULL )
 {
-    ITextExtractor* pExt = new CTxtTextExtractor;
+    ITextExtractor* pExt = NULL;
     pExt = new CMsWordTextExtractor;
     RegisterName( pExt->GetName(), pExt );
     pExt = new CXlsTextExtractor;

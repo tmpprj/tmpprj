@@ -55,5 +55,7 @@ INCLUDEPATH += ../external/boost \
     ../libChardet/include \
     ../libMsWord/include \
     ../libPdf/include
+#for msvs 2005
+DEFINES += _CRT_SECURE_NO_DEPRECATE
+#for msvs 2008
 DEFINES += _CRT_SECURE_NO_WARNINGS
-

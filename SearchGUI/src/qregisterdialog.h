@@ -2,6 +2,7 @@
 #define QREGISTERDIALOG_H
 
 #include <QtGui/QDialog>
+#include "asprwrapper.h"
 
 namespace Ui {
     class QRegisterDialog;
@@ -22,6 +23,7 @@ protected:
 private:
 
     Ui::QRegisterDialog *m_ui;
+    CAsprWrapper m_Aspr;
 };
 
 #endif // QREGISTERDIALOG_H

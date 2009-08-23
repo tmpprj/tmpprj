@@ -28,6 +28,8 @@ public:
 
     void CheckEnvelope();
 
+    bool TryRegiter( const QString& strName, const QString& strKey );
+
 };
 
 #endif // ASPRWRAPPER_H
