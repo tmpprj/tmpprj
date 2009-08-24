@@ -1,4 +1,4 @@
-TARGET = SearchGUI
+TARGET = FileSearcher
 DESTDIR = ../bin
 TEMPLATE = app
 unix:POST_TARGETDEPS += ../lib/libChardet.a \
