@@ -7,6 +7,8 @@ QFilesTable::QFilesTable( QWidget *parent )
     : QTableWidget( 0, 3, parent )
     , m_CtxMenu( winId() )
 {
+    setItemDelegate( new QReadOnlyItemDelegate( this ) );
+
     QStringList labels;
     labels << tr( "FileName" ) << tr( "Folder" ) << tr( "Status" );
     setHorizontalHeaderLabels( labels );
@@ -23,7 +25,6 @@ QFilesTable::QFilesTable( QWidget *parent )
     
     setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionBehavior( QAbstractItemView::SelectItems );
-    setItemDelegate( new QTestDelegate( this ) );
 }
 
 void QFilesTable::AddFile( const QString& filename, const QString& status, const QColor& statusColor )
@@ -40,11 +41,11 @@ void QFilesTable::AddFile( const QString& filename, const QString& status, const
     fileNameItem->setToolTip( strFile );
 
     QTableWidgetItem *pathNameItem = new QTableWidgetItem( strPath );
-    pathNameItem->setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
+    pathNameItem->setFlags( Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable );
     pathNameItem->setToolTip( strPath );
 
     QTableWidgetItem *statusItem = new QTableWidgetItem( status );
-    statusItem->setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
+    statusItem->setFlags( Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable );
     statusItem->setToolTip( status );
 
     if( statusColor.isValid() )

@@ -31,11 +31,11 @@ private:
     CContextMenu m_CtxMenu;
 };
 
-class QTestDelegate : public QStyledItemDelegate
+class QReadOnlyItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    QTestDelegate( QWidget* parent = 0 )
+    QReadOnlyItemDelegate( QWidget* parent = 0 )
         : QStyledItemDelegate( parent )
     {
     }
@@ -43,7 +43,7 @@ public:
     virtual QWidget * createEditor ( QWidget * parent, const QStyleOptionViewItem & option, 
             const QModelIndex & index ) const
     {
-        QWidget* pWidget = QAbstractItemDelegate::createEditor( parent, option, index );
+        QWidget* pWidget = QStyledItemDelegate::createEditor( parent, option, index );
         QLineEdit* pEdit = qobject_cast< QLineEdit* >( pWidget );
         if( pEdit )
             pEdit->setReadOnly( true );

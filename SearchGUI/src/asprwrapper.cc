@@ -1,5 +1,8 @@
 #include "asprwrapper.h"
+
+#ifdef WIN31
 #include "aspr.h"
+#endif
 
 CAsprWrapper::CAsprWrapper()
 {
