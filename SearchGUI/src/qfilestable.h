@@ -20,7 +20,6 @@ protected:
     virtual void mouseDoubleClickEvent( QMouseEvent * e );
     virtual void keyPressEvent( QKeyEvent * e );
     void mouseMoveEvent( QMouseEvent *event );
-    virtual bool edit( const QModelIndex & index, EditTrigger trigger, QEvent * event );
 
 private Q_SLOTS:
     void headersGeometryChanged();

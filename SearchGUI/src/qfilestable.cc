@@ -117,20 +117,6 @@ void QFilesTable::mouseMoveEvent( QMouseEvent *event )
     QTableWidget::mouseMoveEvent( event );
 }
 
-bool QFilesTable::edit( const QModelIndex & index, EditTrigger trigger, QEvent * event )
-{
-    CLog( Debug ) << "edit called: " << ( int )trigger << " coord: " << index.row() << ", " << index.column();
-    CLog( Debug ) << "Selection model: " << selectionModel()->isSelected( index );
-
-/*    if( trigger != QAbstractItemView::SelectedClicked )
-    {
-        m_edit.hide();
-        return QTableWidget::edit( index, trigger, event );
-    }
-*/
-    return QTableWidget::edit( index, trigger, event );
-}
-
 void QFilesTable::headersGeometryChanged()
 {
     horizontalHeader()->setResizeMode( 0, QHeaderView::Interactive );
