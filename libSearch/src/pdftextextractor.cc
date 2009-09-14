@@ -1,6 +1,7 @@
 #include "pdftextextractor.h"
 #include "pdfextractor.h"
 #include <boost/bind.hpp>
+#include <boost/concept_check.hpp>
 
 CPdfTextExtractor::CPdfTextExtractor()
 {
