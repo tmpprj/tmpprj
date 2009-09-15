@@ -2,6 +2,7 @@
 #include "mswordextractor.h"
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
+#include <boost/concept_check.hpp>
 #include <QTextCodec>
 
 

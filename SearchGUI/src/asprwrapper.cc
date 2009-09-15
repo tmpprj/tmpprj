@@ -1,6 +1,6 @@
 #include "asprwrapper.h"
 
-#ifdef WIN31
+#ifdef WIN32
 #include "aspr.h"
 #endif
 
