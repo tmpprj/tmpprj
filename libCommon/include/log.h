@@ -25,6 +25,7 @@ class CLog
 
     LogLevel m_level;
     bool m_bMultiString;
+    bool m_bRelease;
 
 public:
 
@@ -36,10 +37,9 @@ public:
     
     template< class T > CLog& operator<<( const T& t )
     {
-#ifdef BUILD_RELEASE
-        if( m_level == Debug )
+        if( m_bRelease && m_level == Debug )
             return *this;
-#endif
+
         GetFile() << t;
         return *this;
     }

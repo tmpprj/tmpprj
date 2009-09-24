@@ -5,6 +5,9 @@ TARGET = Common
 DESTDIR = ../lib
 TEMPLATE = lib
 CONFIG += staticlib
+release {
+    DEFINES += BUILD_RELEASE
+}
 SOURCES += src/log.cc \
            src/settings.cc \
            src/common.cc \

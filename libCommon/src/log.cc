@@ -18,17 +18,21 @@ char GetLevelChar( LogLevel level )
 
 CLog::CLog( LogLevel level, bool bMultiString )
 : m_level( level ),
-  m_bMultiString( bMultiString )
+  m_bMultiString( bMultiString ),
+#ifdef BUILD_RELEASE
+  m_bRelease( true )
+#else
+  m_bRelease( false )
+#endif
 {
     GetLock().lock();
 
     if( (uint)GetFile().tellp() > CommonConf().nMaxLogSize.Value() )
         TruncateFile();
 
-#ifdef BUILD_RELEASE
-    if( m_level == Debug )
+    if( m_bRelease && Debug == m_level )
         return;
-#endif
+
     GetFile() << QTime::currentTime().toString( "HH:mm:ss:zzz" ).toStdString() << " ["<< GetLevelChar( level ) << "]: ";
 }
 
@@ -56,10 +60,9 @@ void CLog::TruncateFile()
 
 void CLog::AddNewLine()
 {
-#ifdef BUILD_RELEASE
-    if( m_level == Debug )
+    if( m_bRelease && Debug == m_level )
         return;
-#endif
+    
     GetFile() << std::endl;
 }
 
@@ -71,12 +74,18 @@ boost::recursive_mutex& CLog::GetLock()
 
 CLog& CLog::operator<<( const QString& str )
 {
+    if( m_bRelease && m_level == Debug )
+        return *this;
+
     GetFile() << str.toStdString();
     return *this;
 }
 
 CLog& CLog::operator<<( Manip_t m )
 {
+    if( m_bRelease && m_level == Debug )
+        return *this;
+
     m( GetFile() );
     return *this;
 }
