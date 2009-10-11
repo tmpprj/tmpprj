@@ -8,6 +8,8 @@ QRegisterDialog::QRegisterDialog(QWidget *parent) :
 {
     m_ui->setupUi(this);
 
+    m_ui->hwidEdit->setText( m_Aspr.GetHwId() );
+
     connect( m_ui->buttonBox, SIGNAL( accepted() ), this, SLOT( OnAccept() ) );
 }
 
