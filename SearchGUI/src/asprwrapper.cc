@@ -77,7 +77,8 @@ void CAsprWrapper::CheckEnvelope()
 #ifdef WIN32
 USER_POLYBUFFER
         //TODO: doesn`t work
-   EnvelopeCheck();
+   if( !EnvelopeCheck() )
+		abort();
 #endif
 }
 
