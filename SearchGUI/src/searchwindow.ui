@@ -110,6 +110,9 @@
           <property name="toolTip">
            <string>Example: *.doc; *.pdf; *.txt</string>
           </property>
+          <property name="whatsThis">
+           <string>Line for entering the search mask</string>
+          </property>
           <property name="editable">
            <bool>true</bool>
           </property>
@@ -126,6 +129,9 @@
           <property name="toolTip">
            <string>Example: word &quot;sample phrase&quot;</string>
           </property>
+          <property name="whatsThis">
+           <string>Line for entering the search words</string>
+          </property>
           <property name="editable">
            <bool>true</bool>
           </property>
@@ -141,6 +147,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="whatsThis">
+             <string>Initial search directory</string>
+            </property>
             <property name="editable">
              <bool>true</bool>
             </property>
@@ -148,6 +157,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="browseButton">
+            <property name="whatsThis">
+             <string>This button opens a dialog box to choose the search directory</string>
+            </property>
             <property name="text">
              <string>&amp;Browse...</string>
             </property>
@@ -166,6 +178,9 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="whatsThis">
+       <string>This button displays or hides additional search settings</string>
       </property>
       <property name="ButtonText">
        <string>Settings</string>
@@ -187,6 +202,9 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="whatsThis">
+               <string>This setting specifies whether to search the subdirectories of the given directory</string>
+              </property>
               <property name="text">
                <string>Search subfolders</string>
               </property>
@@ -200,6 +218,9 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="whatsThis">
+               <string>This checkbox specifies whether the search will be case-sensitive</string>
+              </property>
               <property name="text">
                <string>Case sensitive</string>
               </property>
@@ -207,6 +228,9 @@
             </item>
             <item>
              <widget class="QCheckBox" name="charsetCheckBox">
+              <property name="whatsThis">
+               <string>This checkbox turns automatic character set detection on/off</string>
+              </property>
               <property name="text">
                <string>Automatic character set detection</string>
               </property>
@@ -217,6 +241,9 @@
             </item>
             <item>
              <widget class="QRadioButton" name="radioSearchText">
+              <property name="whatsThis">
+               <string>This selection element specifies whether to search for text in files or search files themselves</string>
+              </property>
               <property name="text">
                <string>Search text within files</string>
               </property>
@@ -238,6 +265,9 @@
            <layout class="QVBoxLayout" name="verticalLayout">
             <item>
              <widget class="QGroupBox" name="groupFileSize">
+              <property name="whatsThis">
+               <string>This checkbox allows setting search criteria for file size</string>
+              </property>
               <property name="title">
                <string>Enable File Size Limits</string>
               </property>
@@ -271,6 +301,9 @@
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="whatsThis">
+                  <string>Minimum file size</string>
                  </property>
                  <property name="inputMask">
                   <string/>
@@ -318,6 +351,9 @@
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="whatsThis">
+                  <string>Maximum file size</string>
+                 </property>
                  <property name="inputMask">
                   <string/>
                  </property>
@@ -338,6 +374,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="settingsButton">
+              <property name="whatsThis">
+               <string>This button opens the dialog for configuring the processing of various formats</string>
+              </property>
               <property name="text">
                <string>File se&amp;ttings</string>
               </property>
@@ -356,12 +395,18 @@
       <property name="focusPolicy">
        <enum>Qt::WheelFocus</enum>
       </property>
+      <property name="whatsThis">
+       <string>Table of search results.  It allows both drag-and-drop operations and usage of the standard Windows contextual menu</string>
+      </property>
      </widget>
     </item>
     <item>
      <layout class="QHBoxLayout">
       <item>
        <widget class="QPushButton" name="aboutButton">
+        <property name="whatsThis">
+         <string>This button displays an information window about the program and registration</string>
+        </property>
         <property name="text">
          <string>About</string>
         </property>
@@ -382,6 +427,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="hideButton">
+        <property name="whatsThis">
+         <string>This button allows to hide the window in the system tray and performing the search in background mode</string>
+        </property>
         <property name="text">
          <string>Hide to Tray</string>
         </property>
@@ -389,6 +437,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="findButton">
+        <property name="whatsThis">
+         <string>This button begins the search</string>
+        </property>
         <property name="text">
          <string>&amp;Find</string>
         </property>
@@ -396,6 +447,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="stopButton">
+        <property name="whatsThis">
+         <string>This button stops the search</string>
+        </property>
         <property name="text">
          <string>&amp;Stop</string>
         </property>

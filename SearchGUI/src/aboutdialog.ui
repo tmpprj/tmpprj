@@ -67,6 +67,9 @@
       </item>
       <item row="0" column="1" colspan="4">
        <widget class="QLineEdit" name="hwidEdit">
+        <property name="whatsThis">
+         <string>Generated ID number necessary for software registration</string>
+        </property>
         <property name="text">
          <string notr="true"/>
         </property>
@@ -98,6 +101,9 @@
       </item>
       <item row="1" column="1" colspan="2">
        <widget class="QLabel" name="regnameLabel">
+        <property name="whatsThis">
+         <string>Registered product user</string>
+        </property>
         <property name="text">
          <string>TextLabel</string>
         </property>
@@ -112,6 +118,9 @@
       </item>
       <item row="2" column="1">
        <widget class="QLabel" name="daysleftLabel">
+        <property name="whatsThis">
+         <string>Remaining number of days for the trial version of the program</string>
+        </property>
         <property name="text">
          <string>TextLabel</string>
         </property>
@@ -119,6 +128,9 @@
       </item>
       <item row="3" column="1">
        <widget class="QLabel" name="exleftLabel">
+        <property name="whatsThis">
+         <string>Remaining number of trial version launches</string>
+        </property>
         <property name="text">
          <string>TextLabel</string>
         </property>
@@ -126,6 +138,9 @@
       </item>
       <item row="4" column="1">
        <widget class="QLabel" name="versionLabel">
+        <property name="whatsThis">
+         <string>Program version</string>
+        </property>
         <property name="text">
          <string>TextLabel</string>
         </property>
@@ -166,6 +181,9 @@
       </item>
       <item row="1" column="1">
        <widget class="QLabel" name="label_7">
+        <property name="whatsThis">
+         <string>Program developer website</string>
+        </property>
         <property name="text">
          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -177,6 +195,9 @@ p, li { white-space: pre-wrap; }
       </item>
       <item row="0" column="1" colspan="2">
        <widget class="QLabel" name="label_4">
+        <property name="whatsThis">
+         <string>E-mail the program developers</string>
+        </property>
         <property name="text">
          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
