@@ -78,4 +78,4 @@ win32 {
         libboost_system.lib \
         ..\ASProtect\aspr_ide.lib
 }
-DEFINES += REVISION=\"\\\"$$quote( $$system( git tag -l ) )\\\"\"
+DEFINES += REVISION=\"\\\"$$quote( $$system( git describe --tags ) )\\\"\"
