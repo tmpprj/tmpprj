@@ -1,5 +1,6 @@
 #include <QtGui>
 #include <QtCore>
+#include <QWhatsThis>
 
 #include "qsearchwindow.h"
 #include "qfilestable.h"
@@ -69,6 +70,9 @@ void QSearchWindow::setupControls()
     lineMinFileSize->setValidator( pValidatorMin );
     QValidator* pValidatorMax = new QIntValidator( 1, 999999999LL, this );
     lineMaxFileSize->setValidator( pValidatorMax );
+
+    QAction* pWhatThisAction = QWhatsThis::createAction( this );
+    connect( whatThisButton, SIGNAL( clicked() ), pWhatThisAction, SLOT( trigger() ) );
 }
 
 void QSearchWindow::setupTrayIcon()
