@@ -141,7 +141,7 @@ ExpirationDateValue=01-01-2003
 [Project Parameters]
 CBDISABLESUBMITBTN=0
 EAPPLICATIONNAME=Multiformat File Searcher
-EVERSIONNAME=1.01
+EVERSIONNAME=1.02
 EFILETOPROTECT=D:\Raznoe\Programming\WorkSpace\tmpprj\bin\FileSearcher.exe
 EFILETOSAVE=D:\Raznoe\Programming\WorkSpace\tmpprj\bin\FileSearcher_1.exe
 EMAPFILE=
@@ -176,5 +176,5 @@ STORAGEKEYSFNAME=aspr_keys.ini
 KEYSDIALOGCAPTION=Registration Information
 KEYSDIALOGTEXT=Please, input your registration information below:
 NOVALIDMODES=No valid modes found. Please, contact support team!
-PAGEINDEX=2
+PAGEINDEX=0
 MODEINDEX=0
