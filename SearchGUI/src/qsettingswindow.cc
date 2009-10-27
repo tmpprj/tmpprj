@@ -11,7 +11,7 @@
 #include "guicommon.h"
 
 QSettingsWindow::QSettingsWindow( QWidget *parent )
-    : QDialog( parent )
+    : QDialog( parent, Qt::WindowContextHelpButtonHint | Qt::Dialog )
 {
     setupUi( this );
     

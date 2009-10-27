@@ -90,3 +90,4 @@ bool CAsprWrapper::TryRegiter( const QString& strKey, const QString& strName )
     return true;
 #endif
 }
+

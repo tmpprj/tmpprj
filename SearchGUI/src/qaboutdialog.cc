@@ -2,7 +2,7 @@
 #include <QMessageBox>
 
 QAboutDialog::QAboutDialog( QWidget *parent )
-        : QDialog( parent )
+: QDialog( parent, Qt::WindowContextHelpButtonHint | Qt::Dialog  )
 {
     setupUi( this );
     RefreshData();

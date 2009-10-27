@@ -3,7 +3,7 @@
 #include <QMessageBox>
 
 QRegisterDialog::QRegisterDialog(QWidget *parent) :
-    QDialog(parent),
+    QDialog(parent, Qt::WindowContextHelpButtonHint | Qt::Dialog),
     m_ui(new Ui::QRegisterDialog)
 {
     m_ui->setupUi(this);
