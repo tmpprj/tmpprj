@@ -66,6 +66,10 @@ class MenusViewItem extends JView
 		$params			= $this->get( 'StateParams' );
 		$sysparams		= $this->get( 'SystemParams' );
 		$advanced		= $this->get( 'AdvancedParams' );
+		
+		#JAW reading the META data
+		$metadata		= $this->get( 'MetaData' );
+				
 		$component		= $this->get( 'ComponentParams' );
 		$name			= $this->get( 'StateName' );
 		$description	= $this->get( 'StateDescription' );
@@ -107,6 +111,10 @@ class MenusViewItem extends JView
 		$this->assignRef('sysparams', $sysparams);
 		$this->assignRef('params'	, $params);
 		$this->assignRef('advanced'	, $advanced);
+		
+		# JAW adding META data XML
+		$this->assignRef('metadata' , $metadata);		
+		
 		$this->assignRef('comp'		, $component);
 		$this->assignRef('menutypes', $menuTypes);
 		$this->assignRef('name'		, $name);

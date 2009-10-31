@@ -432,7 +432,7 @@ class ContentView
 	* @param JTableContent The category object
 	* @param string The html for the groups select list
 	*/
-	function editContent( &$row, $section, &$lists, &$sectioncategories, $option, &$form )
+	function editContent( &$row, $section, &$lists, &$sectioncategories, $option, &$form , &$meta_params )
 	{
 		JRequest::setVar( 'hidemainmenu', 1 );
 
@@ -533,8 +533,10 @@ class ContentView
 				$title = JText::_( 'Metadata Information' );
 				echo $pane->endPanel();
 				echo $pane->startPanel( $title, "metadata-page" );
-				echo $form->render('meta', 'metadata');
-
+				// echo $form->render('meta', 'metadata');
+				# JAW: changed the render of the META data
+				echo $meta_params->render('meta');
+				
 				echo $pane->endPanel();
 				echo $pane->endPane();
 			?>

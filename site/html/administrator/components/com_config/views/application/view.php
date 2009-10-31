@@ -111,6 +111,20 @@ class ConfigApplicationView
 					</tr>
 				</table>
 			</div>
+	        <div id="page-seo">
+		        <table class="noshow">
+		          <tr>
+		            <td width="60%">
+		              <?php require_once($tmplpath.DS.'config_seo_metafields.php'); ?>
+		              <?php require_once($tmplpath.DS.'config_seo_metadata.php'); ?>
+		               <?php require_once($tmplpath.DS.'config_seo_custom_fields.php'); ?>
+		            </td>
+		            <td width="40%">
+		              <?php require_once($tmplpath.DS.'config_seo.php'); ?>
+		            </td>
+		          </tr>
+		        </table>
+	        </div>			
 		</div>
 		<div class="clr"></div>
 

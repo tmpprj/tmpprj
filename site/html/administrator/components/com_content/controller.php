@@ -550,6 +550,8 @@ class ContentController extends JController
 
 		// Create the form
 		$form = new JParameter('', JPATH_COMPONENT.DS.'models'.DS.'article.xml');
+		# JAW: read the META data XML file settings.
+		$meta_params = new JParameter( '' , JPATH_ROOT.DS.'metaconfig.xml');
 
 		// Details Group
 		$active = (intval($row->created_by) ? intval($row->created_by) : $user->get('id'));
@@ -569,11 +571,12 @@ class ContentController extends JController
 		$form->loadINI($row->attribs);
 
 		// Metadata Group
-		$form->set('description', $row->metadesc);
-		$form->set('keywords', $row->metakey);
-		$form->loadINI($row->metadata);
+		$meta_params->set('meta_description', $row->metadesc);
+		$meta_params->set('meta_keywords'	, $row->metakey);
+		$meta_params->loadINI($row->metadata);
 
-		ContentView::editContent($row, $contentSection, $lists, $sectioncategories, $option, $form);
+		# JAW, adjust the call of edit content with an aditional PARAM: $meta_params;
+		ContentView::editContent($row, $contentSection, $lists, $sectioncategories, $option, $form, $meta_params);
 	}
 
 	/**

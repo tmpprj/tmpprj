@@ -44,6 +44,7 @@ class ContentViewFrontpage extends ContentView
 		$params = &$mainframe->getParams();
 
 		// parameters
+		$title			= $params->def('page_title',	$mainframe->getCfg('sitename' ));
 		$intro			= $params->def('num_intro_articles',	4);
 		$leading		= $params->def('num_leading_articles',	1);
 		$links			= $params->def('num_links', 			4);
@@ -95,12 +96,58 @@ class ContentViewFrontpage extends ContentView
 		$this->pagination = new JPagination($total, $limitstart, $limit - $links);
 
 		$this->assign('total',			$total);
-
+		$params->def('description', 	'') ;
 		$this->assignRef('user',		$user);
 		$this->assignRef('access',		$access);
 		$this->assignRef('params',		$params);
 		$this->assignRef('items',		$items);
+	/*
+		 * JAW: setting the HTML title, check if the HTML title is set within
+		 * the PARAMs
+		 */
+		if ( $params->def('html_title', '') ){
+			$title = $params->def('html_title', 	'') ;
+		}
+		// Set the page title to the menu name if title is empty
+		if (empty ($title)) {
+			$title = $menu->name;
+		}
+		if ( $params->def('meta_description', ''))	{
+			$document->setMetaData('meta_description', $params->def('meta_description', ''));
+		}
+		if ( $params->def('meta_keywords', '') != "") {
+			$document->setMetaData('keywords', $params->def('meta_keywords', ''));
+		}
+		if ( $params->def('robots', '') != "") {
+			$robots_tag = $params->def('robots', '');
+			if ( $robots_tag == "0" ){
+				$document->setMetaData('robots','');
+			} else {
+				$document->setMetaData('robots',$robots_tag);
+			}
+		}
+		/*
+		 * JAW:
+		 * Display the configurable items - Check if the generator tag maybe
+		 * display; - Check if their are custom META fields present
+		 */
+		$document->setTitle($title);
 
+		/**
+		 * Read the custom META field
+		 */
+		$xml_data = new JParameter ( '', JPATH_ROOT . DS . "metaconfig.xml");
+		$field_array = $xml_data->renderToArray();
+
+		$exclude_list = array("html_title","meta_description", "meta_keywords", "robots" );
+		foreach ( $field_array as $key => $val) {
+			if (!in_array($key, $exclude_list)  ) {
+				$value = $params->def($key, '' );
+				if ( !empty($value)) {
+					$document->setMetaData( $key, $value);
+				}
+			}
+		}
 		parent::display($tpl);
 	}
 

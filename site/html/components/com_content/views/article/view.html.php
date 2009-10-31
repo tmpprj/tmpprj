@@ -29,7 +29,7 @@ class ContentViewArticle extends ContentView
 	function display($tpl = null)
 	{
 		global $mainframe;
-		
+
 		$user		=& JFactory::getUser();
 		$document	=& JFactory::getDocument();
 		$dispatcher	=& JDispatcher::getInstance();
@@ -58,7 +58,7 @@ class ContentViewArticle extends ContentView
 		}
 
 		$limitstart	= JRequest::getVar('limitstart', 0, '', 'int');
-		
+
 		if (!$params->get('intro_only') && ($this->getLayout() == 'default') && ($limitstart == 0))
 		{
 			$model =& $this->getModel();
@@ -110,38 +110,56 @@ class ContentViewArticle extends ContentView
 		$menus = &JSite::getMenu();
 		$menu  = $menus->getActive();
 
-		if (is_object( $menu ) && isset($menu->query['view']) && $menu->query['view'] == 'article' && isset($menu->query['id']) && $menu->query['id'] == $article->id) {
-			$menu_params = new JParameter( $menu->params );
-			if (!$menu_params->get( 'page_title')) {
-				$params->set('page_title',	$article->title);
-			}
-		} else {
-			$params->set('page_title',	$article->title);
-		}
-		$document->setTitle( $params->get( 'page_title' ) );
+		// JAW: Handle Page Title
+		$title = $article->title;
 
-		if ($article->metadesc) {
-			$document->setDescription( $article->metadesc );
-		}
-		if ($article->metakey) {
-			$document->setMetadata('keywords', $article->metakey);
-		}
-
-		if ($mainframe->getCfg('MetaTitle') == '1') {
-			$mainframe->addMetaTag('title', $article->title);
-		}
-		if ($mainframe->getCfg('MetaAuthor') == '1') {
-			$mainframe->addMetaTag('author', $article->author);
-		}
-
+		// Other metadata
+		$description_set = false;
+		$keywords_set = false;
 		$mdata = new JParameter($article->metadata);
 		$mdata = $mdata->toArray();
+
 		foreach ($mdata as $k => $v)
 		{
 			if ($v) {
-				$document->setMetadata($k, $v);
+				// JAW: html_title is a META field but is intended for the html title tag.
+				if ( $k == 'html_title' && $v != '')
+				{
+					$title = $v;
+				} else {
+					# JAW: always check if it is not empty
+					if ( $v != '') {
+						$document->setMetadata($k, $v);
+					}
+				}
+				if ( $k == 'meta_description') {
+					$description_set = true;
+				}
+				if ( $k == 'meta_keywords') {
+					$keywords_set = true;
+				}
+
 			}
 		}
+		// Handle metadata
+		if ( !empty($article->metadesc) & $description_set == false ) {
+			$document->setMetadata('description', $article->metadesc );
+		}
+		if (!empty($article->metakey) & $keywords_set == false) {
+			$document->setMetadata('keywords', $article->metakey);
+		}
+
+		if ($mainframe->getCfg('MetaAuthor') == '1') {
+			$document->setMetadata('author', $article->author);
+		}
+		if ($mainframe->getCfg('MetaTitle') == '1') {
+			$mainframe->addMetaTag('title', $title);
+		}
+		// If there is a pagebreak heading or title, add it to the page title
+		if (isset ($article->page_title)) {
+			$title = $title.' '.$article->page_title;
+		}
+		$document->setTitle($title);
 
 		// If there is a pagebreak heading or title, add it to the page title
 		if (!empty($article->page_title))

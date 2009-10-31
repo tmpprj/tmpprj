@@ -211,6 +211,29 @@ class MenusModelItem extends JModel
 		}
 		return $params;
 	}
+	/*
+	 * JAW adjustment for getting META data for menu elemens.
+	 * Note: only for the frontpage and the blog's (category / section)
+	 * Always make use of the user defined META data settings (located in
+	 * /administrator/components/com_metadata/config.xml)
+	 */
+	function &getMetaData()
+	{
+		global $mainframe;
+
+		$params	= null;
+		$item	= & $this->getItem();
+		if ( $item->linkparts['view'] == "frontpage" || $item->linkparts['view'] == "section" ||
+			 $item->linkparts['view'] == "category" ||  $item->linkparts['view'] == "archive" || "categories" )
+		{
+			$path	= JPATH_ROOT . DS ."metaconfig.xml" ;
+			if (file_exists( $path )) {
+				$params = new JParameter( null, $path );
+			}
+			$params->merge(new JParameter($item->params));
+		}
+		return $params;
+	}
 
 	function &getComponentParams()
 	{

@@ -57,9 +57,8 @@ class ContentViewCategory extends ContentView
 		$params->def('show_pagination_results',	1);
 		$params->def('show_pagination_limit',	1);
 		$params->def('filter',					1);
-		if (($params->def('filter_type', 'title') != 'hits') && ($params->def('filter_type', 'title') != 'author')) {
-			$params->set('filter_type', 'title');
-		}
+		// JAW: get the title;
+		$title		= $params->def('page_title',	$mainframe->getCfg('sitename' ));
 
 		$intro		= $params->get('num_intro_articles');
 		$leading	= $params->get('num_leading_articles');
@@ -112,7 +111,53 @@ class ContentViewCategory extends ContentView
 		} else {
 			$params->set('page_title',	$category->title);
 		}
-		$document->setTitle( $params->get( 'page_title' ) );
+
+		// JAW: Set the page title
+		if ( empty ($title)) {
+			$title = $menu->name;
+		}
+		/*
+		 * JAW: setting the HTML title, check if the HTML title is set within
+		 * the PARAMs
+		 */
+		if ( $params->def('html_title', '') )
+		{
+			$title = $params->def('html_title', 	'') ;
+		}
+		if ( $params->def('meta_description', ''))
+		{
+			$document->setMetaData('meta_description', $params->def('meta_description', ''));
+		}
+		if ( $params->def('meta_keywords', '') != "")
+		{
+			$document->setMetaData('meta_keywords', $params->def('meta_keywords', ''));
+		}
+		if ( $params->def('robots', ''))
+		{
+			$robots_tag = $params->def('robots', '');
+			if ( $robots_tag == "0" )
+			{
+				$document->setMetaData('robots','');
+			} else {
+				$document->setMetaData('robots',$robots_tag);
+			}
+		}
+		/*
+		 * JAW:
+		 * Display the configurable items - Check if the generator tag maybe
+		 * display; - Check if their are custom META fields present
+		 */
+		$document->setTitle($title);
+		$xml_data = new JParameter ( '', JPATH_ROOT . DS . "metaconfig.xml");
+		$field_array = $xml_data->renderToArray();
+		$exclude_list = array("html_title","meta_description", "meta_keywords", "robots" );
+		foreach ( $field_array as $key => $val) {
+		        if (!in_array($key, $exclude_list) & ($params->def($key, '')!= "" )  ) {
+				$value = $params->def($key, '' );
+				$document->setMetaData( $key, $value);
+			}
+		}
+
 
 		//set breadcrumbs
 		if(is_object($menu) && $menu->query['view'] != 'category') {
