@@ -32,7 +32,7 @@ function submitbutton(pressbutton) {
 	<?php if( $this->item->type == 'component' && isset($this->item->linkparts['option']) && $this->item->linkparts['option'] == 'com_content' && isset($this->item->linkparts['view']) && $this->item->linkparts['view'] == 'section' ){ ?>
 	else if( document.getElementById('urlparamsid').value == 0 ){
  		alert( "<?php echo JText::_('Please select a Section', true ); ?>" );
-	} <?php } ?>
+	} <?php } ?>	
 	<?php if( $this->item->type == 'component' && isset($this->item->linkparts['option']) && $this->item->linkparts['option'] == 'com_poll' && isset($this->item->linkparts['view']) && $this->item->linkparts['view'] == 'poll' ){ ?>
 	else if( document.getElementById('urlparamsid').value == 0 ){
  		alert( "<?php echo JText::_('Please select a Poll', true ); ?>" );
@@ -176,6 +176,12 @@ function submitbutton(pressbutton) {
 						echo $this->pane->endPanel();
 					endif;
 
+					if($this->metadata && ($params = $this->metadata->render('params'))) :
+						echo $this->pane->startPanel(JText :: _('MENU item meta data'), "METAdata-page");
+						echo $params;
+						echo $this->pane->endPanel();
+					endif;
+					
 					if ($this->comp && ($params = $this->comp->render('params'))) :
 						echo $this->pane->startPanel(JText :: _('Parameters - Component'), "component-page");
 						echo $params;

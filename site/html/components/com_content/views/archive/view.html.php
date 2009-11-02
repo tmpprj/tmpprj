@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id: view.html.php 11398 2009-01-05 20:03:27Z kdevine $
+ * @version		$Id: view.html.php 10711 2008-08-21 10:09:03Z eddieajau $
  * @package		Joomla
  * @subpackage	Content
  * @copyright	Copyright (C) 2005 - 2008 Open Source Matters. All rights reserved.
@@ -60,7 +60,48 @@ class ContentViewArchive extends ContentView
 
 		// Add item to pathway
 		$pathway->addItem(JText::_('Archive'), '');
-
+			// JAW: Set the page title
+		$document	=& JFactory::getDocument();
+		$title		= $params->def('page_title',	$mainframe->getCfg('sitename' ));
+		if ( empty ($title)) {
+			$title = $menu->name;
+		}
+		/*
+		 * JAW: setting the HTML title, check if the HTML title is set within
+		 * the PARAMs
+		 */
+		if ( $params->def('html_title', '') ){
+			$title = $params->def('html_title', 	'') ;
+		}
+		if ( $params->def('meta_description', '')){
+			$document->setMetaData('meta_description', $params->def('meta_description', ''));
+		}
+		if ( $params->def('meta_keywords', '') != ""){
+			$document->setMetaData('keywords', $params->def('meta_keywords', ''));
+		}
+		if ( $params->def('robots', '')) {
+			$robots_tag = $params->def('robots', '');
+			if ( $robots_tag == "0" ) {
+				$document->setMetaData('robots','');
+			} else {
+				$document->setMetaData('robots',$robots_tag);
+			}
+		}
+		/*
+		 * JAW:
+		 * Display the configurable items - Check if the generator tag maybe
+		 * display; - Check if their are custom META fields present
+		 */
+		$document->setTitle($title);
+		$xml_data = new JParameter ( '', JPATH_ROOT . DS . "metaconfig.xml");
+		$field_array = $xml_data->renderToArray();
+		$exclude_list = array("html_title","meta_description", "meta_keywords", "robots" );
+		foreach ( $field_array as $key => $val) {
+		        if (!in_array($key, $exclude_list) & ($params->def($key, '')!= "" )  ) {
+				$value = $params->def($key, '' );
+				$document->setMetaData( $key, $value);
+			}
+		}
 		$params->def('filter',			1);
 		$params->def('filter_type',		'title');
 

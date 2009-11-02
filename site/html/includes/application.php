@@ -98,7 +98,8 @@ class JSite extends JApplication
 			case 'html':
 			{
 				//set metadata
-				$document->setMetaData( 'keywords', $this->getCfg('MetaKeys') );
+				// JAW: disabled
+				// $document->setMetaData( 'keywords', $this->getCfg('MetaKeys') );
 
 				if ( $user->get('id') ) {
 					$document->addScript( JURI::root(true).'/includes/js/joomla.javascript.js');
@@ -119,7 +120,8 @@ class JSite extends JApplication
 
 
 		$document->setTitle( $params->get('page_title') );
-		$document->setDescription( $params->get('page_description') );
+		// JAW: disabled
+		// $document->setDescription( $params->get('page_description') );
 
 		$contents = JComponentHelper::renderComponent($component);
 		$document->setBuffer( $contents, 'component');

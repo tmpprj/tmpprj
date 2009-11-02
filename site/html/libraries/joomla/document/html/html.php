@@ -62,7 +62,8 @@ class JDocumentHTML extends JDocument
 
 		//set default document metadata
 		 $this->setMetaData('Content-Type', $this->_mime . '; charset=' . $this->_charset , true );
-		 $this->setMetaData('robots', 'index, follow' );
+		// JAW: Remove the robots tags
+		// $this->setMetaData('robots', 'index, follow' );
 	}
 
 	/**

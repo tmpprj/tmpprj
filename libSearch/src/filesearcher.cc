@@ -16,12 +16,13 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
 {
     QDir dirFiles( strPath, "", QDir::Unsorted );
     QFileInfoList listFiles = dirFiles.entryInfoList( listMasks,
-                                                      QDir::AllDirs | QDir::Files | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot );
+		QDir::AllDirs | QDir::Files | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot );
 
     for (int i = 0; i < listFiles.size(); ++i)
     {
         boost::this_thread::interruption_point();
-        if( listFiles[ i ].isDir() )
+
+		if( listFiles[ i ].isDir() && !listFiles[ i ].isSymLink() )
         {
             if( bRecursive )
                 Search( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ), listMasks, bRecursive, stMinFileSize, stMaxFileSize, false );
@@ -31,7 +32,16 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
             CLog(Debug) << "CFileSearcher::Search: file " << qPrintable( listFiles[i].fileName() ) << " is filtered by size: " << listFiles[ i ].size() << " bytes";
             continue;
         }
-        else
+		else if( listFiles[ i ].isSymLink() )
+		{
+			for( size_t j = 0; j < m_Filters.size(); j++ )
+				if( m_Filters[ j ].exactMatch( listFiles[ i ].fileName() ) )
+				{
+					m_sigFileFound( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ) );
+					break;
+				}
+		}
+		else
         {
             m_sigFileFound( dirFiles.absoluteFilePath( listFiles[ i ].fileName() ) );
         }
@@ -43,7 +53,11 @@ void CFileSearcher::Search( const QString& strPath, const QStringList& listMasks
 
 void CFileSearcher::WorkerFunc( const FileSearcher::structParams& Params )
 {
-    Search( Params.strPath, Params.listMasks, Params.bRecursive, Params.stMinFileSize, Params.stMaxFileSize, true );
+	m_Filters.clear();
+	for( int i = 0; i < Params.listMasks.size(); i++ )
+		m_Filters.push_back( QRegExp( Params.listMasks[ i ], Qt::CaseInsensitive, QRegExp::Wildcard ) );
+
+	Search( Params.strPath, Params.listMasks, Params.bRecursive, Params.stMinFileSize, Params.stMaxFileSize, true );
 }
 
 

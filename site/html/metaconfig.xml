@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+  <params>
+	<param name="html_title" type="text" size="40" default="" label="HTML Title" description="Enter the HTML title tag" value="" />
+	<param name="meta_description" type="textarea" default="" label="META tag description" rows="5" cols="30" description="META tag: Description"/>
+	<param name="meta_keywords"    type="textarea" default="" label="META tag keywords" rows="5" cols="30" description="META tag keywords, please seperate your keywords with a comma"/>
+	<param name="robots" type="list" default="index, follow" label="Robots meta tag" description="Set the value of the robots tag">
+		<option value="index, follow">index, follow</option>
+		<option value="noindex, follow">noindex, follow</option>
+		<option value="noindex, follow">index, nofollow</option>
+		<option value="noindex, nofollow">noindex, nofollow</option>
+		<option value="0">Don't display the robots tag</option>
+	</param>
+	<!-- start here your custom META tags -->
+	<param name="googlebot" type="list" default="" label="Google settings" description="Settings for the Google crawler">
+		<option value="">Do nothing</option>
+		<option value="noarchive">noarchive => don't include in Google cache</option>
+		<option value="nosnippet">nosnippet => disallow a summary display</option>
+		<option value="noodp">noodp => disallow a summary from dmoz.org</option>
+		<option value="noarchive, nosnippet">noarchive, nosnippet</option>
+		<option value="noarchive, noodp">noarchive, noodp</option>
+		<option value="nosnippet, noodp">nosnippet, noodp</option>
+		<option value="noarchive, nosnippet, noodp">noarchive, nosnippet, noodp</option>
+	</param>
+	<param name="copyright" type="text" size="40" default="" label="Copy right" description="Copyright META field" value="" />
+	<!-- end of your custom META tags -->
+  </params>
+</config>

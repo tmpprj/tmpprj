@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id: application.php 12389 2009-07-01 00:34:45Z ian $
+ * @version		$Id: application.php 11795 2009-05-06 01:59:19Z ian $
  * @package		Joomla
  * @subpackage	Config
  * @copyright	Copyright (C) 2005 - 2008 Open Source Matters. All rights reserved.
@@ -48,6 +48,12 @@ class ConfigControllerApplication extends ConfigController
 		$langs 		= array ();
 		$menuitems 	= array ();
 		$lists 		= array ();
+
+		// Joomlatwork PATCH: adding the custom META data;
+		$xml_data = new JParameter_extended ( '', JPATH_ROOT . DS ."metaconfig.xml");
+		$exclude_list = "html_title|meta_description|meta_keywords|robots";
+		$lists['custom_fields'] = $xml_data->render_config( 'params', '_default', $exclude_list);
+
 
 		// PRE-PROCESS SOME LIST
 
@@ -108,7 +114,7 @@ class ConfigControllerApplication extends ConfigController
 		$lists['xmlrpc_server'] = JHTML::_('select.booleanlist', 'xmlrpc_server', 'class="inputbox"', $row->xmlrpc_server);
 		$lists['error_reporting'] = JHTML::_('select.genericlist',  $errors, 'error_reporting', 'class="inputbox" size="1"', 'value', 'text', $row->error_reporting);
 		$lists['enable_ftp'] 	= JHTML::_('select.booleanlist', 'ftp_enable', 'class="inputbox"', intval($row->ftp_enable));
-
+		
 		$forceSSL = array(
 								JHTML::_('select.option', 0, JText::_('None')),
 								JHTML::_('select.option', 1, JText::_('Administrator Only')),
@@ -198,6 +204,53 @@ class ConfigControllerApplication extends ConfigController
 		$lists['sef'] 		= JHTML::_('select.booleanlist', 'sef', 'class="inputbox"', $row->sef);
 		$lists['sef_rewrite'] 	= JHTML::_('select.booleanlist', 'sef_rewrite', 'class="inputbox"', $row->sef_rewrite);
 		$lists['sef_suffix'] 	= JHTML::_('select.booleanlist', 'sef_suffix', 'class="inputbox"', $row->sef_suffix);
+		// JAW: settings for GLOBAL DESCRIPTION
+		$descr_list 			= array (JHTML::_('select.option', '0', JText::_('DONT USE GLOBAL META DESCRIPTION')), JHTML::_('select.option', '1', JText::_('USE GLOBAL META DESCRIPTION')));
+		if (!isset($row->use_global_metadesc)) {
+			$row->use_global_metadesc = 0;
+		}
+		$lists['description'] 	= JHTML::_('select.genericlist',  $descr_list, 'use_global_metadesc', 'class="inputbox" size="1"', 'value', 'text', $row->use_global_metadesc);
+
+		// JAW: settings for GLOBAL keywords
+		$keyw_list 			= array (JHTML::_('select.option', '0', JText::_('DONT USE GLOBAL META KEYWORDS')), JHTML::_('select.option', '1', JText::_('USE GLOBAL META KEYWORDS')));
+		if (!isset($row->use_global_keywords)) {
+			$row->use_global_keywords = 0;
+		}
+		$lists['keywords'] 	= JHTML::_('select.genericlist',  $keyw_list, 'use_global_keywords', 'class="inputbox" size="1"', 'value', 'text', $row->use_global_keywords);
+
+		// JAW: settings for the ROBOT tag
+		$robots = array (	JHTML::_('select.option', '', 'Dont display the robot tag'),
+							JHTML::_('select.option', 'index, follow', 'index, follow'),
+							JHTML::_('select.option', 'index, nofollow', 'index, nofollow'),
+							JHTML::_('select.option', 'noindex, follow', 'noindex, follow'),
+							JHTML::_('select.option', 'noindex, follow', 'noindex, nofollow')
+						);
+
+		if (!isset($row->metarobots)) {
+			$row->metarobots = 1;
+		}
+		$lists['robots'] = JHTML::_('select.genericlist',  $robots, 'metarobots', 'class="inputbox" size="1"', 'value', 'text', $row->metarobots);
+
+		$keyw_list= array (JHTML::_('select.option', '0', JText::_('DONT USE CUSTOM META DEFAULT')), JHTML::_('select.option', '1', JText::_('USE CUSTOM META DEFAULT')));
+		if (!isset($row->custom_default)) {
+			$row->custom_default = 0;
+		}
+		$lists['Metacustomfields']= JHTML::_('select.genericlist',  $keyw_list, 'custom_default', 'class="inputbox" size="1"', 'value', 'text', $row->custom_default);
+
+		$generator 			= array (JHTML::_('select.option', '0', JText::_('SHOW GENERATOR TAG')), JHTML::_('select.option', '1', JText::_('HIDE GENERATOR TAG')));
+		if (!isset($row->metagenerator)) {
+			$row->metagenerator = 0;
+		}
+		$lists['generator']	=JHTML::_('select.booleanlist', 'metagenerator', 'class="inputbox"', $row->metagenerator);
+		if (!isset($row->html_title_config)) {
+			$row->html_title_config = '[TITLE]-[SITENAME]';
+		}
+		if (!isset($row->html_title_default)) {
+			$row->html_title_default = '[SITENAME]';
+		}
+		if (!isset($row->generator_tag)) {
+			$row->generator_tag = '';
+		}
 
 		// FEED SETTINGS
 		$formats	= array (JHTML::_('select.option', 'RSS2.0', JText::_('RSS')), JHTML::_('select.option', 'Atom', JText::_('Atom')));
@@ -362,6 +415,27 @@ class ConfigControllerApplication extends ConfigController
 		$config_array['smtppass']	= JRequest::getVar('smtppass', '', 'post', 'string', JREQUEST_ALLOWRAW);
 		$config_array['smtphost']	= JRequest::getVar('smtphost', '', 'post', 'string');
 
+		// JAW: settings for the HTML title tag
+		$config_array['html_title_config'] = JRequest::getVar('html_title_config', '[TITLE]-[SITENAME]', 'post', 'string' );
+		$config_array['html_title_default'] = JRequest::getVar('html_title_default', '[SITENAME]', 'post', 'string');
+
+		// JAW: settings for GLOBAL DESCRIPTION
+		$config_array['use_global_metadesc'] = JRequest::getVar('use_global_metadesc', 0, 'post', 'int');
+
+		// JAW: settings for GLOBAL KEYWORDS
+		$config_array['use_global_keywords'] = JRequest::getVar('use_global_keywords', 0, 'post', 'int');
+
+		// JAW: settings for the META tag robots
+		$config_array['metarobots'] = JRequest::getVar('metarobots', 1, 'post', 'string');
+
+		// JAW: settings for the custom META fields default
+		$config_array['custom_default'] = JRequest::getVar('custom_default', 1, 'post', 'string');
+
+		// JAW: custom fields
+		$config_array['metagenerator'] 	= JRequest::getVar('metagenerator', 1, 'post', 'int');
+		$generator_tag	= htmlspecialchars( JRequest::getVar( 'generator_tag', '', 'post' ) );
+		$config->setValue('config.generator_tag', $generator_tag);
+
 		// META SETTINGS
 		$config_array['MetaAuthor']	= JRequest::getVar('MetaAuthor', 1, 'post', 'int');
 		$config_array['MetaTitle']	= JRequest::getVar('MetaTitle', 1, 'post', 'int');
@@ -485,3 +559,49 @@ class ConfigControllerApplication extends ConfigController
 		}
 	}
 }
+/*
+ * Class: JParameter_extended extends Jparameter purpose is to display the custom fields into the global configuration
+ * @abstract
+ * @author		Richard
+ * @package		global configuration
+ * @subpackage
+ * @since		1.5
+ */
+class JParameter_extended extends JParameter {
+
+	function render_config ($name = 'params',  $group = '_default', $exclude_list = null) {
+
+		$exclude_array = explode ( "|",$exclude_list );
+		if (!isset($this->_xml[$group])) {
+			return false;
+		}
+
+		$params = $this->getParams($name, $group);
+
+		$html = array ();
+
+		if ($description = $this->_xml[$group]->attributes('description')) {
+			// add the params description to the display
+			$desc	= JText::_($description);
+			$html[]	= '<tr><td class="paramlist_description" colspan="2">'.$desc.'</td></tr>';
+		}
+
+		foreach ($params as $param)
+		{
+			if ( !in_array( $param[5], $exclude_array) ) {
+				$html[] = '<tr>';
+				$html[] = '<td>' . $param[5] . '</td>';
+				$html[] = '<td>' . $param[3] . '</td>';
+				$html[] = '<td>' . $param[2] . '</td>';
+				$html[] = '</tr>';
+			}
+		}
+
+		if (count($params) < 1) {
+			$html[] = "<tr><td colspan=\"2\"><i>".JText::_('There are no Parameters for this item')."</i></td></tr>";
+		}
+
+		return implode("\n", $html);
+	}
+}
+?>

@@ -43,6 +43,7 @@ class ContentViewSection extends ContentView
 		$limitstart	= JRequest::getVar('limitstart', 0, '', 'int');
 
 		//parameters
+		$title			= $params->def('page_title',	$mainframe->getCfg('sitename' ));
 		$intro		= $params->def('num_intro_articles', 	4);
 		$leading	= $params->def('num_leading_articles', 	1);
 		$links		= $params->def('num_links', 			4);
@@ -61,6 +62,47 @@ class ContentViewSection extends ContentView
 		$access->canEdit		= $user->authorize('com_content', 'edit', 'content', 'all');
 		$access->canEditOwn		= $user->authorize('com_content', 'edit', 'content', 'own');
 		$access->canPublish		= $user->authorize('com_content', 'publish', 'content', 'all');
+
+			// JAW: Set the page title
+		if ( empty ($title)) {
+			$title = $menu->name;
+		}
+		/*
+		 * JAW: setting the HTML title, check if the HTML title is set within
+		 * the PARAMs
+		 */
+		if ( $params->def('html_title', '') ){
+			$title = $params->def('html_title', 	'') ;
+		}
+		if ( $params->def('meta_description', '')){
+			$document->setMetaData('meta_description', $params->def('meta_description', ''));
+		}
+		if ( $params->def('meta_keywords', '') != ""){
+			$document->setMetaData('keywords', $params->def('meta_keywords', ''));
+		}
+		if ( $params->def('robots', '')) {
+			$robots_tag = $params->def('robots', '');
+			if ( $robots_tag == "0" ) {
+				$document->setMetaData('robots','');
+			} else {
+				$document->setMetaData('robots',$robots_tag);
+			}
+		}
+		/*
+		 * JAW:
+		 * Display the configurable items - Check if the generator tag maybe
+		 * display; - Check if their are custom META fields present
+		 */
+		$document->setTitle($title);
+		$xml_data = new JParameter ( '', JPATH_ROOT . DS . "metaconfig.xml");
+		$field_array = $xml_data->renderToArray();
+		$exclude_list = array("html_title","meta_description", "meta_keywords", "robots" );
+		foreach ( $field_array as $key => $val) {
+		        if (!in_array($key, $exclude_list) & ($params->def($key, '')!= "" )  ) {
+				$value = $params->def($key, '' );
+				$document->setMetaData( $key, $value);
+			}
+		}
 
 		//add alternate feed link
 		if($params->get('show_feed_link', 1) == 1)
@@ -85,7 +127,7 @@ class ContentViewSection extends ContentView
 		} else {
 			$params->set('page_title',	$section->title);
 		}
-		$document->setTitle( $params->get( 'page_title' ) );
+		
 
 		// Prepare section description
 		$section->description = JHTML::_('content.prepare', $section->description);
