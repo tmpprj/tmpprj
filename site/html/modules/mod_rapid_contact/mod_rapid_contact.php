@@ -69,6 +69,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
           $CORRECT_ANTISPAM_ANSWER = $_POST["rp_anti_spam_answer"];
         }
       }      
+//patch
 /*       if ($_POST["rp_email"] === "") { */
 /*         $myError = '<span style="color: #f00;">' . $noEmail . '</span>'; */
 /*       } */
@@ -120,10 +121,11 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
           '<div class="rapid_contact intro_text ' . $mod_class_suffix . '">'.$pre_text.'</div>' . "\n";
     print '<table>';
     if ($enable_anti_spam) {
-      print '<tr><td colspan="2">' . $myAntiSpamQuestion . '</td></tr><tr><td></td><td><input class="rapid_contact inputbox ' . $mod_class_suffix . '" type="text" name="rp_anti_spam_answer" size="' . $emailWidth . '" value="'.$CORRECT_ANTISPAM_ANSWER.'"/></td></tr>' . "\n";
+        print '<tr><td colspan="2">' . $myAntiSpamQuestion . '</td></tr><tr><td></td><td><input class="rapid_contact inputbox ' . $mod_class_suffix . '" type="text" name="rp_anti_spam_answer" size="' . $emailWidth . '" value="'.$CORRECT_ANTISPAM_ANSWER.'"/></td></tr>' . "\n";
     }
-    print '<tr><td>' . $myEmailLabel . '</td><td><input class="rapid_contact inputbox ' . $mod_class_suffix . '" type="text" name="rp_email" size="' . $emailWidth . '" value="'.$CORRECT_EMAIL.'"/></td></tr>' . "\n";
-    print '<tr><td>' . $mySubjectLabel . '</td><td><input class="rapid_contact inputbox ' . $mod_class_suffix . '" type="text" name="rp_subject" size="' . $subjectWidth . '" value="'.$CORRECT_SUBJECT.'"/></td></tr>' . "\n";
-    print '<tr><td valign="top">' . $myMessageLabel . '</td><td><textarea class="rapid_contact textarea ' . $mod_class_suffix . '" name="rp_message" cols="' . $messageWidth . '" rows="4">'.$CORRECT_MESSAGE.'</textarea></td></tr>' . "\n";
-    print '<tr><td colspan="2"><input class="rapid_contact button ' . $mod_class_suffix . '" type="submit" value="' . $buttonText . '" style="width: ' . $buttonWidth . '%"/></td></tr></table></form></div>' . "\n";
+//patch: All sizes are now relative and fixed
+    print '<tr><td>' . $myEmailLabel . '</td><td><input class="rapid_contact inputbox ' . $mod_class_suffix . '" type="text" name="rp_email" style="width: 90%" value="'.$CORRECT_EMAIL.'"/></td></tr>' . "\n";
+    print '<tr><td>' . $mySubjectLabel . '</td><td><input class="rapid_contact inputbox ' . $mod_class_suffix . '" type="text" name="rp_subject" style="width: 90%" value="'.$CORRECT_SUBJECT.'"/></td></tr>' . "\n";
+    print '<tr><td valign="top">' . $myMessageLabel . '</td><td><textarea class="rapid_contact textarea ' . $mod_class_suffix . '" name="rp_message" style="width: 90%" cols="' . $messageWidth . '" rows="4">'.$CORRECT_MESSAGE.'</textarea></td></tr>' . "\n";
+    print '<tr><td colspan="2"><input class="rapid_contact button ' . $mod_class_suffix . '" type="submit" value="' . $buttonText . '" style="width: 100%"/></td></tr></table></form></div>' . "\n";
     return true;
