@@ -60,7 +60,7 @@ void QSearchWindow::setupControls()
     
     directoryComboBox->setCompleter( completer );
     directoryComboBox->setInsertPolicy( QComboBox::NoInsert );
-    directoryComboBox->SetDefaultElement( QDir::currentPath() );
+	directoryComboBox->SetDefaultElement( QDir::toNativeSeparators( QDir::currentPath() ) );
 
     connect( masksComboBox, SIGNAL( editTextChanged(QString) ), this, SLOT(validateInputData()) );
     connect( textComboBox, SIGNAL( editTextChanged(QString) ), this, SLOT(validateInputData()) );
@@ -169,11 +169,12 @@ void QSearchWindow::browse()
     if( strBrowseDir.isEmpty() )
         strBrowseDir = QDir::currentPath();
 
-    QString directory = QFileDialog::getExistingDirectory( this, tr( "Find Files" ), strBrowseDir, 
+	QString directoryRaw = QFileDialog::getExistingDirectory( this, tr( "Find Files" ), strBrowseDir, 
             QFileDialog::DontUseNativeDialog | QFileDialog::ShowDirsOnly );
+	QString directory = QDir::toNativeSeparators( directoryRaw );
 
     if( !directory.isEmpty() ) 
-        directoryComboBox->PushTextToList( directory );
+		directoryComboBox->PushTextToList( directory );
 }
 
 void QSearchWindow::fileProcessing( const QString& strFilename )
