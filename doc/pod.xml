@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XML_DIZ_INFO>
+  <MASTER_PAD_VERSION_INFO>
+    <MASTER_PAD_VERSION>3.01</MASTER_PAD_VERSION>
+    <MASTER_PAD_EDITOR>RoboSoft 4.0.652</MASTER_PAD_EDITOR>
+    <MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://www.asp-shareware.org/pad</MASTER_PAD_INFO>
+  </MASTER_PAD_VERSION_INFO>
+  <RoboSoft>
+    <Company_UIN>CMP-009B057C3FE</Company_UIN>
+    <Company_Description></Company_Description>
+    <Product_UIN>APP-009B0520516</Product_UIN>
+    <Publish_on_CD>FALSE</Publish_on_CD>
+    <Search_String>Multiformat File Searcher</Search_String>
+    <Press_Release_Search_String></Press_Release_Search_String>
+    <NewsFeed_Search_String></NewsFeed_Search_String>
+    <Search_Engine_Search_String></Search_Engine_Search_String>
+    <Web_Directories_Search_String></Web_Directories_Search_String>
+    <Search_String_Unique></Search_String_Unique>
+    <Comments_For_Reviewer></Comments_For_Reviewer>
+    <Additional_Categories></Additional_Categories>
+    <Backlink></Backlink>
+  </RoboSoft>
+  <Company_Info>
+    <Company_Name>Atalanta Software</Company_Name>
+    <Address_1>Postal Box: 125315</Address_1>
+    <Address_2></Address_2>
+    <City_Town>Moscow</City_Town>
+    <State_Province>Moscow</State_Province>
+    <Zip_Postal_Code>125315</Zip_Postal_Code>
+    <Country>Russian Federation</Country>
+    <Company_WebSite_URL>http://www.atalantasoftware.com/</Company_WebSite_URL>
+    <Contact_Info>
+      <Contact_First_Name>Dmitry</Contact_First_Name>
+      <Contact_Last_Name>Parshin</Contact_Last_Name>
+      <Contact_Email>filesearcher@atalantasoftware.com</Contact_Email>
+      <Author_Email>filesearcher@atalantasoftware.com</Author_Email>
+      <Author_First_Name>Dmitry</Author_First_Name>
+      <Author_Last_Name>Parshin</Author_Last_Name>
+    </Contact_Info>
+    <Support_Info>
+      <Sales_Email>filesearcher@atalantasoftware.com</Sales_Email>
+      <Support_Email>filesearcher@atalantasoftware.com</Support_Email>
+      <General_Email>filesearcher@atalantasoftware.com</General_Email>
+      <Sales_Phone></Sales_Phone>
+      <Support_Phone></Support_Phone>
+      <General_Phone></General_Phone>
+      <Fax_Phone></Fax_Phone>
+    </Support_Info>
+  </Company_Info>
+  <NewsFeed>
+    <NewsFeed_FORM>Y</NewsFeed_FORM>
+    <NewsFeed_VERSION>1.0</NewsFeed_VERSION>
+    <NewsFeed_URL>http://Submit-Everywhere.com/extensions/NewsFeed.htm</NewsFeed_URL>
+    <NewsFeed_Type>RSS 0.90</NewsFeed_Type>
+    <NewsFeed_Language>English</NewsFeed_Language>
+    <NewsFeed_Purpose>News</NewsFeed_Purpose>
+    <NewsFeed_Author_Email>filesearcher@atalantasoftware.com</NewsFeed_Author_Email>
+    <NewsFeed_Author_First_Name>Dmitry</NewsFeed_Author_First_Name>
+    <NewsFeed_Author_Last_Name>Parshin</NewsFeed_Author_Last_Name>
+    <NewsFeed_DESCRIPTION></NewsFeed_DESCRIPTION>
+    <NewsFeed_Feed_URL></NewsFeed_Feed_URL>
+    <NewsFeed_Site_Name></NewsFeed_Site_Name>
+    <NewsFeed_Site_URL></NewsFeed_Site_URL>
+    <NewsFeed_Title></NewsFeed_Title>
+    <NewsFeed_Description_70></NewsFeed_Description_70>
+    <NewsFeed_Description_250></NewsFeed_Description_250>
+  </NewsFeed>
+  <Site>
+    <Site_FORM>Y</Site_FORM>
+    <Site_VERSION>1.0</Site_VERSION>
+    <Site_URL>http://Submit-Everywhere.com/extensions/Site.htm</Site_URL>
+    <Site_DESCRIPTION>This PAD extension allows you to add your site info into your PAD file. This info can be used by site submission software or by web directories themselves.</Site_DESCRIPTION>
+    <Site_Contact_Email>filesearcher@atalantasoftware.com</Site_Contact_Email>
+    <Site_Contact_First_Name>Dmitry</Site_Contact_First_Name>
+    <Site_Contact_Last_Name>Parshin</Site_Contact_Last_Name>
+    <Site_Site_Title>Multiformat File Searcher</Site_Site_Title>
+    <Site_Site_URL>http://www.atalantasoftware.com/</Site_Site_URL>
+    <Site_Description_100>Multiformat File Searcher - Fast and reliable way to search within files</Site_Description_100>
+    <Site_Description_250>Multiformat File Searcher is an utility that allows you to find text quickly in any document on your computer.</Site_Description_250>
+    <Site_Keywords>File Searcher, search within files, search in pdf, search in doc, search in ms word, search in documents, search text, search in files, search in documents, text search in files</Site_Keywords>
+    <Site_Description_450>Multiformat File Searcher is an utility that allows you to find text quickly in any document on your computer.</Site_Description_450>
+  </Site>
+  <Program_Info>
+    <Program_Name>Multiformat File Searcher</Program_Name>
+    <Program_Version>1.03</Program_Version>
+    <Program_Release_Month>10</Program_Release_Month>
+    <Program_Release_Day>20</Program_Release_Day>
+    <Program_Release_Year>2009</Program_Release_Year>
+    <Program_Cost_Dollars>29.95</Program_Cost_Dollars>
+    <Program_Type>Shareware</Program_Type>
+    <Program_Release_Status>New Release</Program_Release_Status>
+    <Program_Install_Support>Install and Uninstall</Program_Install_Support>
+    <Program_OS_Support>WinXP,WinVista,WinVista x64,Win7 x32,Win7 x64,Windows2003,Windows Vista Ultimate,Windows Vista Ultimate x64,Windows Vista Starter,Windows Vista Home Basic,Windows Vista Home Premium,Windows Vista Business,Windows Vista Enterprise,Windows Vista Home Basic x64,Windows Vista Home Premium x64,Windows Vista Business x64,Windows Vista Enterprise x64</Program_OS_Support>
+    <Program_Language>English</Program_Language>
+    <Program_Change_Info>Added parsers for most popular document formats</Program_Change_Info>
+    <Program_System_Requirements>Windows compatible OS, 64Mb RAM</Program_System_Requirements>
+    <Program_Category_Class>Business::Office Suites &amp; Tools</Program_Category_Class>
+    <File_Info>
+      <File_Size_Bytes>4437310</File_Size_Bytes>
+      <File_Size_K>4333</File_Size_K>
+      <File_Size_MB>4.23</File_Size_MB>
+      <Filename_Versioned></Filename_Versioned>
+      <Filename_Previous></Filename_Previous>
+      <Filename_Generic></Filename_Generic>
+      <Filename_Long></Filename_Long>
+    </File_Info>
+    <Expire_Info>
+      <Has_Expire_Info>N</Has_Expire_Info>
+      <Expire_Based_On>Days</Expire_Based_On>
+      <Expire_Count></Expire_Count>
+      <Expire_Other_Info></Expire_Other_Info>
+      <Expire_Month></Expire_Month>
+      <Expire_Day></Expire_Day>
+      <Expire_Year></Expire_Year>
+    </Expire_Info>
+    <Program_Categories>Office,Tools,Business</Program_Categories>
+    <Limitations>Trial version is limited to 1 file in result set</Limitations>
+    <Program_Cost_Other_Code></Program_Cost_Other_Code>
+    <Program_Cost_Other></Program_Cost_Other>
+    <Awards></Awards>
+    <Program_Specific_Category></Program_Specific_Category>
+    <Includes_JAVA_VM></Includes_JAVA_VM>
+    <Includes_VB_Runtime></Includes_VB_Runtime>
+    <Includes_DirectX></Includes_DirectX>
+  </Program_Info>
+  <Web_Info>
+    <Application_URLs>
+      <Application_Info_URL>http://www.atalantasoftware.com/</Application_Info_URL>
+      <Application_Order_URL>https://www.plimus.com/jsp/buynow.jsp?contractId=2586632</Application_Order_URL>
+      <Application_Screenshot_URL>http://www.atalantasoftware.com/</Application_Screenshot_URL>
+      <Application_Icon_URL>http://www.atalantasoftware.com/media/files/search32x32.gif</Application_Icon_URL>
+      <Application_XML_File_URL>http://www.atalantasoftware.com/media/files/pod.xml</Application_XML_File_URL>
+    </Application_URLs>
+    <Download_URLs>
+      <Primary_Download_URL>http://atalantasoftware.com/media/files/FileSearcherInstaller.exe</Primary_Download_URL>
+      <Secondary_Download_URL></Secondary_Download_URL>
+      <Additional_Download_URL_1></Additional_Download_URL_1>
+      <Additional_Download_URL_2></Additional_Download_URL_2>
+    </Download_URLs>
+  </Web_Info>
+  <Permissions>
+    <Distribution_Permissions>The trial version of Multiformat File Searcher can be freely distributed over the internet in an uncharged form</Distribution_Permissions>
+    <EULA>END-USER LICENSE AGREEMENT FOR MULTIFORMAT FILE SEARCHER IMPORTANT PLEASE READ THE TERMS AND CONDITIONS OF THIS LICENSE AGREEMENT CAREFULLY BEFORE CONTINUING WITH THIS PROGRAM INSTALL: Atalanta Software's End-User License Agreement ("EULA") is a legal agreement between you (either an individual or a single entity) and Atalanta Software. For the Atalanta Software software product(s) identified above which may include associated software components, media, printed materials, and "online" or electronic documentation ("SOFTWARE PRODUCT"). By installing, copying, or otherwise using the SOFTWARE PRODUCT, you agree to be bound by the terms of this EULA. This license agreement represents the entire agreement concerning the program between you and Atalanta Software, (referred to as "licenser"), and it supersedes any prior proposal, representation, or understanding between the parties. If you do not agree to the terms of this EULA, do not install or use the SOFTWARE PRODUCT.
+
+The SOFTWARE PRODUCT is protected by copyright laws and international copyright treaties, as well as other intellectual property laws and treaties. The SOFTWARE PRODUCT is licensed, not sold.
+
+1. GRANT OF LICENSE.
+The SOFTWARE PRODUCT is licensed as follows:
+(a) Installation and Use.
+Atalanta Software grants you the right to install and use copies of the SOFTWARE PRODUCT on your computer running a validly licensed copy of the operating system for which the SOFTWARE PRODUCT was designed [e.g., Windows 2000, Windows 2003, Windows XP, Windows Vista, Windows 7].
+(b) Backup Copies.
+You may also make copies of the SOFTWARE PRODUCT as may be necessary for backup and archival purposes.
+
+2. DESCRIPTION OF OTHER RIGHTS AND LIMITATIONS.
+(a) Maintenance of Copyright Notices.
+You must not remove or alter any copyright notices on any and all copies of the SOFTWARE PRODUCT.
+(b) Distribution.
+You may not distribute registered copies of the SOFTWARE PRODUCT to third parties. Evaluation versions available for download from Atalanta Software's websites may be freely distributed.
+(c) Prohibition on Reverse Engineering, Decompilation, and Disassembly.
+You may not reverse engineer, decompile, or disassemble the SOFTWARE PRODUCT, except and only to the extent that such activity is expressly permitted by applicable law notwithstanding this limitation.
+(d) Rental.
+You may not rent, lease, or lend the SOFTWARE PRODUCT.
+(e) Support Services.
+Atalanta Software may provide you with support services related to the SOFTWARE PRODUCT ("Support Services"). Any supplemental software code provided to you as part of the Support Services shall be considered part of the SOFTWARE PRODUCT and subject to the terms and conditions of this EULA.
+(f) Compliance with Applicable Laws.
+You must comply with all applicable laws regarding use of the SOFTWARE PRODUCT.
+
+3. TERMINATION
+Without prejudice to any other rights, Atalanta Software may terminate this EULA if you fail to comply with the terms and conditions of this EULA. In such event, you must destroy all copies of the SOFTWARE PRODUCT in your possession.
+
+4. COPYRIGHT
+All title, including but not limited to copyrights, in and to the SOFTWARE PRODUCT and any copies thereof are owned by Atalanta Software or its suppliers. All title and intellectual property rights in and to the content which may be accessed through use of the SOFTWARE PRODUCT is the property of the respective content owner and may be protected by applicable copyright or other intellectual property laws and treaties. This EULA grants you no rights to use such content. All rights not expressly granted are reserved by Atalanta Software.
+
+5. NO WARRANTIES
+Atalanta Software expressly disclaims any warranty for the SOFTWARE PRODUCT. The SOFTWARE PRODUCT is provided 'As Is' without any express or implied warranty of any kind, including but not limited to any warranties of merchantability, non infringement, or fitness of a particular purpose. Atalanta Software does not warrant or assume responsibility for the accuracy or completeness of any information, text, graphics, links or other items contained within the SOFTWARE PRODUCT. Atalanta Software makes no warranties respecting any harm that may be caused by the transmission of a computer virus, worm, time bomb, logic bomb, or other such computer program. Atalanta Software further expressly disclaims any warranty or representation to Authorized Users or to any third party.
+
+6. LIMITATION OF LIABILITY
+In no event shall Atalanta Software be liable for any damages (including, without limitation, lost profits, business interruption, or lost information) rising out of 'Authorized Users' use of or inability to use the SOFTWARE PRODUCT, even if Atalanta Software has been advised of the possibility of such damages. In no event will Atalanta Software be liable for loss of data or for indirect, special, incidental, consequential (including lost profit), or other damages based in contract, tort or otherwise. Atalanta Software shall have no liability with respect to the content of the SOFTWARE PRODUCT or any part thereof, including but not limited to errors or omissions contained therein, libel, infringements of rights of publicity, privacy, trademark rights, business interruption, personal injury, loss of privacy, moral rights or the disclosure of confidential information.</EULA>
+  </Permissions>
+  <Program_Descriptions>
+    <English>
+      <Keywords>File Searcher, search within files, search in pdf, search in doc, search in ms word, search in documents, search text, search in files, search in documents, text search in files</Keywords>
+      <Char_Desc_45>Fast and reliable way to search within files</Char_Desc_45>
+      <Char_Desc_80>Multiformat File Searcher - Fast and reliable way to search within files</Char_Desc_80>
+      <Char_Desc_250>Multiformat File Searcher is an utility that allows you to find text quickly in any document on your computer.</Char_Desc_250>
+      <Char_Desc_450>Multiformat File Searcher is an utility that allows you to find text quickly in any document on your computer.</Char_Desc_450>
+      <Char_Desc_2000>Multiformat File Searcher is an utility that allows you to find text quickly in any document on your computer. Multiformat File Searcher is extremely fast due to using of newest parsing  and text search algorithms. It has trully user-friendly interface and is the easiest tool to use.
+
+Multiformat File Searcher advantages:
+- Fast search within PDF, DOC, XLS, PPT, RTF and more
+- Background search option
+- Automatic charset detection
+- Case sensitive/insensitive search option
+- Search by file size
+- Easy format adding option</Char_Desc_2000>
+    </English>
+  </Program_Descriptions>
+</XML_DIZ_INFO>
