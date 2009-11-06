@@ -9,8 +9,8 @@
     <Company_UIN>CMP-009B057C3FE</Company_UIN>
     <Company_Description>Atalanta Software - Software is our business</Company_Description>
     <Product_UIN>APP-009B0520516</Product_UIN>
-    <Publish_on_CD>FALSE</Publish_on_CD>
     <Search_String>Multiformat File Searcher</Search_String>
+    <Publish_on_CD>FALSE</Publish_on_CD>
     <Press_Release_Search_String></Press_Release_Search_String>
     <NewsFeed_Search_String></NewsFeed_Search_String>
     <Search_Engine_Search_String></Search_Engine_Search_String>
@@ -33,9 +33,9 @@
       <Contact_First_Name>Dmitry</Contact_First_Name>
       <Contact_Last_Name>Parshin</Contact_Last_Name>
       <Contact_Email>filesearcher@atalantasoftware.com</Contact_Email>
-      <Author_Email>filesearcher@atalantasoftware.com</Author_Email>
       <Author_First_Name>Dmitry</Author_First_Name>
       <Author_Last_Name>Parshin</Author_Last_Name>
+      <Author_Email>filesearcher@atalantasoftware.com</Author_Email>
     </Contact_Info>
     <Support_Info>
       <Sales_Email>filesearcher@atalantasoftware.com</Sales_Email>
@@ -127,7 +127,7 @@
     <Application_URLs>
       <Application_Info_URL>http://www.atalantasoftware.com/</Application_Info_URL>
       <Application_Order_URL>https://www.plimus.com/jsp/buynow.jsp?contractId=2586632</Application_Order_URL>
-      <Application_Screenshot_URL>http://www.atalantasoftware.com/</Application_Screenshot_URL>
+      <Application_Screenshot_URL>http://atalantasoftware.com/images/stories/01.png</Application_Screenshot_URL>
       <Application_Icon_URL>http://www.atalantasoftware.com/media/files/search32x32.gif</Application_Icon_URL>
       <Application_XML_File_URL>http://www.atalantasoftware.com/media/files/pod.xml</Application_XML_File_URL>
     </Application_URLs>
