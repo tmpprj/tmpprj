@@ -132,7 +132,7 @@
       <Application_XML_File_URL>http://www.atalantasoftware.com/media/files/pod.xml</Application_XML_File_URL>
     </Application_URLs>
     <Download_URLs>
-      <Primary_Download_URL>http://atalantasoftware.com/media/files/FileSearcherInstaller.exe</Primary_Download_URL>
+      <Primary_Download_URL>http://atalantasoftware.com/download.php</Primary_Download_URL>
       <Secondary_Download_URL></Secondary_Download_URL>
       <Additional_Download_URL_1></Additional_Download_URL_1>
       <Additional_Download_URL_2></Additional_Download_URL_2>
