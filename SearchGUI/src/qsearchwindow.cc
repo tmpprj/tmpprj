@@ -185,42 +185,42 @@ void QSearchWindow::fileProcessing( const QString& strFilename )
 }
 
 
-#ifdef WIN32
-#pragma optimize("", off)
-#endif
+//#ifdef WIN32
+//#pragma optimize("", off)
+//#endif
 void QSearchWindow::AddFileToResultSet( const QString& strFilename )
 {
-#ifdef WIN32
-    REG_CRYPT_BEGIN1
-#endif
+//#ifdef WIN32
+//    REG_CRYPT_BEGIN1
+//#endif
 
     if( filesTable->rowCount() >= SearchGUI::Conf().nMaxFiles.Value() )
     {
-        m_status = SS_TRIALFILEFOUND;
+        m_status = SS_TOOMANYFILES;
         stop();
     }
 
     filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
 
-#ifdef WIN32
-    REG_CRYPT_END1
-#endif
+//#ifdef WIN32
+//    REG_CRYPT_END1
+//#endif
 
 }
-#ifdef WIN32
-#pragma optimize("", on)
-#endif
+//#ifdef WIN32
+//#pragma optimize("", on)
+//#endif
 
 void QSearchWindow::fileMatched( const QString& strFilename )
 {
     CLog(Debug) << __FUNCTION__ << ": " << qPrintable( strFilename );
 
-    if( !m_Aspr.IsModeActive(1) )
-    {
-        filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
-        m_status = SS_TRIALFILEFOUND;
-        stop();
-    }
+    //if( !m_Aspr.IsModeActive(1) )
+    //{
+    //    filesTable->AddFile( QDir::toNativeSeparators( strFilename ), "FOUND" );
+    //    m_status = SS_TRIALFILEFOUND;
+    //    stop();
+    //}
 
     AddFileToResultSet( strFilename );
 
@@ -249,10 +249,10 @@ void QSearchWindow::searchDone()
     }
     else if( m_status == SS_TOOMANYFILES )
         m_TrayIcon.showMessage( "Search done!", "Too many files matched." );
-    else if( m_status == SS_TRIALFILEFOUND )
-    {
-        m_TrayIcon.showMessage( "Search done!", "Trial version is limited to 1 file in result set." );
-    }
+    //else if( m_status == SS_TRIALFILEFOUND )
+    //{
+    //    m_TrayIcon.showMessage( "Search done!", "Trial version is limited to 1 file in result set." );
+    //}
 }
 
 void QSearchWindow::searchError( const QString& strFilename, const QString& strError )

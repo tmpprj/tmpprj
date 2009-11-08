@@ -176,5 +176,5 @@ STORAGEKEYSFNAME=aspr_keys.ini
 KEYSDIALOGCAPTION=Registration Information
 KEYSDIALOGTEXT=Please, input your registration information below:
 NOVALIDMODES=No valid modes found. Please, contact support team!
-PAGEINDEX=3
+PAGEINDEX=2
 MODEINDEX=0
